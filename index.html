@@ -1,0 +1,436 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゆってぃさん ロードマップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#C68B6B;--bg:#F8F5F0;--gold:#f0a500;--ink:#3F3A37;}
+*{box-sizing:border-box}
+body{font-family:"Noto Sans JP","Hiragino Sans",sans-serif;margin:0;background:var(--bg);color:#3F3A37;font-size:15px;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:21px;margin:0 0 2px;font-family:"Noto Serif JP",serif;font-weight:600;letter-spacing:.05em;color:#3F3A37}
+.sub{color:#7A6E63;font-size:13px;margin:0 0 4px}
+.hint{color:#9a8e80;font-size:12px;margin:0 0 14px}
+.today{background:var(--blue);color:#fff;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.today .lbl{font-size:12px;opacity:.85}
+.today .menu{font-size:18px;font-weight:700;margin-top:2px}
+.today .why{font-size:12px;opacity:.92;margin-top:6px;border-top:1px solid rgba(255,255,255,.25);padding-top:6px}
+.today .style{font-size:13px;opacity:.95;margin-top:6px}
+.today .term{border-bottom-color:#cfe0f2;color:#eaf2fb}
+.ctrl{display:flex;gap:8px;margin-bottom:14px}
+.btn{flex:1;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer}
+.btn.go{background:#06c755;color:#fff}
+.btn.back{flex:0 0 auto;background:#e6e8ec;color:#7A6E63;font-weight:600;padding:12px 14px}
+
+/* 達成グラフ */
+.chart{background:#fff;border-radius:10px;padding:14px;margin-bottom:14px}
+.chart-top{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.donut{position:relative;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--blue) calc(var(--p,0)*1%),#e6e8ec 0);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.donut::after{content:"";position:absolute;inset:14px;background:#fff;border-radius:50%}
+.dnum{position:relative;z-index:1;font-weight:800;color:var(--blue);font-size:22px}
+.dlabel .big{font-size:15px;font-weight:700}
+.dlabel .sub2{color:#7A6E63;font-size:13px;margin-top:3px}
+.dlabel .medal{color:#9a6a00;font-size:13px;margin-top:5px}
+.phasebars{margin-top:8px}
+.pbrow{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
+.pbrow .nm{flex:0 0 160px;color:#456;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pbar{flex:1;height:9px;background:#eef1f5;border-radius:99px;overflow:hidden}
+.pbar>i{display:block;height:100%;border-radius:99px;background:var(--blue);transition:width .3s}
+.pbar>i.full{background:var(--gold)}
+.pbrow .ct{flex:0 0 auto;color:#889;width:34px;text-align:right}
+.spark{margin-top:12px;border-top:1px solid #eee;padding-top:10px}
+.spark-h{font-size:12px;color:#456;margin-bottom:4px}
+.spark svg{width:100%;height:70px;display:block}
+.spark .empty{color:#aaa;font-size:12px;padding:10px 0}
+
+.line{background:#06c755;color:#fff;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-weight:600}
+.box{background:#fff;border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.box b{color:var(--blue)}
+.goal{border-left:4px solid var(--blue)}
+.beat{border-left:4px solid var(--gold)}
+.beat ol{margin:6px 0 0;padding-left:20px}
+.beat li{margin:2px 0}
+.phase{margin:20px 0 4px;font-weight:700;color:var(--blue);font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.phase .pv{background:#eef3fa;color:var(--blue);border-radius:6px;padding:2px 8px;font-size:12px;text-decoration:none}
+.badge{font-size:12px;border-radius:99px;padding:2px 9px;font-weight:600}
+.badge.lock{background:#f0f0f0;color:#aaa}
+.badge.win{background:#fff4d6;color:#9a6a00;border:1px solid #f0d48a}
+.why{color:#7A6E63;font-size:12.5px;margin:0 0 6px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
+th,td{border-bottom:1px solid #eee;padding:8px 10px;text-align:left;font-size:14px}
+th{background:#eef3fa;font-size:12px;color:#456}
+tr.now{background:#fff7e0}
+tr.now td:first-child{border-left:4px solid var(--gold)}
+tr.done td{color:#9aa;}
+tr.create td{background:#f3f0ff}
+tr.create td:first-child{border-left:4px solid #8a6ad0}
+.chk{white-space:nowrap;color:#bbb}
+.chk.on{color:#06c755}
+.vid{display:inline-block;background:#eef3fa;color:var(--blue);border-radius:6px;padding:3px 8px;font-size:12px;text-decoration:none}
+.vid.empty{background:#f0f0f0;color:#aaa}
+.foot{color:#999;font-size:12px;margin-top:18px}
+
+/* 用語タップ解説 */
+.term{border-bottom:1px dotted var(--blue);color:var(--blue);cursor:pointer}
+.gloss-sheet{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:flex-end;z-index:50}
+.gloss-sheet[hidden]{display:none}
+.gloss-card{background:#fff;width:100%;max-width:760px;margin:0 auto;border-radius:14px 14px 0 0;padding:16px 18px 24px;box-shadow:0 -4px 20px rgba(0,0,0,.2);animation:rise .18s ease-out}
+@keyframes rise{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+.gloss-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.gloss-h span{font-weight:700;font-size:17px;color:var(--blue)}
+#gloss-x{border:none;background:#eef1f5;border-radius:50%;width:30px;height:30px;font-size:18px;cursor:pointer;color:#7A6E63}
+.gloss-d{font-size:14px;line-height:1.65;color:#222}
+.gloss-fig{display:flex;gap:10px;overflow-x:auto;margin-top:12px;-webkit-overflow-scrolling:touch}
+.gloss-fig img{height:240px;width:auto;flex:0 0 auto;border:1px solid #eef1f5;border-radius:8px;background:#fff}
+#gloss-v{margin-top:10px}
+
+/* === スマホ対応（〜480px）=== */
+@media(max-width:480px){
+ .wrap{padding:10px}
+ h1{font-size:18px}
+ .sub{font-size:12px}
+ .today{padding:12px 14px}
+ .today .menu{font-size:16px}
+ .ctrl{gap:6px}
+ .btn{padding:13px 10px;font-size:14px}
+ .btn.back{padding:13px 12px}
+ .chart{padding:12px}
+ .chart-top{gap:12px}
+ .donut{width:84px;height:84px}
+ .dnum{font-size:19px}
+ .pbrow{font-size:11.5px;gap:6px;margin:6px 0}
+ .pbrow .nm{flex:0 0 110px}
+ .pbrow .ct{width:30px}
+ .box{padding:11px 13px}
+ .beat ol{padding-left:18px}
+ .phase{font-size:14.5px;margin:18px 0 4px}
+ table,tbody{display:block;background:transparent}
+ .hrow{display:none}
+ tr{display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;background:#fff;border-radius:10px;margin-bottom:6px;padding:9px 11px;border-bottom:none}
+ tr.now{background:#fff7e0;border-left:4px solid var(--gold)}
+ tr.create{background:#f3f0ff;border-left:4px solid #8a6ad0}
+ tr.create td{background:transparent}
+ td{display:block;border:none!important;padding:0;font-size:13px}
+ td.chk{order:1;font-size:16px}
+ td:nth-child(2){order:2;flex:1 1 auto;font-weight:600;font-size:14px}
+ td:nth-child(5){order:3;margin-left:auto}
+ td:nth-child(3){order:4;flex:1 0 100%;color:#7A6E63;font-size:12px}
+ td:nth-child(4){order:5;flex:1 0 100%;color:#889;font-size:11.5px}
+ td:empty{display:none}
+}
+.vidbtn{cursor:pointer}
+.video-modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;z-index:100;padding:14px}
+.video-modal[hidden]{display:none}
+.video-modal video{max-width:100%;max-height:84vh;border-radius:10px;background:#000}
+.video-close{position:absolute;top:12px;right:16px;font-size:32px;line-height:1;color:#fff;background:none;border:none;cursor:pointer}
+</style></head>
+<body><div class="wrap">
+<h1>ゆってぃさん｜上達ロードマップ</h1>
+<p class="sub">毎日メニューをこなす → 公式LINEで動画提出（マスト）→ 週2の対面でフィードバック</p>
+<p class="hint">ℹ️ <span style="border-bottom:1px dotted var(--blue);color:var(--blue)">色つきの点線</span>の用語はタップで解説が出ます。</p>
+
+<div class="today">
+  <div class="lbl" id="todayLbl">今日やること</div>
+  <div class="menu" id="todayMenu">―</div>
+  <div class="why" id="todayWhy"></div>
+  <div class="style" id="todayStyle"></div>
+</div>
+<div class="ctrl">
+  <button class="btn go" id="goBtn">✅ できた → 次へ</button>
+  <button class="btn back" id="backBtn">↩︎ 1つ戻す</button>
+</div>
+
+<div class="chart">
+  <div class="chart-top">
+    <div class="donut" id="donut"><span class="dnum" id="dpct">0%</span></div>
+    <div class="dlabel">
+      <div class="big">達成グラフ</div>
+      <div class="sub2" id="dsub">0 / 0 ステップ</div>
+      <div class="medal" id="dmedal">🏅 0／0 フェーズ制覇</div>
+    </div>
+  </div>
+  <div class="phasebars" id="phasebars"></div>
+  <div class="spark">
+    <div class="spark-h">日々の積み上げ（継続）</div>
+    <svg id="spark" viewBox="0 0 320 70" preserveAspectRatio="none"></svg>
+  </div>
+</div>
+
+<div class="line">📲 動画は毎回かならず「公式LINE」から提出（これがマスト）</div>
+
+<div class="box goal"><b>最終ゴール</b><br>跳びながら音を取れるようになる → 自分のステップと混ぜてバトルが組み立てられる。<br><span style="color:#7A6E63;font-size:13px">1日にやることは最大3つまで。アンカー・スナッピーの2つの質感で磨く。</span></div>
+
+<div class="box beat" id="beatBox"><b>毎回の提出は、この4ステップで回す</b>（覚えるのは技じゃなく、この“ループ”ひとつ）
+<ol>
+<li><b>コピー</b>…見本どおり、形だけ回す</li>
+<li><b>なぜ</b>…今アンカー？スナッピー？ 頭が揺れない＝アンカー／揺れる＝スナッピー を自分で判定して一言</li>
+<li><b>条件変え</b>…高さ・向き・2スタイルで変えてみる</li>
+<li><b>自分で（仕上げ）</b>…🎨 ジャンプ系＝空間を埋める／3ステップ＝とめ・はね・払い</li>
+</ol></div>
+
+<div id="plan"></div>
+<p class="foot" id="foot"></p>
+</div>
+
+<div class="gloss-sheet" id="gloss" hidden>
+  <div class="gloss-card">
+    <div class="gloss-h"><span id="gloss-t"></span><button id="gloss-x" aria-label="閉じる">×</button></div>
+    <div class="gloss-d" id="gloss-d"></div>
+    <div class="gloss-fig" id="gloss-fig"></div>
+    <div id="gloss-v"></div>
+  </div>
+</div>
+
+<div class="video-modal" id="vmodal" hidden><button class="video-close" id="vclose" aria-label="閉じる">×</button><video id="vplayer" controls playsinline preload="metadata"></video></div>
+<script>
+// ===== 用語辞典（このサイトだけで完結。タップで定義が出る） =====
+const GLOSSARY = {
+ "アンカー":{d:"体を固めず、腰で引き上げる質感。着地の振動を体に伝えない＝頭が揺れない（上半身が静か・滑らか）。コツ：重心を少し下げ、お尻を後ろに。",f:["figures/04_質感.svg"]},
+ "スナッピー":{d:"落下・横移動の勢いを、地面との接触で止める質感。かかとで着地して同時に体を固める。振動が足→体へ伝わる＝頭が揺れる（キレ）。",f:["figures/04_質感.svg"]},
+ "空間を埋める":{d:"縄の内側を、体を基準にした量で使い切る。①位置＝前後左右に“一人分以上”ずらす ②高さ＝上下2段階（普通／頭一つ分しゃがむ）③向き＝前・横・後ろ。①②③を全部できたらクリア。",f:["figures/01_位置.svg","figures/02_高さ.svg","figures/03_向き.svg"]},
+ "リズム":{d:"どのビートで刻むか（8ビート／ダブル／トリプ等）。足の動き（ステップ）とは独立していて、ステップ×リズムで掛け合わせる。",f:["figures/05_リズム.svg"]},
+ "トリプ":{d:"「と・り・ぷ」の3連（1カウントに3回＝24ビート）で刻むリズム。3つ目の音の直後にオーヴで縄を抜けると引っかかりにくい。",v:"videos/トリプ.mp4",f:["figures/05_リズム.svg"]},
+ "とめ":{d:"細かく刻んでいる箇所を、刻みの密度を半分に落として取る。動きを長く溜める＝“止めて”見せる。"},
+ "はね":{d:"ステップの途中にハイジャンプを入れる。"},
+ "払い":{d:"そのステップをしながら移動する。"},
+ "オーヴ":{d:"ロープを跳ばずに“またぐ”動き。足幅を前後に大きく開き、残った足を真上に抜く。他の技から縄を抜ける共通動作にもなる。",v:"videos/オーヴ.mp4"},
+ "スライド":{d:"足が地面についた瞬間に、体を平行移動させる技。地面の反発をもらうと速い。前後スライドの習得は必須。",v:"videos/スライド.mp4"},
+ "連続スライド":{d:"スライドを途切れさせず連続でつなぐ。"},
+ "ペダル":{d:"つま先とかかとを交互に踏みかえる中で、足裏の下にロープを通過させる技。引っかかったら重心を上下に。",v:"videos/ペダル.mp4"},
+ "ヒールロック":{d:"着地と同時に素早く片足へ体重を移し、かかとで姿勢をキープする技。ムーブに緩急を出せる。",v:"videos/ヒールロック.mp4"},
+ "ラグジャンプ":{d:"足の接地を意図的に長く取り、カウントで“浮き始める”。溜め＝ラグを作って跳ぶ。最難関。",v:"videos/ラグジャンプ.mp4"},
+ "3ステップ":{d:"ワン（踏みに行く）・エン（太もも90度まで上げる）・ツー（後ろに置く）の3カウントのステップ。ダンスステップ。",v:"videos/3ステップ.mp4"},
+ "ただのジャンプ":{d:"普通に連続で跳ぶ基礎ジャンプ。リズムと質感の土台。"},
+ "パーグージャンプ":{d:"パー（足を開く）とグー（閉じる）を交互に跳ぶ基礎ジャンプ。"},
+ "ジャンプコンボ":{d:"基礎技を組み合わせた連続技（レベル2）。3つ作る。"},
+ "トリプオーヴ":{d:"トリプ＋オーヴ。トリプの3つ目の直後にオーヴで縄を抜けるコンボ。"},
+ "スライドオーヴ":{d:"スライド＋オーヴ。スライドからオーヴで抜けるコンボ。"},
+ "必殺":{d:"自分だけの必殺技（レベル3）。3つ作る。"}
+};
+const GKEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function glossify(text){
+  if(!text)return "";
+  let out="",i=0;
+  while(i<text.length){
+    let m=null;
+    for(const k of GKEYS){ if(text.startsWith(k,i)){m=k;break;} }
+    if(m){ out+='<span class="term" data-k="'+esc(m)+'">'+esc(m)+'</span>'; i+=m.length; }
+    else { out+=esc(text[i]); i++; }
+  }
+  return out;
+}
+
+const PHASES = [
+ {title:"⓪ ウォームアップ", short:"⓪ ウォームアップ", video:"",
+   why:"基本のジャンプを2つの質感（アンカー／スナッピー）で。提出ループにも慣れる。",
+   badge:"初・提出できた！",
+   items:[
+    {name:"ただのジャンプ",point:"アンカー・スナッピーで跳ぶ",styles:""},
+    {name:"パーグージャンプ",point:"アンカー・スナッピーで跳ぶ",styles:""}]},
+
+ {title:"① オーヴ", short:"① オーヴ", video:"videos/オーヴ.mp4",
+   why:"跳ばずに“またぐ”。足幅を前後に大きく開き、残った足を真上に抜く。他の技の共通動作なので最初に土台化。",
+   badge:"初・跳ばずに縄を抜けた",
+   create:"オーヴで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
+   items:[
+    {name:"オーヴ単体",point:"",styles:"アンカー→スナッピー"}]},
+
+ {title:"② スライド", short:"② スライド", video:"videos/スライド.mp4",
+   why:"接地の瞬間に体を平行移動。地面の反発をもらうと速い。前後スライドは必須。",
+   badge:"初・狙った位置にスライドできた",
+   create:"スライドで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
+   items:[
+    {name:"スライド 前後左右",point:"前後は必須",styles:""},
+    {name:"連続スライド",point:"つなげて連続で",styles:""}]},
+
+ {title:"③ ペダル（基礎ジャンプ）", short:"③ ペダル", video:"videos/ペダル.mp4",
+   why:"つま先↔かかとを交互に踏みかえ、足裏の下にロープを通す。引っかかったら重心を上下に。",
+   badge:"初・10回連続跳べた",
+   create:"ペダルで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
+   items:[
+    {name:"ペダル 両足",point:"基本の連続跳び",styles:"アンカー→スナッピー"},
+    {name:"ペダル 片足",point:"片足で安定",styles:"アンカー→スナッピー"},
+    {name:"ペダルウォーク",point:"歩くように",styles:"アンカー→スナッピー"}]},
+
+ {title:"④ 3ステップ", short:"④ 3ステップ", video:"videos/3ステップ.mp4",
+   why:"ワン（踏みに行く）→エン（太もも90度まで上げる）→ツー（後ろに置く）。",
+   badge:"初・とめ・はね・払いが計3そろった",
+   create:"3ステップに とめ・はね・払いを それぞれ1つずつ乗せる（とめ1・はね1・払い1＝計3）",
+   items:[
+    {name:"3ステップ",point:"ワン・エン・ツー",styles:""}]},
+
+ {title:"⑤ ヒールロック", short:"⑤ ヒールロック", video:"videos/ヒールロック.mp4",
+   why:"着地と同時に片足へ素早く体重、かかとでキープ。上半身を横に曲げ次の縄ギリギリまでポーズ＝緩急。",
+   badge:"初・キメのポーズが決まった",
+   create:"ヒールロックで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
+   items:[
+    {name:"ヒールロック 左右",point:"左右どちらの軸足でも",styles:""}]},
+
+ {title:"⑥ ラグジャンプ", short:"⑥ ラグジャンプ", video:"videos/ラグジャンプ.mp4",
+   why:"接地を粘り、カウントで“浮き始める”。溜め＝ラグを作るのが命。最難関。",
+   badge:"初・溜めて高く跳べた",
+   create:"ラグジャンプで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
+   items:[
+    {name:"ラグジャンプ 両足",point:"",styles:""},
+    {name:"ラグジャンプ 片足",point:"",styles:""}]},
+
+ {title:"⑦ トリプ", short:"⑦ トリプ", video:"videos/トリプ.mp4",
+   why:"“と・り・ぷ”の3連（タ・タ・タ）で刻む。3つ目の直後にオーヴで抜けると引っかかりにくい。",
+   badge:"初・トリプが音にハマった",
+   create:"トリプで空間を埋める（位置・高さ・向き）。技に掛けるリズム展開は免除",
+   items:[
+    {name:"トリプ",point:"基本",styles:"アンカー→スナッピー"}]},
+
+ {title:"⑧ レベル2：ジャンプコンボ", short:"⑧ コンボ", video:"",
+   why:"基礎技を組み合わせて、ジャンプコンボを3つ作る。",
+   badge:"初・コンボが繋がった",
+   items:[
+    {name:"トリプオーヴ",point:"トリプ＋オーヴ",styles:""},
+    {name:"スライド＋ペダル＋3ステップ",point:"3技つなぎ",styles:""},
+    {name:"スライドオーヴ",point:"スライド＋オーヴ",styles:""}]},
+
+ {title:"⑨ レベル3：必殺", short:"⑨ 必殺", video:"",
+   why:"自分だけの必殺技を3つ作る。",
+   badge:"初・必殺ができた",
+   items:[
+    {name:"必殺①",point:"自分の必殺技",styles:""},
+    {name:"必殺②",point:"自分の必殺技",styles:""},
+    {name:"必殺③",point:"自分の必殺技",styles:""}]},
+
+ {title:"⑩ 音ハメ（レベル4：フリースタイル）", short:"⑩ 音ハメ", video:"",
+   why:"ここまでの“自分で”を全部使う。曲に合わせて、ハマるように。",
+   badge:"初・自分の組み合わせで8カウント",
+   items:[
+    {name:"各技を音にハメる",point:"音にハマるように",styles:""},
+    {name:"自分のステップと基礎を混ぜて音で遊ぶ",point:"バトルの素を作る",styles:"",isCreate:true}]},
+];
+
+// --- フラット化（各フェーズ末尾に create があれば 🎨 行を生成） ---
+const STEPS=[]; const PHASE_RANGE=[];
+PHASES.forEach((ph,pi)=>{
+  const start=STEPS.length;
+  ph.items.forEach(it=>STEPS.push({...it,phase:pi}));
+  if(ph.create){STEPS.push({name:ph.create,phase:pi,isCreate:true,gen:true});}
+  PHASE_RANGE.push([start,STEPS.length-1]);
+});
+const TOTAL=STEPS.length, NPH=PHASES.length;
+
+const LOGKEY="yutty_log_v3";
+function getLog(){
+  try{const a=JSON.parse(localStorage.getItem(LOGKEY)||"null");if(Array.isArray(a))return a.slice(0,TOTAL);}catch(e){}
+  const old=parseInt(localStorage.getItem("yutty_progress_v2")||"0",10)||0;
+  const a=[];for(let i=0;i<Math.min(old,TOTAL);i++)a.push(null);saveLog(a);return a;
+}
+function saveLog(a){localStorage.setItem(LOGKEY,JSON.stringify(a));}
+function todayStr(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+
+function nameHtml(it){
+  if(it.gen) return "🎨 自分で："+glossify(it.name);
+  if(it.isCreate) return "🎨 "+glossify(it.name);
+  return glossify(it.name);
+}
+
+function drawDonut(c){
+  const pct=TOTAL?Math.round(c/TOTAL*100):0;
+  document.getElementById("donut").style.setProperty("--p",pct);
+  document.getElementById("dpct").textContent=pct+"%";
+  document.getElementById("dsub").textContent=c+" / "+TOTAL+" ステップ";
+  let ph=0;PHASE_RANGE.forEach(([s,e])=>{if(c>e)ph++;});
+  document.getElementById("dmedal").textContent="🏅 "+ph+"／"+NPH+" フェーズ制覇";
+}
+function drawPhaseBars(c){
+  const wrap=document.getElementById("phasebars");wrap.innerHTML="";
+  PHASES.forEach((ph,pi)=>{
+    const [s,e]=PHASE_RANGE[pi];const len=e-s+1;const got=Math.max(0,Math.min(len,c-s));
+    const pct=Math.round(got/len*100);const full=got===len;
+    const row=document.createElement("div");row.className="pbrow";
+    row.innerHTML='<span class="nm">'+ph.short+'</span><span class="pbar"><i class="'+(full?"full":"")+'" style="width:'+pct+'%"></i></span><span class="ct">'+got+'/'+len+'</span>';
+    wrap.appendChild(row);
+  });
+}
+function drawSpark(){
+  const svg=document.getElementById("spark");svg.innerHTML="";
+  const log=getLog();const byDate={};let run=0;
+  log.forEach(d=>{run++;if(d)byDate[d]=run;});
+  const dates=Object.keys(byDate).sort();
+  svg.parentElement.querySelector(".empty")?.remove();
+  if(dates.length===0){svg.style.display="none";const p=document.createElement("div");p.className="empty";p.textContent="まだ記録なし。「できた」を押すと積み上がります。";svg.parentElement.appendChild(p);return;}
+  svg.style.display="block";
+  const W=320,H=70,pad=6,maxY=TOTAL,n=dates.length;
+  const xs=i=>n===1?W/2:pad+(W-2*pad)*i/(n-1);
+  const ys=v=>H-pad-(H-2*pad)*(v/maxY);
+  let line="",area="M"+xs(0)+","+(H-pad);
+  dates.forEach((d,i)=>{const x=xs(i),y=ys(byDate[d]);line+=(i?"L":"M")+x+","+y+" ";area+="L"+x+","+y+" ";});
+  area+="L"+xs(n-1)+","+(H-pad)+"Z";
+  svg.insertAdjacentHTML("beforeend",'<path d="'+area+'" fill="rgba(198,139,107,.12)"/><path d="'+line+'" fill="none" stroke="#C68B6B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>');
+  dates.forEach((d,i)=>svg.insertAdjacentHTML("beforeend",'<circle cx="'+xs(i)+'" cy="'+ys(byDate[d])+'" r="2.6" fill="#C68B6B"/>'));
+}
+
+function render(){
+ const c=getLog().length;
+ const tm=document.getElementById("todayMenu"),tw=document.getElementById("todayWhy"),ts=document.getElementById("todayStyle"),tl=document.getElementById("todayLbl");
+ if(c>=TOTAL){
+   tl.textContent="🎉 全項目クリア";tm.textContent="完走！バトルの素ができたね";tw.textContent="";ts.textContent="ここからはフリースタイルで遊ぼう";
+ }else{
+   const it=STEPS[c], ph=PHASES[it.phase];
+   tl.textContent="今日やること（"+(c+1)+"/"+TOTAL+"）";
+   tm.innerHTML=nameHtml(it)+(it.point?"（"+glossify(it.point)+"）":"");
+   tw.innerHTML="💡 "+glossify(ph.why);
+   const tail=(it.gen||it.isCreate)?"🎨 自分で作って提出！":"撮って公式LINEで提出";
+   ts.innerHTML=(it.styles?"やり方："+glossify(it.styles)+"　":"")+"→ "+tail+
+     (ph.video?'　<span class="vid vidbtn" style="background:rgba(255,255,255,.18);color:#fff" data-v="'+ph.video+'">▶見本</span>':"");
+ }
+ drawDonut(c);drawPhaseBars(c);drawSpark();
+
+ const root=document.getElementById("plan");root.innerHTML="";
+ PHASES.forEach((ph,pi)=>{
+   const [s,e]=PHASE_RANGE[pi];const phaseDone=c>e;
+   const h=document.createElement("div");h.className="phase";
+   h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?'<span class="pv vidbtn" data-v="'+ph.video+'">▶見本</span>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"🏅 ":"🔒 ")+ph.badge+"</span>";
+   root.appendChild(h);
+   const why=document.createElement("p");why.className="why";why.innerHTML="💡 "+glossify(ph.why);root.appendChild(why);
+   const t=document.createElement("table");t.innerHTML="<tr class='hrow'><th>済</th><th>技</th><th>ポイント</th><th>やり方</th><th>見本</th></tr>";root.appendChild(t);
+   for(let i=s;i<=e;i++){
+     const it=STEPS[i];const tr=document.createElement("tr");
+     const done=i<c,now=i===c;
+     if(now)tr.className="now";else if(done)tr.className="done";
+     if(it.isCreate)tr.className+=" create";
+     const vid=(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
+     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"⬅今":"・"))+'</td><td>'+nameHtml(it)+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
+     t.appendChild(tr);
+   }
+ });
+}
+document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);}render();window.scrollTo({top:0,behavior:"smooth"});};
+document.getElementById("backBtn").onclick=()=>{const a=getLog();a.pop();saveLog(a);render();};
+
+// 用語シート
+function openGloss(k){const g=GLOSSARY[k];if(!g)return;
+  document.getElementById("gloss-t").textContent=k;
+  document.getElementById("gloss-d").textContent=g.d;
+  document.getElementById("gloss-fig").innerHTML=(g.f||[]).map(function(src){return '<img src="'+src+'" alt="">';}).join("");
+  document.getElementById("gloss-v").innerHTML=g.v?'<span class="vid vidbtn" data-v="'+g.v+'">▶見本動画</span>':"";
+  document.getElementById("gloss").hidden=false;}
+function closeGloss(){document.getElementById("gloss").hidden=true;}
+function openVideo(src){var p=document.getElementById("vplayer");p.src=src;document.getElementById("vmodal").hidden=false;p.play().catch(function(){});}
+function closeVideo(){var p=document.getElementById("vplayer");p.pause();p.removeAttribute("src");p.load();document.getElementById("vmodal").hidden=true;}
+document.addEventListener("click",e=>{
+  const vb=e.target.closest(".vidbtn");
+  if(vb){openVideo(vb.dataset.v);return;}
+  if(e.target.id==="vclose"||e.target.id==="vmodal"){closeVideo();return;}
+  const t=e.target.closest(".term");
+  if(t){openGloss(t.dataset.k);return;}
+  if(e.target.id==="gloss-x"||e.target.id==="gloss")closeGloss();
+});
+// 4ビート枠の用語もタップ可に
+document.getElementById("beatBox").innerHTML=document.getElementById("beatBox").innerHTML
+  .replace(/アンカー/g,'<span class="term" data-k="アンカー">アンカー</span>')
+  .replace(/スナッピー/g,'<span class="term" data-k="スナッピー">スナッピー</span>')
+  .replace(/空間を埋める/g,'<span class="term" data-k="空間を埋める">空間を埋める</span>')
+  .replace(/とめ・はね・払い/g,'<span class="term" data-k="とめ">とめ</span>・<span class="term" data-k="はね">はね</span>・<span class="term" data-k="払い">払い</span>');
+
+document.getElementById("foot").textContent="全"+TOTAL+"ステップ。日付では進まない＝“できたら押して進む”習得ペース。進捗はこの端末に保存。";
+render();
+</script>
+</body></html>
