@@ -22,6 +22,14 @@ h1{font-size:21px;margin:0 0 2px;font-family:"Noto Serif JP",serif;font-weight:6
 .btn.go{background:#06c755;color:#fff}
 .btn.back{flex:0 0 auto;background:#e6e8ec;color:#7A6E63;font-weight:600;padding:12px 14px}
 
+/* ミニ進捗＋くわしく折りたたみ */
+.miniprog{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.mpbar{flex:1;height:10px;background:#e7e0d6;border-radius:99px;overflow:hidden}
+.mpbar>i{display:block;height:100%;width:0;background:var(--blue);border-radius:99px;transition:width .3s}
+.mptext{font-size:13px;color:#7A6E63;white-space:nowrap;font-weight:700}
+.morebtn{width:100%;border:1px solid #e7e0d6;background:#fff;color:#7A6E63;border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:14px}
+#more[hidden]{display:none}
+
 /* 達成グラフ */
 .chart{background:#fff;border-radius:10px;padding:14px;margin-bottom:14px}
 .chart-top{display:flex;align-items:center;gap:16px;margin-bottom:6px}
@@ -126,9 +134,6 @@ tr.create td:first-child{border-left:4px solid #8a6ad0}
 </style></head>
 <body><div class="wrap">
 <h1>ゆってぃさん｜上達ロードマップ</h1>
-<p class="sub">毎日メニューをこなす → 公式LINEで動画提出（マスト）→ 週2の対面でフィードバック</p>
-<p class="hint">ℹ️ <span style="border-bottom:1px dotted var(--blue);color:var(--blue)">色つきの点線</span>の用語はタップで解説が出ます。</p>
-
 <div class="today">
   <div class="lbl" id="todayLbl">今日やること</div>
   <div class="menu" id="todayMenu">―</div>
@@ -139,6 +144,14 @@ tr.create td:first-child{border-left:4px solid #8a6ad0}
   <button class="btn go" id="goBtn">✅ できた → 次へ</button>
   <button class="btn back" id="backBtn">↩︎ 1つ戻す</button>
 </div>
+<div class="miniprog"><div class="mpbar"><i id="mpfill"></i></div><div class="mptext" id="mptext">0 / 0</div></div>
+<button class="morebtn" id="moreBtn" aria-expanded="false">▾ メニュー・達成グラフを見る</button>
+
+<div id="more" hidden>
+<p class="sub">毎日メニューをこなす → 公式LINEで動画提出（マスト）→ 週2の対面でフィードバック</p>
+<p class="hint">ℹ️ <span style="border-bottom:1px dotted var(--blue);color:var(--blue)">色つきの点線</span>の用語はタップで解説が出ます。</p>
+
+<div class="line">📲 動画は毎回かならず「公式LINE」から提出（これがマスト）</div>
 
 <div class="chart">
   <div class="chart-top">
@@ -156,8 +169,6 @@ tr.create td:first-child{border-left:4px solid #8a6ad0}
   </div>
 </div>
 
-<div class="line">📲 動画は毎回かならず「公式LINE」から提出（これがマスト）</div>
-
 <div class="box goal"><b>最終ゴール</b><br>跳びながら音を取れるようになる → 自分のステップと混ぜてバトルが組み立てられる。<br><span style="color:#7A6E63;font-size:13px">1日にやることは最大3つまで。アンカー・スナッピーの2つの質感で磨く。</span></div>
 
 <div class="box beat" id="beatBox"><b>毎回の提出は、この4ステップで回す</b>（覚えるのは技じゃなく、この“ループ”ひとつ）
@@ -170,6 +181,7 @@ tr.create td:first-child{border-left:4px solid #8a6ad0}
 
 <div id="plan"></div>
 <p class="foot" id="foot"></p>
+</div>
 </div>
 
 <div class="gloss-sheet" id="gloss" hidden>
@@ -382,6 +394,9 @@ function render(){
      (ph.video?'　<span class="vid vidbtn" style="background:rgba(255,255,255,.18);color:#fff" data-v="'+ph.video+'">▶見本</span>':"");
  }
  drawDonut(c);drawPhaseBars(c);drawSpark();
+ var _pct=TOTAL?Math.round(c/TOTAL*100):0;
+ document.getElementById("mpfill").style.width=_pct+"%";
+ document.getElementById("mptext").textContent=(c>=TOTAL?"🎉 完走！":c+" / "+TOTAL+"　"+_pct+"%");
 
  const root=document.getElementById("plan");root.innerHTML="";
  PHASES.forEach((ph,pi)=>{
@@ -404,6 +419,7 @@ function render(){
 }
 document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);}render();window.scrollTo({top:0,behavior:"smooth"});};
 document.getElementById("backBtn").onclick=()=>{const a=getLog();a.pop();saveLog(a);render();};
+document.getElementById("moreBtn").onclick=function(){var m=document.getElementById("more");var open=m.hidden;m.hidden=!open;this.setAttribute("aria-expanded",String(open));this.textContent=open?"▴ 閉じる":"▾ メニュー・達成グラフを見る";};
 
 // 用語シート
 function openGloss(k){const g=GLOSSARY[k];if(!g)return;
