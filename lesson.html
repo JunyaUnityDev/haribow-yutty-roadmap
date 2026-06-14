@@ -65,10 +65,13 @@ details[open]>summary::before{content:"−"}
 .fig-det>summary{list-style:none;cursor:pointer;color:var(--accent);font-size:14px;font-weight:500;padding:10px 0}
 .fig-det>summary::-webkit-details-marker{display:none}
 .figs img{width:100%;border:1px solid var(--line);border-radius:12px;margin-top:10px;display:block}
-.video-modal{position:fixed;inset:0;background:rgba(0,0,0,.84);display:flex;align-items:center;justify-content:center;z-index:100;padding:14px}
+.video-modal{position:fixed;inset:0;background:rgba(0,0,0,.84);display:flex;align-items:center;justify-content:center;z-index:100;padding:14px;overflow:auto}
 .video-modal[hidden]{display:none}
-.video-modal video{max-width:100%;max-height:84vh;border-radius:10px;background:#000}
-.video-close{position:absolute;top:12px;right:16px;font-size:32px;line-height:1;color:#fff;background:none;border:none;cursor:pointer}
+.vmodal-card{background:#fff;border-radius:16px;padding:18px;max-width:520px;width:100%;position:relative;max-height:92vh;overflow:auto}
+.vmodal-card h3{font-family:"Noto Serif JP",serif;font-size:20px;font-weight:600;margin-bottom:12px;color:var(--ink)}
+.vmodal-card video{width:100%;max-height:60vh;border-radius:10px;background:#000;display:block}
+.vmodal-card #vdesc{margin-top:12px;font-size:14.5px;line-height:1.8;color:#3a3a3c;font-weight:300}
+.video-close{position:absolute;top:9px;right:14px;font-size:28px;line-height:1;color:var(--grey);background:none;border:none;cursor:pointer;z-index:2}
 .beats{display:flex;justify-content:center;gap:14px;margin:18px 0 6px;min-height:64px;align-items:center}
 .bt{display:flex;flex-direction:column;align-items:center;gap:7px}
 .bt .dot{width:30px;height:30px;border-radius:50%;background:#d9d2ca;transition:.08s}
@@ -216,25 +219,29 @@ footer{padding:40px 0 70px;text-align:center;color:var(--grey);font-size:13px;fo
 </main>
 <footer>分解して、掛け合わせる</footer>
 
-<div class="video-modal" id="vmodal" hidden><button class="video-close" id="vclose" aria-label="閉じる">×</button><video id="vplayer" controls playsinline preload="metadata"></video></div>
+<div class="video-modal" id="vmodal" hidden><div class="vmodal-card"><button class="video-close" id="vclose" aria-label="閉じる">×</button><h3 id="vtitle"></h3><video id="vplayer" controls playsinline preload="metadata"></video><p id="vdesc"></p></div></div>
 
 <script>
-function openVideo(src){var p=document.getElementById("vplayer");p.src=src;document.getElementById("vmodal").hidden=false;p.play().catch(function(){});}
+function openStepVideo(step){
+  document.getElementById("vtitle").textContent=step.n;
+  document.getElementById("vdesc").textContent=step.e||step.d||"";
+  var p=document.getElementById("vplayer");p.src=step.v;
+  document.getElementById("vmodal").hidden=false;p.play().catch(function(){});
+}
 function closeVideo(){var p=document.getElementById("vplayer");p.pause();p.removeAttribute("src");p.load();document.getElementById("vmodal").hidden=true;}
 document.addEventListener("click",function(e){
-  var vb=e.target.closest(".vidbtn");
-  if(vb){openVideo(vb.dataset.v);return;}
+  if(e.target.closest(".stepvid")){openStepVideo(curStep);return;}
   if(e.target.id==="vclose"||e.target.id==="vmodal")closeVideo();
 });
 const STEPS=[
  {n:"足ぶみ",d:"その場で足を踏む（だれでもできる）"},
  {n:"その場ジャンプ",d:"その場で跳ぶ（だれでもできる）"},
- {n:"ペダル",d:"つま先とかかとを交互に踏みかえる",v:"videos/ペダル.mp4"},
- {n:"オーヴ",d:"縄をまたぐように、足を大きく開いて抜く",v:"videos/オーヴ.mp4"},
- {n:"スライド",d:"着地した瞬間に、体を横へスッとずらす",v:"videos/スライド.mp4"},
- {n:"3ステップ",d:"「ワン・エン・ツー」で踏む",v:"videos/3ステップ.mp4"},
- {n:"ヒールロック",d:"片足のかかとでピタッとキメる",v:"videos/ヒールロック.mp4"},
- {n:"ラグジャンプ",d:"ぐっとためて、遅らせて跳ぶ",v:"videos/ラグジャンプ.mp4"},
+ {n:"ペダル",d:"つま先とかかとを交互に踏みかえる",v:"videos/ペダル.mp4",e:"つま先とかかとを交互に踏みかえる中で、足の裏の下にロープを通す技。引っかかってしまう時は、重心を上下に動かすと抜けやすくなります。"},
+ {n:"オーヴ",d:"縄をまたぐように、足を大きく開いて抜く",v:"videos/オーヴ.mp4",e:"ロープを“跳ばずにまたぐ”動き。足幅を前後に大きく開き、残った足を真上に抜きます。他の技から縄を抜けるときの共通動作にもなります。"},
+ {n:"スライド",d:"着地した瞬間に、体を横へスッとずらす",v:"videos/スライド.mp4",e:"足が地面についた瞬間に、体を横（または前後）へ平行移動させる技。地面からの反発をもらうと、速く動けます。前後のスライドは特に大切です。"},
+ {n:"3ステップ",d:"「ワン・エン・ツー」で踏む",v:"videos/3ステップ.mp4",e:"「ワン・エン・ツー」の3カウントで踏むステップ。エンで、太ももが床と水平（約90度）になるまで足を上げるのが目安です。"},
+ {n:"ヒールロック",d:"片足のかかとでピタッとキメる",v:"videos/ヒールロック.mp4",e:"着地と同時に素早く片足へ体重を移し、かかとでその姿勢をキープする技。動きに“緩急（メリハリ）”を出せます。"},
+ {n:"ラグジャンプ",d:"ぐっとためて、遅らせて跳ぶ",v:"videos/ラグジャンプ.mp4",e:"足の接地をわざと長くとって、カウントの瞬間に“浮き始める”技。跳ぶタイミングに“ため（ラグ）”を作ります。いちばん難しい技です。"},
 ];
 const RHYTHMS=[
  {name:"8ビート",n:1,syl:["1"]},
@@ -260,7 +267,7 @@ function refresh(){
   stop(); build();
   document.getElementById("comboTtl").textContent=curStep.n+" を "+curRhythm.name+" で、"+curDir+"・"+curHgt;
   document.getElementById("comboDesc").textContent="（"+curStep.n+"＝"+curStep.d+"）";
-  document.getElementById("comboVid").innerHTML=curStep.v?'<button class="vidbtn" data-v="'+curStep.v+'">▶ 見本動画</button>':"";
+  document.getElementById("comboVid").innerHTML=curStep.v?'<button class="vidbtn stepvid">▶ 見本動画と解説</button>':"";
   const bt=document.getElementById("beats");bt.innerHTML="";
   curRhythm.syl.forEach((s,i)=>{const d=document.createElement("div");d.className="bt";d.dataset.i=i;d.innerHTML='<div class="dot"></div><div class="syl">'+s+'</div>';bt.appendChild(d);});
 }
