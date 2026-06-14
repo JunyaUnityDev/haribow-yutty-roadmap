@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分解して、掛け合わせる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1d1d1f;--grey:#6e6e73;--line:#e8e6e3;--bg:#fff;--accent:#C68B6B;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:var(--bg);line-height:1.85;font-weight:400;-webkit-font-smoothing:antialiased}
+.wrap{max-width:680px;margin:0 auto;padding:0 22px}
+
+/* ヘッダー */
+header{padding:64px 0 28px;text-align:center}
+header h1{font-family:"Noto Serif JP",serif;font-weight:600;font-size:34px;letter-spacing:.02em;line-height:1.35}
+header .lead{color:var(--grey);font-size:16px;margin-top:14px;font-weight:300}
+
+/* 目次（追従） */
+.toc{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.toc-inner{max-width:680px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:10px 14px;-webkit-overflow-scrolling:touch}
+.toc a{flex:0 0 auto;font-size:13px;color:var(--grey);text-decoration:none;padding:5px 11px;border-radius:99px;white-space:nowrap;transition:.2s}
+.toc a:hover{color:var(--ink);background:#f3f1ee}
+
+/* セクション */
+section{padding:54px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.kicker{font-size:13px;color:var(--accent);font-weight:700;letter-spacing:.08em;margin-bottom:14px}
+section h2{font-family:"Noto Serif JP",serif;font-weight:600;font-size:25px;line-height:1.5;letter-spacing:.01em}
+.one{color:var(--grey);font-size:16px;font-weight:300;margin-top:14px}
+
+/* くわしく（開閉） */
+details{margin-top:22px;border-top:1px solid var(--line);padding-top:6px}
+details>summary{list-style:none;cursor:pointer;color:var(--accent);font-size:14px;font-weight:500;padding:10px 0;display:flex;align-items:center;gap:7px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"＋";font-size:15px;transition:.2s}
+details[open]>summary::before{content:"−"}
+.detail{font-size:15.5px;padding:6px 0 12px}
+.detail p{margin:10px 0}
+.detail ul{margin:10px 0;padding-left:1.1em}
+.detail li{margin:7px 0}
+.detail .em{font-weight:700}
+.note{color:var(--grey);font-size:14px;font-weight:300}
+
+/* 心構えカード */
+.cards{display:grid;gap:14px;margin-top:22px}
+.card{border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.card h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.card p{font-size:14.5px;color:#3a3a3c;font-weight:300}
+
+/* 組み合わせメーカー */
+.maker{border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px;background:#fcfbfa}
+.maker .grouplbl{font-size:12px;color:var(--grey);font-weight:700;letter-spacing:.06em;margin:14px 0 8px}
+.maker .grouplbl:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 15px;font-size:14px;cursor:pointer;color:#3a3a3c;transition:.15s}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.combo{margin-top:22px;text-align:center}
+.combo .ttl{font-size:20px;font-weight:700}
+.cdesc{color:var(--grey);font-size:14px;font-weight:300;margin-top:6px}
+#comboVid{margin-top:10px}
+#comboVid .vidbtn{border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:99px;padding:8px 18px;font-size:13.5px;cursor:pointer;font-weight:500}
+.break-note{margin-top:18px;background:#fcf6f1;border:1px solid #ecd9cb;border-radius:14px;padding:16px 18px;font-size:14px;color:#5a4a40;line-height:1.75}
+.break-note b{color:var(--accent)}
+.fig-det{margin-top:16px;border-top:1px solid var(--line);padding-top:6px}
+.fig-det>summary{list-style:none;cursor:pointer;color:var(--accent);font-size:14px;font-weight:500;padding:10px 0}
+.fig-det>summary::-webkit-details-marker{display:none}
+.figs img{width:100%;border:1px solid var(--line);border-radius:12px;margin-top:10px;display:block}
+.video-modal{position:fixed;inset:0;background:rgba(0,0,0,.84);display:flex;align-items:center;justify-content:center;z-index:100;padding:14px}
+.video-modal[hidden]{display:none}
+.video-modal video{max-width:100%;max-height:84vh;border-radius:10px;background:#000}
+.video-close{position:absolute;top:12px;right:16px;font-size:32px;line-height:1;color:#fff;background:none;border:none;cursor:pointer}
+.beats{display:flex;justify-content:center;gap:14px;margin:18px 0 6px;min-height:64px;align-items:center}
+.bt{display:flex;flex-direction:column;align-items:center;gap:7px}
+.bt .dot{width:30px;height:30px;border-radius:50%;background:#d9d2ca;transition:.08s}
+.bt.lit .dot{background:var(--accent);transform:scale(1.22)}
+.bt .syl{font-size:14px;font-weight:700;color:var(--grey)}
+.play{margin-top:6px;border:none;background:var(--ink);color:#fff;border-radius:99px;padding:12px 26px;font-size:15px;font-weight:500;cursor:pointer}
+.play.playing{background:var(--accent)}
+.hint{color:var(--grey);font-size:13px;font-weight:300;margin-top:12px;text-align:center}
+
+footer{padding:40px 0 70px;text-align:center;color:var(--grey);font-size:13px;font-weight:300}
+
+/* スマホ対応 */
+@media(max-width:480px){
+  .wrap{padding:0 18px}
+  header{padding:44px 0 22px}
+  header h1{font-size:26px}
+  header .lead{font-size:14px}
+  .toc-inner{padding:9px 12px}
+  .toc a{font-size:12px;padding:5px 9px}
+  section{padding:40px 0}
+  section h2{font-size:21px;line-height:1.55}
+  .one{font-size:15px}
+  .detail{font-size:15px}
+  .maker{padding:16px}
+  .chip{padding:8px 13px;font-size:13.5px}
+  .combo .ttl{font-size:17px}
+  .beats{gap:10px}
+  .bt .dot{width:26px;height:26px}
+  .card{padding:16px}
+}
+</style></head>
+<body>
+
+<header>
+  <h1>分解して、掛け合わせる</h1>
+  <p class="lead">ダブルダッチから、夢のかなえ方まで。</p>
+</header>
+
+<nav class="toc"><div class="toc-inner">
+  <a href="#s1">① この人について</a>
+  <a href="#s2">② 2つの軸</a>
+  <a href="#s3">③ リズム</a>
+  <a href="#s4">④ 組み合わせ</a>
+  <a href="#s5">⑤ 心の使い方</a>
+  <a href="#s6">⑥ まとめ</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="s1">
+  <div class="kicker">① この人について</div>
+  <h2>全部、ひとつのスキルでできています。</h2>
+  <p class="one">世界一のダブルダッチ。バズったゲーム。服のブランド。曲づくり。</p>
+  <details><summary>くわしく</summary><div class="detail">
+    <ul>
+      <li>ダブルダッチ <span class="em">世界一</span>（2025年 世界大会 優勝）</li>
+      <li>フリーホラーゲーム『オトギリ』をプロデュース（累計8万ダウンロード／関連動画1,000万回超）</li>
+      <li>アパレルブランド『FLEKKY FLEDDY』を主宰</li>
+      <li>音楽：Britain's Got Talent、NBA、世界大会の舞台で流れた曲は、<span class="em">自分で作曲・リミックス</span>したもの</li>
+    </ul>
+    <p>バラバラに見えますが、中身はすべて <span class="em">同じひとつのスキル</span> でできています。それが、このページの話です。</p>
+  </div></details>
+</section>
+
+<section id="s2">
+  <div class="kicker">② 2つの軸</div>
+  <h2>ゴールから逆算して、分解して掛け合わせる。</h2>
+  <p class="one">「何をやるか」を見つける軸と、「どう作るか」の軸。</p>
+  <details><summary>くわしく</summary><div class="detail">
+    <p><span class="em">① 逆算する（タテ）</span><br>なりたい姿 → そのために必要なもの → … → <span class="em">今日やること</span>。</p>
+    <ul>
+      <li>例）優勝したい → 審査員が「この人が一番だ」と感じる → そのために必要な力は？ → だから今日の課題はこれ。</li>
+    </ul>
+    <p><span class="em">② 分解して掛け合わせる（ヨコ）</span><br>世の中のものや他のジャンルを分解し、原理を取り出して、<span class="em">自分のものに混ぜる</span>。</p>
+    <p>①が「何をやるか」を出し、②が「それを作る」。この2つを回し続けることが、上達のエンジンになります。</p>
+  </div></details>
+</section>
+
+<section id="s3">
+  <div class="kicker">③ リズム</div>
+  <h2>リズムとは、1カウントを何回打つか。</h2>
+  <p class="one">同じ1拍を、何回に分けるか。それだけです。</p>
+  <details><summary>くわしく</summary><div class="detail">
+    <ul>
+      <li><span class="em">8ビート</span>：1カウントに1回</li>
+      <li><span class="em">ダブル</span>：2回（ダ・ブ）</li>
+      <li><span class="em">トリプ</span>：3回（と・り・ぷ）</li>
+      <li><span class="em">クワトロ</span>：4回（ク・ワ・ト・ロ）</li>
+    </ul>
+    <p>音にして、声に出して、体で打つ。次の「組み合わせ」で実際に鳴らせます。</p>
+    <img src="figures/05_リズム.svg" alt="リズムの分け方" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-top:6px">
+  </div></details>
+</section>
+
+<section id="s4">
+  <div class="kicker">④ 組み合わせ</div>
+  <h2>動き × リズム × 空間 を、自分で掛け合わせる。</h2>
+  <p class="one">3つの部品を選ぶと、組み合わせができます。音を鳴らして、体で合わせてみましょう。</p>
+  <div class="maker">
+    <div class="grouplbl">① 動き（ステップ）を選ぶ</div>
+    <div class="chips" id="stepChips"></div>
+    <div class="grouplbl">② リズムを選ぶ</div>
+    <div class="chips" id="rhythmChips"></div>
+    <div class="grouplbl">③ 空間：向き</div>
+    <div class="chips" id="dirChips"></div>
+    <div class="grouplbl">③ 空間：高さ</div>
+    <div class="chips" id="hgtChips"></div>
+    <div class="combo">
+      <div class="ttl" id="comboTtl">―</div>
+      <div class="cdesc" id="comboDesc"></div>
+      <div id="comboVid"></div>
+      <div class="beats" id="beats"></div>
+      <button class="play" id="playBtn">▶ 鳴らす</button>
+      <div class="hint">青い丸が光るタイミングで、手を打つ／足を踏む。動き・リズム・空間のどれかを変えると、別の組み合わせに。これが「掛け合わせ」。</div>
+    </div>
+    <div class="break-note"><b>うまくいかない組み合わせは、崩してOK。</b><br>体のつくり的に、そのままだとムリな組み合わせもあります。そういう時は、いい感じに崩して大丈夫。崩した瞬間に、それはもう「自分のオリジナル」です。</div>
+    <details class="fig-det"><summary>空間ってなに？（図で見る）</summary><div class="figs"><img src="figures/01_位置.svg" alt="位置（前後左右）"><img src="figures/02_高さ.svg" alt="高さ（上下）"><img src="figures/03_向き.svg" alt="向き（前・横・後ろ）"></div></details>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="kicker">⑤ 心の使い方</div>
+  <h2>うまくなる人の、心の使い方。</h2>
+  <p class="one">技術と同じくらい、ここが大事です。</p>
+  <div class="cards">
+    <div class="card"><h3>本気のスイッチ</h3><p>1日1回は、本気を出す瞬間をつくる。だらだらの100回より、本気の1回。</p></div>
+    <div class="card"><h3>「できない理由」を、全部つぶす</h3><p>「できない」は分解できます。理由を一つずつつぶしていくと、最後に残るのは「できる」だけ。</p></div>
+    <div class="card"><h3>緊張は、宝物</h3><p>緊張できるのは、本気の証拠。たくさん失敗して立ち直るほど、「戻ってこられる」と分かって緊張は減ります。脳は、ワクワクと緊張を見分けられません。だから「ワクワクしている」と思えば大丈夫。</p></div>
+  </div>
+  <details><summary>くわしく</summary><div class="detail">
+    <p>だから、いい意味で <span class="em">たくさん失敗してください</span>。失敗の話をたくさん持っている人ほど、強くて、面白い。</p>
+    <p class="note">この先生も、初めての大会は緊張で吐きそうでした。衣装は七分丈。高校1年のころの話です。そこから、今があります。</p>
+  </div></details>
+</section>
+
+<section id="s6">
+  <div class="kicker">⑥ まとめ</div>
+  <h2>これは、ダブルダッチだけの話ではありません。</h2>
+  <p class="one">ゴールから逆算して、分解して掛け合わせる。勉強にも、夢にも、なりたい姿にも効きます。</p>
+  <details><summary>くわしく</summary><div class="detail">
+    <p>今日やったのは、たったひとつ。<span class="em">分解して、掛け合わせる</span>。これを、自分の好きなこと全部でやってみてください。別々のものが、つながって、掛け算で伸びていきます。</p>
+  </div></details>
+</section>
+
+</main>
+<footer>分解して、掛け合わせる</footer>
+
+<div class="video-modal" id="vmodal" hidden><button class="video-close" id="vclose" aria-label="閉じる">×</button><video id="vplayer" controls playsinline preload="metadata"></video></div>
+
+<script>
+function openVideo(src){var p=document.getElementById("vplayer");p.src=src;document.getElementById("vmodal").hidden=false;p.play().catch(function(){});}
+function closeVideo(){var p=document.getElementById("vplayer");p.pause();p.removeAttribute("src");p.load();document.getElementById("vmodal").hidden=true;}
+document.addEventListener("click",function(e){
+  var vb=e.target.closest(".vidbtn");
+  if(vb){openVideo(vb.dataset.v);return;}
+  if(e.target.id==="vclose"||e.target.id==="vmodal")closeVideo();
+});
+const STEPS=[
+ {n:"足ぶみ",d:"その場で足を踏む（だれでもできる）"},
+ {n:"その場ジャンプ",d:"その場で跳ぶ（だれでもできる）"},
+ {n:"ペダル",d:"つま先とかかとを交互に踏みかえる",v:"videos/ペダル.mp4"},
+ {n:"オーヴ",d:"縄をまたぐように、足を大きく開いて抜く",v:"videos/オーヴ.mp4"},
+ {n:"スライド",d:"着地した瞬間に、体を横へスッとずらす",v:"videos/スライド.mp4"},
+ {n:"3ステップ",d:"「ワン・エン・ツー」で踏む",v:"videos/3ステップ.mp4"},
+ {n:"ヒールロック",d:"片足のかかとでピタッとキメる",v:"videos/ヒールロック.mp4"},
+ {n:"ラグジャンプ",d:"ぐっとためて、遅らせて跳ぶ",v:"videos/ラグジャンプ.mp4"},
+];
+const RHYTHMS=[
+ {name:"8ビート",n:1,syl:["1"]},
+ {name:"ダブル",n:2,syl:["ダ","ブ"]},
+ {name:"トリプ",n:3,syl:["と","り","ぷ"]},
+ {name:"クワトロ",n:4,syl:["ク","ワ","ト","ロ"]},
+];
+const DIRS=["前向き","横向き","後ろ向き"];
+const HGTS=["ふつう","しゃがむ"];
+let curStep=STEPS[0], curRhythm=RHYTHMS[2], curDir=DIRS[0], curHgt=HGTS[0];
+
+function chipRow(id,items,label,isOn,pick){
+  const el=document.getElementById(id); el.innerHTML="";
+  items.forEach(it=>{const b=document.createElement("button");b.className="chip"+(isOn(it)?" on":"");b.textContent=label(it);b.onclick=()=>{pick(it);refresh();};el.appendChild(b);});
+}
+function build(){
+  chipRow("stepChips",STEPS,s=>s.n,s=>s===curStep,s=>curStep=s);
+  chipRow("rhythmChips",RHYTHMS,r=>r.name,r=>r===curRhythm,r=>curRhythm=r);
+  chipRow("dirChips",DIRS,d=>d,d=>d===curDir,d=>curDir=d);
+  chipRow("hgtChips",HGTS,h=>h,h=>h===curHgt,h=>curHgt=h);
+}
+function refresh(){
+  stop(); build();
+  document.getElementById("comboTtl").textContent=curStep.n+" を "+curRhythm.name+" で、"+curDir+"・"+curHgt;
+  document.getElementById("comboDesc").textContent="（"+curStep.n+"＝"+curStep.d+"）";
+  document.getElementById("comboVid").innerHTML=curStep.v?'<button class="vidbtn" data-v="'+curStep.v+'">▶ 見本動画</button>':"";
+  const bt=document.getElementById("beats");bt.innerHTML="";
+  curRhythm.syl.forEach((s,i)=>{const d=document.createElement("div");d.className="bt";d.dataset.i=i;d.innerHTML='<div class="dot"></div><div class="syl">'+s+'</div>';bt.appendChild(d);});
+}
+
+// --- 音（Web Audio）---
+let A=null, sched=null, idx=0, playing=false;
+function blip(accent){
+  const t=A.currentTime, o=A.createOscillator(), g=A.createGain();
+  o.type="triangle"; o.frequency.value=accent?900:560;
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(accent?0.55:0.34,t+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t+0.13);
+  o.connect(g); g.connect(A.destination); o.start(t); o.stop(t+0.15);
+}
+function lit(i){document.querySelectorAll("#beats .bt").forEach(b=>b.classList.toggle("lit",+b.dataset.i===i));}
+function play(){
+  if(!A)A=new (window.AudioContext||window.webkitAudioContext)(); if(A.resume)A.resume();
+  const n=curRhythm.n, countDur=620, sub=countDur/n; idx=0; stop(); playing=true;
+  const btn=document.getElementById("playBtn"); btn.classList.add("playing"); btn.textContent="■ 止める";
+  const fire=()=>{const i=idx%n; blip(i===0); lit(i); idx++;};
+  fire(); sched=setInterval(fire,sub);
+}
+function stop(){
+  if(sched){clearInterval(sched);sched=null;} playing=false; lit(-1);
+  const btn=document.getElementById("playBtn"); if(btn){btn.classList.remove("playing");btn.textContent="▶ 鳴らす";}
+}
+document.getElementById("playBtn").onclick=()=>{playing?stop():play();};
+
+refresh();
+</script>
+</body></html>
