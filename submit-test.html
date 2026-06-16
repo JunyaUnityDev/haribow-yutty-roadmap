@@ -39,7 +39,7 @@ input{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 14
 const STEPS=["オーヴ","スライド","ペダル","3ステップ","ヒールロック","ラグジャンプ"];
 let tech="オーヴ";
 const oaid=document.getElementById("oaid");
-oaid.value=localStorage.getItem("oa_id")||"";
+oaid.value=localStorage.getItem("oa_id")||"@578mjivx";
 oaid.oninput=()=>localStorage.setItem("oa_id",oaid.value.trim());
 const techs=document.getElementById("techs");
 function draw(){
