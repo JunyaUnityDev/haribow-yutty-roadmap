@@ -17,7 +17,8 @@ h1{font-size:21px;margin:0 0 2px;font-family:"Noto Serif JP",serif;font-weight:6
 .today .why{font-size:12px;opacity:.92;margin-top:6px;border-top:1px solid rgba(255,255,255,.25);padding-top:6px}
 .today .style{font-size:13px;opacity:.95;margin-top:6px}
 .today .term{border-bottom-color:#cfe0f2;color:#eaf2fb}
-.ctrl{display:flex;gap:8px;margin-bottom:14px}
+.ctrl{display:flex;gap:8px;margin-bottom:8px}
+.submitbtn{display:block;text-align:center;text-decoration:none;background:#06c755;color:#fff;font-weight:800;font-size:15px;border-radius:10px;padding:13px;margin-bottom:14px;box-shadow:0 2px 6px rgba(6,199,85,.25)}
 .btn{flex:1;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer}
 .btn.go{background:#06c755;color:#fff}
 .btn.back{flex:0 0 auto;background:#e6e8ec;color:#7A6E63;font-weight:600;padding:12px 14px}
@@ -144,6 +145,7 @@ tr.create td:first-child{border-left:4px solid #8a6ad0}
   <button class="btn go" id="goBtn">✅ できた → 次へ</button>
   <button class="btn back" id="backBtn">↩︎ 1つ戻す</button>
 </div>
+<a class="submitbtn" id="submitBtn" target="_blank" rel="noopener" style="display:none">📲 この技を動画提出する</a>
 <div class="miniprog"><div class="mpbar"><i id="mpfill"></i></div><div class="mptext" id="mptext">0 / 0</div></div>
 <button class="morebtn" id="moreBtn" aria-expanded="false">▾ メニュー・達成グラフを見る</button>
 
@@ -341,6 +343,18 @@ function todayStr(){const d=new Date();return d.getFullYear()+"-"+String(d.getMo
 // --- サーバ同期（GAS doGet）。?u=token があれば進捗をサーバと同期（ログイン不要） ---
 const GAS_URL="https://script.google.com/macros/s/AKfycbzk8aSKX2KPs3lYJ4mW1yS5-XrAzU5mg5EM_d0bf2Ev0VTdZk46ph4TqNCyEHhZ-LGCHQ/exec";
 const U=(new URLSearchParams(location.search).get("u")||"").trim();
+// 提出ラベル＝承認システムの突合キー（公式LINEに送る「動画提出：{ラベル}」の{ラベル}）。
+// グローバル一意にするため phase短縮＋技名。web🏅・提出ボタン・承認シートで同じ文字列を使う。
+function stepLabel(it){
+  var ph=PHASES[it.phase];
+  var pfx=String(ph.short||ph.title||"").replace(/\s+/g,"");
+  if(it.isCreate||it.gen) return pfx+"／空間を埋める";
+  return pfx+"／"+it.name;
+}
+const OA_BASIC_ID="578mjivx";
+function submitUrl(it){
+  return "https://line.me/R/oaMessage/%40"+OA_BASIC_ID+"/?"+encodeURIComponent("動画提出："+stepLabel(it));
+}
 let approvedSet=new Set();
 function gasSave(stepKey,done){
   if(!U)return;
@@ -406,8 +420,10 @@ function drawSpark(){
 function render(){
  const c=getLog().length;
  const tm=document.getElementById("todayMenu"),tw=document.getElementById("todayWhy"),ts=document.getElementById("todayStyle"),tl=document.getElementById("todayLbl");
+ const sb=document.getElementById("submitBtn");
  if(c>=TOTAL){
    tl.textContent="🎉 全項目クリア";tm.textContent="完走！バトルの素ができたね";tw.textContent="";ts.textContent="ここからはフリースタイルで遊ぼう";
+   if(sb)sb.style.display="none";
  }else{
    const it=STEPS[c], ph=PHASES[it.phase];
    tl.textContent="今日やること（"+(c+1)+"/"+TOTAL+"）";
@@ -416,6 +432,7 @@ function render(){
    const tail=(it.gen||it.isCreate)?"🎨 自分で作って提出！":"撮って公式LINEで提出";
    ts.innerHTML=(it.styles?"やり方："+glossify(it.styles)+"　":"")+"→ "+tail+
      (ph.video?'　<span class="vid vidbtn" style="background:rgba(255,255,255,.18);color:#fff" data-v="'+ph.video+'">▶見本</span>':"");
+   if(sb){sb.href=submitUrl(it);sb.style.display="block";}
  }
  drawDonut(c);drawPhaseBars(c);drawSpark();
  var _pct=TOTAL?Math.round(c/TOTAL*100):0;
@@ -436,7 +453,7 @@ function render(){
      if(now)tr.className="now";else if(done)tr.className="done";
      if(it.isCreate)tr.className+=" create";
      const vid=(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
-     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"⬅今":"・"))+'</td><td>'+nameHtml(it)+(approvedSet.has(it.key)?' <span style="color:#C68B6B;font-size:11px;font-weight:700">🏅承認</span>':'')+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
+     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"⬅今":"・"))+'</td><td>'+nameHtml(it)+(approvedSet.has(stepLabel(it))?' <span style="color:#C68B6B;font-size:11px;font-weight:700">🏅承認</span>':'')+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
      t.appendChild(tr);
    }
  });
