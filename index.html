@@ -319,11 +319,12 @@ const PHASES = [
 ];
 
 // --- フラット化（各フェーズ末尾に create があれば 🎨 行を生成） ---
+const PHASE_KEYS=["warmup","ove","slide","pedal","step3","heel","rag","trip","combo","special","music"];
 const STEPS=[]; const PHASE_RANGE=[];
 PHASES.forEach((ph,pi)=>{
-  const start=STEPS.length;
-  ph.items.forEach(it=>STEPS.push({...it,phase:pi}));
-  if(ph.create){STEPS.push({name:ph.create,phase:pi,isCreate:true,gen:true});}
+  const start=STEPS.length;const pk=PHASE_KEYS[pi]||("p"+pi);
+  ph.items.forEach((it,ii)=>STEPS.push({...it,phase:pi,key:pk+"-"+(ii+1)}));
+  if(ph.create){STEPS.push({name:ph.create,phase:pi,isCreate:true,gen:true,key:pk+"-c"});}
   PHASE_RANGE.push([start,STEPS.length-1]);
 });
 const TOTAL=STEPS.length, NPH=PHASES.length;
@@ -336,6 +337,29 @@ function getLog(){
 }
 function saveLog(a){localStorage.setItem(LOGKEY,JSON.stringify(a));}
 function todayStr(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+
+// --- サーバ同期（GAS doGet）。?u=token があれば進捗をサーバと同期（ログイン不要） ---
+const GAS_URL="https://script.google.com/macros/s/AKfycbzk8aSKX2KPs3lYJ4mW1yS5-XrAzU5mg5EM_d0bf2Ev0VTdZk46ph4TqNCyEHhZ-LGCHQ/exec";
+const U=(new URLSearchParams(location.search).get("u")||"").trim();
+let approvedSet=new Set();
+function gasSave(stepKey,done){
+  if(!U)return;
+  fetch(GAS_URL+"?action=save&u="+encodeURIComponent(U)+"&step="+encodeURIComponent(stepKey)+"&done="+(done?1:0)).catch(function(){});
+}
+function gasLoad(cb){
+  if(!U){cb();return;}
+  fetch(GAS_URL+"?action=read&u="+encodeURIComponent(U)).then(function(r){return r.json();}).then(function(j){
+    if(j&&j.ok){
+      (j.approved||[]).forEach(function(k){approvedSet.add(k);});
+      var sset=new Set(j.done||[]);
+      var sCleared=0;while(sCleared<TOTAL&&sset.has(STEPS[sCleared].key))sCleared++;
+      var a=getLog();
+      if(sCleared>a.length){var na=a.slice();for(var i=a.length;i<sCleared;i++)na.push(todayStr());saveLog(na);}
+      else if(a.length>sCleared){for(var i2=sCleared;i2<a.length;i2++)gasSave(STEPS[i2].key,true);}
+    }
+    cb();
+  }).catch(function(){cb();});
+}
 
 function nameHtml(it){
   if(it.gen) return "🎨 自分で："+glossify(it.name);
@@ -412,13 +436,13 @@ function render(){
      if(now)tr.className="now";else if(done)tr.className="done";
      if(it.isCreate)tr.className+=" create";
      const vid=(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
-     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"⬅今":"・"))+'</td><td>'+nameHtml(it)+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
+     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"⬅今":"・"))+'</td><td>'+nameHtml(it)+(approvedSet.has(it.key)?' <span style="color:#C68B6B;font-size:11px;font-weight:700">🏅承認</span>':'')+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
      t.appendChild(tr);
    }
  });
 }
-document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);}render();window.scrollTo({top:0,behavior:"smooth"});};
-document.getElementById("backBtn").onclick=()=>{const a=getLog();a.pop();saveLog(a);render();};
+document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);}render();window.scrollTo({top:0,behavior:"smooth"});};
+document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}render();};
 document.getElementById("moreBtn").onclick=function(){var m=document.getElementById("more");var open=m.hidden;m.hidden=!open;this.setAttribute("aria-expanded",String(open));this.textContent=open?"▴ 閉じる":"▾ メニュー・達成グラフを見る";};
 
 // 用語シート
@@ -446,7 +470,7 @@ document.getElementById("beatBox").innerHTML=document.getElementById("beatBox").
   .replace(/空間を埋める/g,'<span class="term" data-k="空間を埋める">空間を埋める</span>')
   .replace(/とめ・はね・払い/g,'<span class="term" data-k="とめ">とめ</span>・<span class="term" data-k="はね">はね</span>・<span class="term" data-k="払い">払い</span>');
 
-document.getElementById("foot").textContent="全"+TOTAL+"ステップ。日付では進まない＝“できたら押して進む”習得ペース。進捗はこの端末に保存。";
-render();
+document.getElementById("foot").textContent="全"+TOTAL+"ステップ。できたら押して進む。"+(U?"進捗はサーバに保存（同じURLならどの端末でも続けられます）。":"進捗はこの端末に保存。");
+gasLoad(render);
 </script>
 </body></html>
