@@ -46,6 +46,10 @@ h1.rm{margin:0 0 6px}
 .today .why{font-size:12.5px;color:var(--mut);margin-top:15px;border-top:1px solid var(--line);padding-top:14px}
 .today .style{font-size:13px;color:var(--ink);margin-top:10px}
 .ctrl{display:flex;gap:10px;margin-bottom:10px}
+.practicebtn{display:block;width:100%;text-align:center;background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:700;font-size:14px;border-radius:13px;padding:13px;margin-bottom:10px;cursor:pointer}
+.practicebtn:active{transform:scale(.99)}
+.practicebtn.done{background:var(--acw);border-color:transparent;color:var(--blue)}
+.practicebtn #practiceMsg{font-weight:600;font-size:12px;color:var(--blue);margin-left:8px}
 .submitbtn{display:block;text-align:center;text-decoration:none;background:#06c755;color:#fff;font-weight:700;font-size:15px;border-radius:13px;padding:15px;margin-bottom:8px}
 .submithint{font-size:11.5px;line-height:1.65;color:var(--mut);background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:12px 14px;margin-bottom:18px}
 .submithint b{color:var(--ink)}
@@ -209,6 +213,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
   <button class="btn go" id="goBtn">できた →次へ</button>
   <button class="btn back" id="backBtn">‹ 戻す</button>
 </div>
+<button class="practicebtn" id="practiceBtn">今日練習した<span id="practiceMsg"></span></button>
 <a class="submitbtn" id="submitBtn" target="_blank" rel="noopener" style="display:none">この技を動画提出する</a>
 <div class="submithint" id="submitHint" style="display:none">
   公式LINEが開いたら、入った文をそのまま送信 → 続けて<b>動画</b>を送ればOK。<br>
@@ -459,6 +464,7 @@ function submitUrl(it){
 }
 let approvedSet=new Set();
 let activityDates=[];
+let practiceStreak=0, practiceTotal=0;
 // サーバ形式 yyyy/MM/dd
 function ymdSlash_(dt){return dt.getFullYear()+"/"+String(dt.getMonth()+1).padStart(2,"0")+"/"+String(dt.getDate()).padStart(2,"0");}
 // 今日（or 昨日）から遡って連続して活動した日数
@@ -474,12 +480,28 @@ function gasSave(stepKey,done){
   if(!U)return;
   fetch(GAS_URL+"?action=save&u="+encodeURIComponent(U)+"&step="+encodeURIComponent(stepKey)+"&done="+(done?1:0)).catch(function(){});
 }
+// 今日の練習⭕️を記録（サーバ）→ 連続記録を更新
+function gasPractice(){
+  if(!U)return;
+  var pb=document.getElementById("practiceBtn");
+  fetch(GAS_URL+"?action=practice&u="+encodeURIComponent(U)).then(function(r){return r.json();}).then(function(j){
+    if(j&&j.ok){
+      practiceStreak=j.streak||0;practiceTotal=j.total||0;
+      var sn=document.getElementById("streakNum");if(sn)sn.textContent=practiceStreak+"日";
+      var sr=document.getElementById("streakRow");if(sr&&practiceStreak>=1)sr.style.display="flex";
+      if(pb)pb.classList.add("done");
+      var pm=document.getElementById("practiceMsg");
+      if(pm){pm.textContent=j.already?"記録ずみ":"記録した（"+practiceStreak+"日連続）";}
+    }
+  }).catch(function(){});
+}
 function gasLoad(cb){
   if(!U){cb();return;}
   fetch(GAS_URL+"?action=read&u="+encodeURIComponent(U)).then(function(r){return r.json();}).then(function(j){
     if(j&&j.ok){
       showWho(j.name||"");
       activityDates=(j.dates||[]).slice();
+      if(j.practice){practiceStreak=j.practice.streak||0;practiceTotal=j.practice.total||0;}
       (j.approved||[]).forEach(function(k){approvedSet.add(k);});
       var sset=new Set(j.done||[]);
       var sCleared=0;while(sCleared<TOTAL&&sset.has(STEPS[sCleared].key))sCleared++;
@@ -572,8 +594,8 @@ function render(){
    if(sh2){var stx=document.getElementById("submitText");if(stx)stx.textContent="動画提出："+stepLabel(it);sh2.style.display="block";}
  }
  drawDonut(c);drawPhaseBars(c);drawSpark();
- var _stk=computeStreak(activityDates);var _sr=document.getElementById("streakRow");
- if(_sr){if(_stk>=1){document.getElementById("streakNum").textContent=_stk+"日";_sr.style.display="flex";}else{_sr.style.display="none";}}
+ var _sr=document.getElementById("streakRow");
+ if(_sr){if(practiceStreak>=1){document.getElementById("streakNum").textContent=practiceStreak+"日";_sr.style.display="flex";}else{_sr.style.display="none";}}
 
  const root=document.getElementById("plan");root.innerHTML="";
  PHASES.forEach((ph,pi)=>{
@@ -594,7 +616,8 @@ function render(){
    }
  });
 }
-document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);var _td=ymdSlash_(new Date());if(activityDates.indexOf(_td)<0)activityDates.push(_td);}render();window.scrollTo({top:0,behavior:"smooth"});};
+document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);gasPractice();}render();window.scrollTo({top:0,behavior:"smooth"});};
+document.getElementById("practiceBtn").onclick=function(){gasPractice();};
 document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}render();};
 document.getElementById("submitText").addEventListener("click",function(){
   var t=this.textContent||"";
