@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="ja"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ゆってぃさん ロードマップ</title>
+<title>上達ロードマップ｜HARIBOW ONLINE LESSON</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -13,14 +13,27 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
 h1{font-size:24px;margin:0 0 22px;font-family:var(--serif);font-weight:700;letter-spacing:.015em;color:var(--ink);line-height:1.4}
 /* 読み込み時：段階的に立ち上がる（高インパクト一発） */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.wrap>h1,.wrap>.today,.wrap>.ctrl,.wrap>.submitbtn,.wrap>.submithint,.wrap>.miniprog,.wrap>.morebtn{animation:fadeUp .6s cubic-bezier(.2,.7,.2,1) both}
-.wrap>.today{animation-delay:.05s}
-.wrap>.ctrl{animation-delay:.11s}
-.wrap>.submitbtn{animation-delay:.16s}
-.wrap>.submithint{animation-delay:.2s}
-.wrap>.miniprog{animation-delay:.24s}
-.wrap>.morebtn{animation-delay:.28s}
+.wrap>.brand,.wrap>h1,.wrap>.snap,.wrap>.today,.wrap>.ctrl,.wrap>.submitbtn,.wrap>.submithint,.wrap>.morebtn{animation:fadeUp .6s cubic-bezier(.2,.7,.2,1) both}
+.wrap>h1{animation-delay:.04s}
+.wrap>.snap{animation-delay:.09s}
+.wrap>.today{animation-delay:.15s}
+.wrap>.ctrl{animation-delay:.2s}
+.wrap>.submitbtn{animation-delay:.24s}
+.wrap>.submithint{animation-delay:.28s}
+.wrap>.morebtn{animation-delay:.32s}
 @media(prefers-reduced-motion:reduce){.wrap>*{animation:none!important}}
+.brand{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--blue);font-weight:700;margin:0 0 7px}
+h1.rm{margin:0 0 18px}
+/* 進捗スナップ（最初の画面に出る・自分%/承認%） */
+.snap{display:flex;align-items:center;gap:20px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 2px rgba(28,24,19,.03)}
+.snap svg{width:96px;height:96px;flex:0 0 auto}
+.snapstat{flex:1;min-width:0}
+.srow{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--mut);margin:5px 0}
+.srow b{font-family:var(--mono);margin-left:auto;font-size:17px;color:var(--ink);font-weight:700;letter-spacing:-.01em}
+.sdot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.sdot.self{background:var(--blue)}
+.sdot.appr{background:var(--gold)}
+.snum{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
 .sub{color:var(--mut);font-size:13px;margin:0 0 4px}
 .hint{color:var(--faint);font-size:12px;margin:0 0 18px}
 .today{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 20px;margin-bottom:14px;box-shadow:0 1px 2px rgba(28,24,19,.03),0 10px 30px -18px rgba(28,24,19,.18)}
@@ -48,6 +61,8 @@ h1{font-size:24px;margin:0 0 22px;font-family:var(--serif);font-weight:700;lette
 
 /* 達成グラフ */
 .chart{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:16px}
+.charth{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.charth .medal{font-size:12px;color:#9a7a1e;font-weight:600}
 .chart-top{display:flex;align-items:center;gap:22px;margin-bottom:8px}
 .donut{position:relative;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--blue) calc(var(--p,0)*1%),#e8e3da 0);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .donut::after{content:"";position:absolute;inset:13px;background:var(--card);border-radius:50%}
@@ -151,7 +166,16 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 .video-close{position:absolute;top:12px;right:16px;font-size:32px;line-height:1;color:#fff;background:none;border:none;cursor:pointer}
 </style></head>
 <body><div class="wrap">
-<h1>ゆってぃさん｜上達ロードマップ</h1>
+<div class="brand">HARIBOW ONLINE LESSON</div>
+<h1 class="rm">上達ロードマップ</h1>
+<div class="snap">
+  <svg id="donut2" viewBox="0 0 120 120" aria-hidden="true"></svg>
+  <div class="snapstat">
+    <div class="srow"><span class="sdot self"></span>自分で進めた<b id="selfPct">0%</b></div>
+    <div class="srow"><span class="sdot appr"></span>承認ずみ<b id="apprPct">0%</b></div>
+    <div class="snum" id="snapNum">0 / 0 ステップ</div>
+  </div>
+</div>
 <div class="today">
   <div class="lbl" id="todayLbl">今日やること</div>
   <div class="menu" id="todayMenu">―</div>
@@ -164,12 +188,11 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 </div>
 <a class="submitbtn" id="submitBtn" target="_blank" rel="noopener" style="display:none">この技を動画提出する</a>
 <div class="submithint" id="submitHint" style="display:none">
-  押すと<b>公式LINE</b>が開いて、下の文が自動で入ります → そのまま送って、続けて<b>動画</b>を送ればOK。<br>
-  ※ もし入力欄が空っぽだったら、この文を<b>タップでコピー</b>して送ってください<br>
+  公式LINEが開いたら、入った文をそのまま送信 → 続けて<b>動画</b>を送ればOK。<br>
+  <span style="color:var(--faint)">空欄のときは下をコピー：</span>
   <code id="submitText" title="タップでコピー">動画提出：―</code><span id="copiedMsg" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span>
 </div>
-<div class="miniprog"><div class="mpbar"><i id="mpfill"></i></div><div class="mptext" id="mptext">0 / 0</div></div>
-<button class="morebtn" id="moreBtn" aria-expanded="false">▾ メニュー・達成グラフを見る</button>
+<button class="morebtn" id="moreBtn" aria-expanded="false">▾ ぜんぶ見る（全ステップ・用語・達成グラフ）</button>
 
 <div id="more" hidden>
 <p class="sub">毎日メニューをこなす → 公式LINEで動画提出（マスト）→ 週2の対面でフィードバック</p>
@@ -178,14 +201,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 <div class="line">動画は毎回かならず「公式LINE」から提出（これがマスト）</div>
 
 <div class="chart">
-  <div class="chart-top">
-    <div class="donut" id="donut"><span class="dnum" id="dpct">0%</span></div>
-    <div class="dlabel">
-      <div class="big">達成グラフ</div>
-      <div class="sub2" id="dsub">0 / 0 ステップ</div>
-      <div class="medal" id="dmedal">◆ 0／0 フェーズ制覇</div>
-    </div>
-  </div>
+  <div class="charth">フェーズ別の進み<span class="medal" id="dmedal">◆ 0／0 制覇</span></div>
   <div class="phasebars" id="phasebars"></div>
   <div class="spark">
     <div class="spark-h">日々の積み上げ（継続）</div>
@@ -403,13 +419,26 @@ function nameHtml(it){
   return glossify(it.name);
 }
 
+function approvedCount(){var n=0;for(var i=0;i<STEPS.length;i++){if(approvedSet.has(stepLabel(STEPS[i])))n++;}return n;}
+function ringSvg_(r,frac,color,track){
+  var C=2*Math.PI*r;var on=Math.max(0,Math.min(1,frac))*C;
+  return '<circle cx="60" cy="60" r="'+r+'" fill="none" stroke="'+track+'" stroke-width="11"/>'+
+    (on>0?'<circle cx="60" cy="60" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="11" stroke-linecap="round" stroke-dasharray="'+(on-0.01)+' '+(C-on+0.01)+'" transform="rotate(-90 60 60)"/>':'');
+}
 function drawDonut(c){
-  const pct=TOTAL?Math.round(c/TOTAL*100):0;
-  document.getElementById("donut").style.setProperty("--p",pct);
-  document.getElementById("dpct").textContent=pct+"%";
-  document.getElementById("dsub").textContent=c+" / "+TOTAL+" ステップ";
+  var self=TOTAL?c/TOTAL:0, appr=TOTAL?approvedCount()/TOTAL:0;
+  var svg=document.getElementById("donut2");
+  if(svg){
+    svg.innerHTML=ringSvg_(52,self,"#b25c33","#e8e3da")+ringSvg_(38,appr,"#a9842b","#efe9df")+
+      '<text x="60" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="21" font-weight="700" fill="#b25c33">'+Math.round(self*100)+'%</text>'+
+      '<text x="60" y="74" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="9" fill="#a8a196">自分</text>';
+  }
+  var sp=document.getElementById("selfPct"),ap=document.getElementById("apprPct"),sn=document.getElementById("snapNum");
+  if(sp)sp.textContent=Math.round(self*100)+"%";
+  if(ap)ap.textContent=Math.round(appr*100)+"%";
+  if(sn)sn.textContent=c+" / "+TOTAL+" ステップ";
   let ph=0;PHASE_RANGE.forEach(([s,e])=>{if(c>e)ph++;});
-  document.getElementById("dmedal").textContent="◆ "+ph+"／"+NPH+" フェーズ制覇";
+  var dm=document.getElementById("dmedal");if(dm)dm.textContent="◆ "+ph+"／"+NPH+" 制覇";
 }
 function drawPhaseBars(c){
   const wrap=document.getElementById("phasebars");wrap.innerHTML="";
@@ -453,16 +482,12 @@ function render(){
    tl.textContent="TODAY · "+(c+1)+" / "+TOTAL;
    tm.innerHTML=nameHtml(it)+(it.point?"（"+glossify(it.point)+"）":"");
    tw.innerHTML=glossify(ph.why);
-   const tail=(it.gen||it.isCreate)?"自分で作って提出":"撮って公式LINEで提出";
-   ts.innerHTML=(it.styles?"やり方："+glossify(it.styles)+"　":"")+"→ "+tail+
-     (ph.video?'　<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':"");
+   ts.innerHTML=(it.styles?"やり方："+glossify(it.styles):"")+
+     (ph.video?(it.styles?'　':'')+'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':"");
    if(sb){sb.href=submitUrl(it);sb.style.display="block";}
    if(sh2){var stx=document.getElementById("submitText");if(stx)stx.textContent="動画提出："+stepLabel(it);sh2.style.display="block";}
  }
  drawDonut(c);drawPhaseBars(c);drawSpark();
- var _pct=TOTAL?Math.round(c/TOTAL*100):0;
- document.getElementById("mpfill").style.width=_pct+"%";
- document.getElementById("mptext").textContent=(c>=TOTAL?"完走 · 100%":c+" / "+TOTAL+"　"+_pct+"%");
 
  const root=document.getElementById("plan");root.innerHTML="";
  PHASES.forEach((ph,pi)=>{
