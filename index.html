@@ -36,6 +36,7 @@ h1.rm{margin:0 0 6px}
 .sdot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
 .sdot.self{background:var(--blue)}
 .sdot.appr{background:var(--gold)}
+.sdot.st{background:var(--ink)}
 .snum{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
 .sub{color:var(--mut);font-size:13px;margin:0 0 4px}
 .hint{color:var(--faint);font-size:12px;margin:0 0 18px}
@@ -194,6 +195,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
   <div class="snapstat">
     <div class="srow"><span class="sdot self"></span>自分で進めた<b id="selfPct">0%</b></div>
     <div class="srow"><span class="sdot appr"></span>承認ずみ<b id="apprPct">0%</b></div>
+    <div class="srow" id="streakRow" style="display:none"><span class="sdot st"></span>連続記録<b id="streakNum">0日</b></div>
     <div class="snum" id="snapNum">0 / 0 ステップ</div>
   </div>
 </div>
@@ -456,6 +458,18 @@ function submitUrl(it){
   return "https://line.me/R/oaMessage/%40"+OA_BASIC_ID+"/?"+encodeURIComponent("動画提出："+stepLabel(it));
 }
 let approvedSet=new Set();
+let activityDates=[];
+// サーバ形式 yyyy/MM/dd
+function ymdSlash_(dt){return dt.getFullYear()+"/"+String(dt.getMonth()+1).padStart(2,"0")+"/"+String(dt.getDate()).padStart(2,"0");}
+// 今日（or 昨日）から遡って連続して活動した日数
+function computeStreak(dates){
+  if(!dates||!dates.length)return 0;
+  var set={};dates.forEach(function(d){set[d]=1;});
+  var t=new Date();var cur=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+  if(!set[ymdSlash_(cur)]){cur.setDate(cur.getDate()-1);if(!set[ymdSlash_(cur)])return 0;}
+  var n=0;while(set[ymdSlash_(cur)]){n++;cur.setDate(cur.getDate()-1);}
+  return n;
+}
 function gasSave(stepKey,done){
   if(!U)return;
   fetch(GAS_URL+"?action=save&u="+encodeURIComponent(U)+"&step="+encodeURIComponent(stepKey)+"&done="+(done?1:0)).catch(function(){});
@@ -465,6 +479,7 @@ function gasLoad(cb){
   fetch(GAS_URL+"?action=read&u="+encodeURIComponent(U)).then(function(r){return r.json();}).then(function(j){
     if(j&&j.ok){
       showWho(j.name||"");
+      activityDates=(j.dates||[]).slice();
       (j.approved||[]).forEach(function(k){approvedSet.add(k);});
       var sset=new Set(j.done||[]);
       var sCleared=0;while(sCleared<TOTAL&&sset.has(STEPS[sCleared].key))sCleared++;
@@ -557,6 +572,8 @@ function render(){
    if(sh2){var stx=document.getElementById("submitText");if(stx)stx.textContent="動画提出："+stepLabel(it);sh2.style.display="block";}
  }
  drawDonut(c);drawPhaseBars(c);drawSpark();
+ var _stk=computeStreak(activityDates);var _sr=document.getElementById("streakRow");
+ if(_sr){if(_stk>=1){document.getElementById("streakNum").textContent=_stk+"日";_sr.style.display="flex";}else{_sr.style.display="none";}}
 
  const root=document.getElementById("plan");root.innerHTML="";
  PHASES.forEach((ph,pi)=>{
@@ -577,7 +594,7 @@ function render(){
    }
  });
 }
-document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);}render();window.scrollTo({top:0,behavior:"smooth"});};
+document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);var _td=ymdSlash_(new Date());if(activityDates.indexOf(_td)<0)activityDates.push(_td);}render();window.scrollTo({top:0,behavior:"smooth"});};
 document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}render();};
 document.getElementById("submitText").addEventListener("click",function(){
   var t=this.textContent||"";
