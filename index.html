@@ -37,6 +37,7 @@ h1.rm{margin:0 0 6px}
 .sdot.self{background:var(--blue)}
 .sdot.appr{background:var(--gold)}
 .sdot.st{background:var(--ink)}
+.sdot.tot{background:var(--faint)}
 .snum{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
 .sub{color:var(--mut);font-size:13px;margin:0 0 4px}
 .hint{color:var(--faint);font-size:12px;margin:0 0 18px}
@@ -200,6 +201,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
     <div class="srow"><span class="sdot self"></span>自分で進めた<b id="selfPct">0%</b></div>
     <div class="srow"><span class="sdot appr"></span>承認ずみ<b id="apprPct">0%</b></div>
     <div class="srow" id="streakRow" style="display:none"><span class="sdot st"></span>連続記録<b id="streakNum">0日</b></div>
+    <div class="srow" id="totalRow" style="display:none"><span class="sdot tot"></span>合計練習<b id="totalNum">0回</b></div>
     <div class="snum" id="snapNum">0 / 0 ステップ</div>
   </div>
 </div>
@@ -489,6 +491,8 @@ function gasPractice(){
       practiceStreak=j.streak||0;practiceTotal=j.total||0;
       var sn=document.getElementById("streakNum");if(sn)sn.textContent=practiceStreak+"日";
       var sr=document.getElementById("streakRow");if(sr&&practiceStreak>=1)sr.style.display="flex";
+      var tn=document.getElementById("totalNum");if(tn)tn.textContent=practiceTotal+"回";
+      var tr=document.getElementById("totalRow");if(tr&&practiceTotal>=1)tr.style.display="flex";
       if(pb)pb.classList.add("done");
       var pm=document.getElementById("practiceMsg");
       if(pm){pm.textContent=j.already?"記録ずみ":"記録した（"+practiceStreak+"日連続）";}
@@ -596,6 +600,8 @@ function render(){
  drawDonut(c);drawPhaseBars(c);drawSpark();
  var _sr=document.getElementById("streakRow");
  if(_sr){if(practiceStreak>=1){document.getElementById("streakNum").textContent=practiceStreak+"日";_sr.style.display="flex";}else{_sr.style.display="none";}}
+ var _tr=document.getElementById("totalRow");
+ if(_tr){if(practiceTotal>=1){document.getElementById("totalNum").textContent=practiceTotal+"回";_tr.style.display="flex";}else{_tr.style.display="none";}}
 
  const root=document.getElementById("plan");root.innerHTML="";
  PHASES.forEach((ph,pi)=>{
