@@ -61,6 +61,23 @@ h1.rm{margin:0 0 6px}
 .mptext{font-family:var(--mono);font-size:12.5px;color:var(--mut);white-space:nowrap;font-weight:700;letter-spacing:0}
 .morebtn{width:100%;border:1px solid var(--line);background:var(--card);color:var(--mut);border-radius:13px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:18px}
 #more[hidden]{display:none}
+/* 段階開示アコーディオン（必要な情報だけ・押すほど深く） */
+.acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.acc>summary{list-style:none;cursor:pointer;padding:15px 17px;font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:8px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary .sm{font-weight:500;color:var(--mut);font-size:12px}
+.acc>summary::after{content:"›";margin-left:auto;color:var(--faint);font-size:21px;line-height:1;transform:rotate(90deg);transition:transform .22s}
+.acc[open]>summary::after{transform:rotate(-90deg)}
+.accbody{padding:2px 17px 16px;font-size:13px;color:var(--mut);line-height:1.78}
+.accbody p{margin:0 0 8px}
+.accbody p:last-child{margin-bottom:0}
+.accbody .em{color:var(--blue);font-weight:700}
+.subd{margin-top:6px;border-top:1px solid var(--line);padding-top:8px}
+.subd>summary{list-style:none;cursor:pointer;color:var(--blue);font-weight:700;font-size:12.5px;padding:4px 0}
+.subd>summary::-webkit-details-marker{display:none}
+.subd>summary::before{content:"＋ "}
+.subd[open]>summary::before{content:"− "}
+.accwhy>summary{color:var(--blue)}
 
 /* 達成グラフ */
 .chart{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:16px}
@@ -196,36 +213,63 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
   <span style="color:var(--faint)">空欄のときは下をコピー：</span>
   <code id="submitText" title="タップでコピー">動画提出：―</code><span id="copiedMsg" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span>
 </div>
-<button class="morebtn" id="moreBtn" aria-expanded="false">▾ ぜんぶ見る（全ステップ・用語・達成グラフ）</button>
-
-<div id="more" hidden>
-<p class="sub">毎日メニューをこなす → 公式LINEで動画提出（マスト）→ 週2の対面でフィードバック</p>
-<p class="hint">※ <span style="border-bottom:1px dotted var(--blue);color:var(--blue)">色つきの点線</span>の用語はタップで解説が出ます。</p>
-
-<div class="line">動画は毎回かならず「公式LINE」から提出（これがマスト）</div>
-
-<div class="chart">
-  <div class="charth">フェーズ別の進み<span class="medal" id="dmedal">◆ 0／0 制覇</span></div>
-  <div class="phasebars" id="phasebars"></div>
-  <div class="spark">
-    <div class="spark-h">日々の積み上げ（継続）</div>
-    <svg id="spark" viewBox="0 0 320 70" preserveAspectRatio="none"></svg>
+<details class="acc accwhy">
+  <summary>なぜこの順番でやるの？<span class="sm">動き × リズム × 空間の掛け算</span></summary>
+  <div class="accbody">
+    <p>ダブルダッチのショーは、<span class="em">動き × リズム × 空間</span>の“掛け算”でできています。</p>
+    <p>言葉と同じです。単語をいくつか覚えて、つなげるほど無限に文が作れる。技も、<span class="em">1個ずつ覚えて掛け合わせる</span>ほど、自由に・即興で組めるようになります。</p>
+    <p>だからこのロードマップは「<span class="em">部品を1個ずつ覚える（分解）→ 掛け合わせる</span>」順番に並んでいます。</p>
+    <details class="subd"><summary>さらにくわしく</summary>
+      <div style="margin-top:8px">
+        <p>・土台の技（オーヴ・スライド・ペダル…）＝<span class="em">動きの部品</span></p>
+        <p>・空間を埋める＝<span class="em">空間の掛け合わせ</span></p>
+        <p>・コンボ／必殺＝ぜんぶの掛け算＝<span class="em">あなたのオリジナル</span></p>
+        <p>部品が増えるほど、組み合わせは“掛け算”で爆発的に増える。これが応用力と即興力になります。</p>
+      </div>
+    </details>
   </div>
-</div>
+</details>
 
-<div class="box goal"><b>最終ゴール</b><br>跳びながら音を取れるようになる → 自分のステップと混ぜてバトルが組み立てられる。<br><span style="color:#7A6E63;font-size:13px">1日にやることは最大3つまで。アンカー・スナッピーの2つの質感で磨く。</span></div>
+<details class="acc">
+  <summary>進め方<span class="sm">4ステップのループ</span></summary>
+  <div class="accbody" id="beatBox">
+    <p>覚えるのは技じゃなく、この“ループ”ひとつ。</p>
+    <p><span class="em">① コピー</span>… 見本どおり、形だけ回す</p>
+    <p><span class="em">② なぜ</span>… 今アンカー？スナッピー？（頭が揺れない＝アンカー／揺れる＝スナッピー）を一言で</p>
+    <p><span class="em">③ 条件変え</span>… 高さ・向き・2スタイルで変えてみる</p>
+    <p><span class="em">④ 自分で</span>… ジャンプ系＝空間を埋める／3ステップ＝とめ・はね・払い</p>
+  </div>
+</details>
 
-<div class="box beat" id="beatBox"><b>毎回の提出は、この4ステップで回す</b>（覚えるのは技じゃなく、この“ループ”ひとつ）
-<ol>
-<li><b>コピー</b>…見本どおり、形だけ回す</li>
-<li><b>なぜ</b>…今アンカー？スナッピー？ 頭が揺れない＝アンカー／揺れる＝スナッピー を自分で判定して一言</li>
-<li><b>条件変え</b>…高さ・向き・2スタイルで変えてみる</li>
-<li><b>自分で（仕上げ）</b>…ジャンプ系＝空間を埋める／3ステップ＝とめ・はね・払い</li>
-</ol></div>
+<details class="acc">
+  <summary>全ステップを見る<span class="sm">いまの位置と次の課題</span></summary>
+  <div class="accbody">
+    <p class="hint" style="margin:0 0 10px">※ <span style="border-bottom:1px dotted var(--blue);color:var(--blue)">色つきの点線</span>の用語はタップで解説。</p>
+    <div id="plan"></div>
+    <p class="foot" id="foot"></p>
+  </div>
+</details>
 
-<div id="plan"></div>
-<p class="foot" id="foot"></p>
-</div>
+<details class="acc">
+  <summary>達成グラフ<span class="sm">フェーズ別の進み</span></summary>
+  <div class="accbody">
+    <div class="charth" style="margin-bottom:12px">フェーズ別の進み<span class="medal" id="dmedal">◆ 0／0 制覇</span></div>
+    <div class="phasebars" id="phasebars"></div>
+    <div class="spark">
+      <div class="spark-h">日々の積み上げ（継続）</div>
+      <svg id="spark" viewBox="0 0 320 70" preserveAspectRatio="none"></svg>
+    </div>
+  </div>
+</details>
+
+<details class="acc">
+  <summary>ゴールと約束<span class="sm">めざす場所・提出ルール</span></summary>
+  <div class="accbody">
+    <p><span class="em">最終ゴール</span>… 跳びながら音を取れる → 自分のステップと混ぜて、バトルが組み立てられる。</p>
+    <p>1日にやることは最大3つまで。アンカー・スナッピーの2つの質感で磨く。</p>
+    <p>動画は毎回かならず「<span class="em">公式LINE</span>」から提出（これがマスト）。</p>
+  </div>
+</details>
 </div>
 
 <div class="gloss-sheet" id="gloss" hidden>
@@ -527,7 +571,6 @@ document.getElementById("submitText").addEventListener("click",function(){
   try{navigator.clipboard.writeText(t).then(flash,function(){flash();});}
   catch(e){try{var r=document.createRange();r.selectNodeContents(this);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");}catch(_){}flash();}
 });
-document.getElementById("moreBtn").onclick=function(){var m=document.getElementById("more");var open=m.hidden;m.hidden=!open;this.setAttribute("aria-expanded",String(open));this.textContent=open?"▴ 閉じる":"▾ メニュー・達成グラフを見る";};
 
 // 用語シート
 function openGloss(k){const g=GLOSSARY[k];if(!g)return;
