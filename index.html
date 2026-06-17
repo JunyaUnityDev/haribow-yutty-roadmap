@@ -159,13 +159,13 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
   <div class="style" id="todayStyle"></div>
 </div>
 <div class="ctrl">
-  <button class="btn go" id="goBtn">✅ できた → 次へ</button>
-  <button class="btn back" id="backBtn">↩︎ 1つ戻す</button>
+  <button class="btn go" id="goBtn">できた →次へ</button>
+  <button class="btn back" id="backBtn">‹ 戻す</button>
 </div>
-<a class="submitbtn" id="submitBtn" target="_blank" rel="noopener" style="display:none">📲 この技を動画提出する</a>
+<a class="submitbtn" id="submitBtn" target="_blank" rel="noopener" style="display:none">この技を動画提出する</a>
 <div class="submithint" id="submitHint" style="display:none">
-  押すと<b>公式LINE</b>が開いて、下の文が自動で入ります → そのまま送って、続けて<b>動画</b>を送ればOK！<br>
-  ⚠️ もし入力欄が空っぽだったら、この文を<b>タップでコピー</b>して送ってください👇<br>
+  押すと<b>公式LINE</b>が開いて、下の文が自動で入ります → そのまま送って、続けて<b>動画</b>を送ればOK。<br>
+  ※ もし入力欄が空っぽだったら、この文を<b>タップでコピー</b>して送ってください<br>
   <code id="submitText" title="タップでコピー">動画提出：―</code><span id="copiedMsg" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span>
 </div>
 <div class="miniprog"><div class="mpbar"><i id="mpfill"></i></div><div class="mptext" id="mptext">0 / 0</div></div>
@@ -173,9 +173,9 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 
 <div id="more" hidden>
 <p class="sub">毎日メニューをこなす → 公式LINEで動画提出（マスト）→ 週2の対面でフィードバック</p>
-<p class="hint">ℹ️ <span style="border-bottom:1px dotted var(--blue);color:var(--blue)">色つきの点線</span>の用語はタップで解説が出ます。</p>
+<p class="hint">※ <span style="border-bottom:1px dotted var(--blue);color:var(--blue)">色つきの点線</span>の用語はタップで解説が出ます。</p>
 
-<div class="line">📲 動画は毎回かならず「公式LINE」から提出（これがマスト）</div>
+<div class="line">動画は毎回かならず「公式LINE」から提出（これがマスト）</div>
 
 <div class="chart">
   <div class="chart-top">
@@ -183,7 +183,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
     <div class="dlabel">
       <div class="big">達成グラフ</div>
       <div class="sub2" id="dsub">0 / 0 ステップ</div>
-      <div class="medal" id="dmedal">🏅 0／0 フェーズ制覇</div>
+      <div class="medal" id="dmedal">◆ 0／0 フェーズ制覇</div>
     </div>
   </div>
   <div class="phasebars" id="phasebars"></div>
@@ -200,7 +200,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 <li><b>コピー</b>…見本どおり、形だけ回す</li>
 <li><b>なぜ</b>…今アンカー？スナッピー？ 頭が揺れない＝アンカー／揺れる＝スナッピー を自分で判定して一言</li>
 <li><b>条件変え</b>…高さ・向き・2スタイルで変えてみる</li>
-<li><b>自分で（仕上げ）</b>…🎨 ジャンプ系＝空間を埋める／3ステップ＝とめ・はね・払い</li>
+<li><b>自分で（仕上げ）</b>…ジャンプ系＝空間を埋める／3ステップ＝とめ・はね・払い</li>
 </ol></div>
 
 <div id="plan"></div>
@@ -398,8 +398,8 @@ function gasLoad(cb){
 }
 
 function nameHtml(it){
-  if(it.gen) return "🎨 自分で："+glossify(it.name);
-  if(it.isCreate) return "🎨 "+glossify(it.name);
+  if(it.gen) return "自分で："+glossify(it.name);
+  if(it.isCreate) return glossify(it.name);
   return glossify(it.name);
 }
 
@@ -409,7 +409,7 @@ function drawDonut(c){
   document.getElementById("dpct").textContent=pct+"%";
   document.getElementById("dsub").textContent=c+" / "+TOTAL+" ステップ";
   let ph=0;PHASE_RANGE.forEach(([s,e])=>{if(c>e)ph++;});
-  document.getElementById("dmedal").textContent="🏅 "+ph+"／"+NPH+" フェーズ制覇";
+  document.getElementById("dmedal").textContent="◆ "+ph+"／"+NPH+" フェーズ制覇";
 }
 function drawPhaseBars(c){
   const wrap=document.getElementById("phasebars");wrap.innerHTML="";
@@ -445,15 +445,15 @@ function render(){
  const sb=document.getElementById("submitBtn");
  const sh2=document.getElementById("submitHint");
  if(c>=TOTAL){
-   tl.textContent="🎉 全項目クリア";tm.textContent="完走！バトルの素ができたね";tw.textContent="";ts.textContent="ここからはフリースタイルで遊ぼう";
+   tl.textContent="COMPLETE";tm.textContent="完走。バトルの素ができたね";tw.textContent="";ts.textContent="ここからはフリースタイルで遊ぼう";
    if(sb)sb.style.display="none";
    if(sh2)sh2.style.display="none";
  }else{
    const it=STEPS[c], ph=PHASES[it.phase];
    tl.textContent="TODAY · "+(c+1)+" / "+TOTAL;
    tm.innerHTML=nameHtml(it)+(it.point?"（"+glossify(it.point)+"）":"");
-   tw.innerHTML="💡 "+glossify(ph.why);
-   const tail=(it.gen||it.isCreate)?"🎨 自分で作って提出！":"撮って公式LINEで提出";
+   tw.innerHTML=glossify(ph.why);
+   const tail=(it.gen||it.isCreate)?"自分で作って提出":"撮って公式LINEで提出";
    ts.innerHTML=(it.styles?"やり方："+glossify(it.styles)+"　":"")+"→ "+tail+
      (ph.video?'　<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':"");
    if(sb){sb.href=submitUrl(it);sb.style.display="block";}
@@ -462,15 +462,15 @@ function render(){
  drawDonut(c);drawPhaseBars(c);drawSpark();
  var _pct=TOTAL?Math.round(c/TOTAL*100):0;
  document.getElementById("mpfill").style.width=_pct+"%";
- document.getElementById("mptext").textContent=(c>=TOTAL?"🎉 完走！":c+" / "+TOTAL+"　"+_pct+"%");
+ document.getElementById("mptext").textContent=(c>=TOTAL?"完走 · 100%":c+" / "+TOTAL+"　"+_pct+"%");
 
  const root=document.getElementById("plan");root.innerHTML="";
  PHASES.forEach((ph,pi)=>{
    const [s,e]=PHASE_RANGE[pi];const phaseDone=c>e;
    const h=document.createElement("div");h.className="phase";
-   h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?'<span class="pv vidbtn" data-v="'+ph.video+'">▶見本</span>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"🏅 ":"🔒 ")+ph.badge+"</span>";
+   h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?'<span class="pv vidbtn" data-v="'+ph.video+'">▶見本</span>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"✓ ":"")+ph.badge+"</span>";
    root.appendChild(h);
-   const why=document.createElement("p");why.className="why";why.innerHTML="💡 "+glossify(ph.why);root.appendChild(why);
+   const why=document.createElement("p");why.className="why";why.innerHTML=glossify(ph.why);root.appendChild(why);
    const t=document.createElement("table");t.innerHTML="<tr class='hrow'><th>済</th><th>技</th><th>ポイント</th><th>やり方</th><th>見本</th></tr>";root.appendChild(t);
    for(let i=s;i<=e;i++){
      const it=STEPS[i];const tr=document.createElement("tr");
@@ -478,7 +478,7 @@ function render(){
      if(now)tr.className="now";else if(done)tr.className="done";
      if(it.isCreate)tr.className+=" create";
      const vid=(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
-     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"⬅今":"・"))+'</td><td>'+nameHtml(it)+(approvedSet.has(stepLabel(it))?' <span style="color:var(--blue);font-size:11px;font-weight:700">🏅承認</span>':'')+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
+     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"▶":"・"))+'</td><td>'+nameHtml(it)+(approvedSet.has(stepLabel(it))?' <span style="color:var(--blue);font-size:11px;font-weight:700">✓ 承認</span>':'')+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
      t.appendChild(tr);
    }
  });
