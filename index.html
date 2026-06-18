@@ -369,6 +369,7 @@ const PHASES = [
     {name:"連続スライド",point:"つなげて連続で",styles:""}]},
 
  {title:"③ ペダル（基礎ジャンプ）", short:"③ ペダル", video:"videos/ペダル.mp4",
+   article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
    why:"つま先↔かかとを交互に踏みかえ、足裏の下にロープを通す。引っかかったら重心を上下に。",
    badge:"初・10回連続跳べた",
    create:"ペダルで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
@@ -378,6 +379,7 @@ const PHASES = [
     {name:"ペダルウォーク",point:"歩くように",styles:"アンカー→スナッピー"}]},
 
  {title:"④ 3ステップ", short:"④ 3ステップ", video:"videos/3ステップ.mp4",
+   article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
    why:"ワン（踏みに行く）→エン（太もも90度まで上げる）→ツー（後ろに置く）。",
    badge:"初・とめ・はね・払いが計3そろった",
    create:"3ステップに とめ・はね・払いを それぞれ1つずつ乗せる（とめ1・はね1・払い1＝計3）",
@@ -618,7 +620,7 @@ function render(){
  PHASES.forEach((ph,pi)=>{
    const [s,e]=PHASE_RANGE[pi];const phaseDone=c>e;
    const h=document.createElement("div");h.className="phase";
-   h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?'<span class="pv vidbtn" data-v="'+ph.video+'">▶見本</span>':"")+(ph.article?'<a class="pv" href="'+ph.article+'" target="_blank" rel="noopener">記事を読む</a>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"✓ ":"")+ph.badge+"</span>";
+   h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?'<span class="pv vidbtn" data-v="'+ph.video+'">▶見本</span>':"")+(ph.article?'<a class="pv" href="'+ph.article+'" target="_blank" rel="noopener">'+(ph.articleLabel||"記事を読む")+'</a>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"✓ ":"")+ph.badge+"</span>";
    root.appendChild(h);
    const why=document.createElement("p");why.className="why";why.innerHTML=glossify(ph.why);root.appendChild(why);
    const t=document.createElement("table");t.innerHTML="<tr class='hrow'><th>済</th><th>技</th><th>ポイント</th><th>やり方</th><th>見本</th></tr>";root.appendChild(t);
