@@ -441,18 +441,27 @@ PHASES.forEach((ph,pi)=>{
 });
 const TOTAL=STEPS.length, NPH=PHASES.length;
 
-const LOGKEY="yutty_log_v3";
+// token を先に確定（localStorageキーを本人ごとに分けるため）
+const U=(new URLSearchParams(location.search).get("u")||"").trim();
+// 進捗のlocalStorageキーは token ごとに分離する。
+// これをしないと、1台のスマホで複数人のURLを開いた時に進捗が混ざり、
+// 別人の進捗が表示され、さらにサーバへ書き込まれてしまう（データ汚染）。
+const LOGKEY = U ? ("yutty_log_v3_"+U) : "yutty_log_v3";
 function getLog(){
   try{const a=JSON.parse(localStorage.getItem(LOGKEY)||"null");if(Array.isArray(a))return a.slice(0,TOTAL);}catch(e){}
-  const old=parseInt(localStorage.getItem("yutty_progress_v2")||"0",10)||0;
-  const a=[];for(let i=0;i<Math.min(old,TOTAL);i++)a.push(null);saveLog(a);return a;
+  // レガシー移行（旧 yutty_progress_v2）は token無しのローカル専用モードでのみ。
+  // token付きURLでは別人の旧データを引き継がないよう移行しない＝空スタート。
+  if(!U){
+    const old=parseInt(localStorage.getItem("yutty_progress_v2")||"0",10)||0;
+    const a=[];for(let i=0;i<Math.min(old,TOTAL);i++)a.push(null);saveLog(a);return a;
+  }
+  return [];
 }
 function saveLog(a){localStorage.setItem(LOGKEY,JSON.stringify(a));}
 function todayStr(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 
 // --- サーバ同期（GAS doGet）。?u=token があれば進捗をサーバと同期（ログイン不要） ---
 const GAS_URL="https://script.google.com/macros/s/AKfycbzk8aSKX2KPs3lYJ4mW1yS5-XrAzU5mg5EM_d0bf2Ev0VTdZk46ph4TqNCyEHhZ-LGCHQ/exec";
-const U=(new URLSearchParams(location.search).get("u")||"").trim();
 // 提出ラベル＝承認システムの突合キー（公式LINEに送る「動画提出：{ラベル}」の{ラベル}）。
 // グローバル一意にするため phase短縮＋技名。web🏅・提出ボタン・承認シートで同じ文字列を使う。
 function stepLabel(it){
