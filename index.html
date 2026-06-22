@@ -189,6 +189,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 .video-modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;z-index:100;padding:14px}
 .video-modal[hidden]{display:none}
 .video-modal video{max-width:100%;max-height:84vh;border-radius:10px;background:#000}
+.video-modal iframe{width:min(90vw,854px);height:min(50.6vw,480px);border:none;border-radius:10px}
 .video-close{position:absolute;top:12px;right:16px;font-size:32px;line-height:1;color:#fff;background:none;border:none;cursor:pointer}
 </style></head>
 <body><div class="wrap">
@@ -305,7 +306,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
   </div>
 </div>
 
-<div class="video-modal" id="vmodal" hidden><button class="video-close" id="vclose" aria-label="閉じる">×</button><video id="vplayer" controls playsinline preload="metadata"></video></div>
+<div class="video-modal" id="vmodal" hidden><button class="video-close" id="vclose" aria-label="閉じる">×</button><video id="vplayer" controls playsinline preload="metadata"></video><iframe id="vframe" allowfullscreen allow="autoplay"></iframe></div>
 <script>
 // ===== 用語辞典（このサイトだけで完結。タップで定義が出る） =====
 const GLOSSARY = {
@@ -416,7 +417,7 @@ const PHASES = [
     {name:"スライド＋ペダル＋3ステップ",point:"3技つなぎ",styles:""},
     {name:"スライドオーヴ",point:"スライド＋オーヴ",styles:""}]},
 
- {title:"⑨ レベル3：必殺", short:"⑨ 必殺", video:"",
+ {title:"⑨ レベル3：必殺", short:"⑨ 必殺", video:"https://youtu.be/cP_cxKg69Y0",
    why:"自分だけの必殺技を3つ作る。",
    badge:"初・必殺ができた",
    items:[
@@ -424,7 +425,7 @@ const PHASES = [
     {name:"必殺②",point:"自分の必殺技",styles:""},
     {name:"必殺③",point:"自分の必殺技",styles:""}]},
 
- {title:"⑩ 音ハメ（レベル4：フリースタイル）", short:"⑩ 音ハメ", video:"",
+ {title:"⑩ 音ハメ（レベル4：フリースタイル）", short:"⑩ 音ハメ", video:"https://youtu.be/0RiCj4l8SyU",
    article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/solo-battle-strategy/",
    why:"ここまでの“自分で”を全部使う。曲に合わせて、ハマるように。",
    badge:"初・自分の組み合わせで8カウント",
@@ -653,8 +654,9 @@ function openGloss(k){const g=GLOSSARY[k];if(!g)return;
   document.getElementById("gloss-v").innerHTML=g.v?'<span class="vid vidbtn" data-v="'+g.v+'">▶見本動画</span>':"";
   document.getElementById("gloss").hidden=false;}
 function closeGloss(){document.getElementById("gloss").hidden=true;}
-function openVideo(src){var p=document.getElementById("vplayer");p.src=src;document.getElementById("vmodal").hidden=false;p.play().catch(function(){});}
-function closeVideo(){var p=document.getElementById("vplayer");p.pause();p.removeAttribute("src");p.load();document.getElementById("vmodal").hidden=true;}
+function toYtEmbed(src){var m=src.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([A-Za-z0-9_-]{11})/);return m?"https://www.youtube.com/embed/"+m[1]+"?autoplay=1":null;}
+function openVideo(src){var yt=toYtEmbed(src);var p=document.getElementById("vplayer");var f=document.getElementById("vframe");if(yt){f.src=yt;f.hidden=false;p.hidden=true;}else{p.src=src;p.hidden=false;f.hidden=true;f.src="";p.play().catch(function(){});}document.getElementById("vmodal").hidden=false;}
+function closeVideo(){var p=document.getElementById("vplayer");var f=document.getElementById("vframe");p.pause();p.removeAttribute("src");p.load();p.hidden=false;f.src="";f.hidden=true;document.getElementById("vmodal").hidden=true;}
 document.addEventListener("click",e=>{
   const vb=e.target.closest(".vidbtn");
   if(vb){openVideo(vb.dataset.v);return;}
