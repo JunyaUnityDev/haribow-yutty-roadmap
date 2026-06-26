@@ -18,7 +18,7 @@ h1{font-size:24px;margin:0 0 22px;font-family:var(--serif);font-weight:700;lette
 .wrap>.snap{animation-delay:.09s}
 .wrap>.today{animation-delay:.15s}
 .wrap>.ctrl{animation-delay:.2s}
-.wrap>.submitbtn{animation-delay:.24s}
+.wrap>.submitbtn{animation-delay:.24s}.wrap>.submitbtn+.submitbtn{animation-delay:.26s}
 .wrap>.submithint{animation-delay:.28s}
 .wrap>.morebtn{animation-delay:.32s}
 @media(prefers-reduced-motion:reduce){.wrap>*{animation:none!important}}
@@ -52,6 +52,7 @@ h1.rm{margin:0 0 6px}
 .practicebtn.done{background:var(--acw);border-color:transparent;color:var(--blue)}
 .practicebtn #practiceMsg{font-weight:600;font-size:12px;color:var(--blue);margin-left:8px}
 .submitbtn{display:block;text-align:center;text-decoration:none;background:#06c755;color:#fff;font-weight:700;font-size:15px;border-radius:13px;padding:15px;margin-bottom:8px}
+.submitbtn.rope{background:#e09000}
 .submithint{font-size:11.5px;line-height:1.65;color:var(--mut);background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:12px 14px;margin-bottom:18px}
 .submithint b{color:var(--ink)}
 .submithint code{display:inline-block;margin-top:7px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--blue);font-weight:700;cursor:pointer;word-break:break-all}
@@ -217,11 +218,13 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
   <button class="btn back" id="backBtn">‹ 戻す</button>
 </div>
 <button class="practicebtn" id="practiceBtn">今日練習した<span id="practiceMsg"></span></button>
-<a class="submitbtn" id="submitBtn" target="_blank" rel="noopener" style="display:none">この技を動画提出する</a>
+<a class="submitbtn" id="submitBtnNoRope" target="_blank" rel="noopener" style="display:none">縄なし動画を提出</a>
+<a class="submitbtn rope" id="submitBtnRope" target="_blank" rel="noopener" style="display:none">縄あり動画を提出</a>
 <div class="submithint" id="submitHint" style="display:none">
   公式LINEが開いたら、入った文をそのまま送信 → 続けて<b>動画</b>を送ればOK。<br>
-  <span style="color:var(--faint)">空欄のときは下をコピー：</span>
-  <code id="submitText" title="タップでコピー">動画提出：―</code><span id="copiedMsg" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span>
+  <span style="color:var(--faint)">空欄のときは下をコピー：</span><br>
+  縄なし：<code class="submitCode" id="submitTextNoRope" title="タップでコピー">動画提出：―（縄なし）</code><span id="copiedMsgNoRope" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span><br>
+  縄あり：<code class="submitCode" id="submitTextRope" title="タップでコピー">動画提出：―（縄あり）</code><span id="copiedMsgRope" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span>
 </div>
 <details class="acc accwhy">
   <summary>なぜこの順番でやるの？<span class="sm">動き × リズム × 空間の掛け算</span></summary>
@@ -475,10 +478,11 @@ function stepLabel(it){
   return pfx+"／"+it.name;
 }
 const OA_BASIC_ID="578mjivx";
-function submitUrl(it){
-  return "https://line.me/R/oaMessage/%40"+OA_BASIC_ID+"/?"+encodeURIComponent("動画提出："+stepLabel(it));
+function submitUrl(it,ropeType){
+  return "https://line.me/R/oaMessage/%40"+OA_BASIC_ID+"/?"+encodeURIComponent("動画提出："+stepLabel(it)+"（"+ropeType+"）");
 }
-let approvedSet=new Set();
+let approvedNoRopeSet=new Set();
+let approvedRopeSet=new Set();
 let activityDates=[];
 let practiceStreak=0, practiceTotal=0;
 // サーバ形式 yyyy/MM/dd
@@ -520,7 +524,8 @@ function gasLoad(cb){
       showWho(j.name||"");
       activityDates=(j.dates||[]).slice();
       if(j.practice){practiceStreak=j.practice.streak||0;practiceTotal=j.practice.total||0;}
-      (j.approved||[]).forEach(function(k){approvedSet.add(k);});
+      (j.approvedNoRope||j.approved||[]).forEach(function(k){approvedNoRopeSet.add(k);});
+      (j.approvedRope||[]).forEach(function(k){approvedRopeSet.add(k);});
       var sset=new Set(j.done||[]);
       var sCleared=0;while(sCleared<TOTAL&&sset.has(STEPS[sCleared].key))sCleared++;
       var a=getLog();
@@ -543,7 +548,7 @@ function nameHtml(it){
   return glossify(it.name);
 }
 
-function approvedCount(){var n=0;for(var i=0;i<STEPS.length;i++){if(approvedSet.has(stepLabel(STEPS[i])))n++;}return n;}
+function approvedCount(){var n=0;for(var i=0;i<STEPS.length;i++){var lbl=stepLabel(STEPS[i]);if(approvedNoRopeSet.has(lbl)||approvedRopeSet.has(lbl))n++;}return n;}
 function ringSvg_(r,frac,color,track){
   var C=2*Math.PI*r;var on=Math.max(0,Math.min(1,frac))*C;
   return '<circle cx="60" cy="60" r="'+r+'" fill="none" stroke="'+track+'" stroke-width="11"/>'+
@@ -595,11 +600,13 @@ function drawSpark(){
 function render(){
  const c=getLog().length;
  const tm=document.getElementById("todayMenu"),tw=document.getElementById("todayWhy"),ts=document.getElementById("todayStyle"),tl=document.getElementById("todayLbl");
- const sb=document.getElementById("submitBtn");
+ const sbNR=document.getElementById("submitBtnNoRope");
+ const sbR=document.getElementById("submitBtnRope");
  const sh2=document.getElementById("submitHint");
  if(c>=TOTAL){
    tl.textContent="COMPLETE";tm.textContent="完走。バトルの素ができたね";tw.textContent="";ts.textContent="ここからはフリースタイルで遊ぼう";
-   if(sb)sb.style.display="none";
+   if(sbNR)sbNR.style.display="none";
+   if(sbR)sbR.style.display="none";
    if(sh2)sh2.style.display="none";
  }else{
    const it=STEPS[c], ph=PHASES[it.phase];
@@ -608,8 +615,9 @@ function render(){
    tw.innerHTML=glossify(ph.why);
    ts.innerHTML=(it.styles?"やり方："+glossify(it.styles):"")+
      (ph.video?(it.styles?'　':'')+'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':"");
-   if(sb){sb.href=submitUrl(it);sb.style.display="block";}
-   if(sh2){var stx=document.getElementById("submitText");if(stx)stx.textContent="動画提出："+stepLabel(it);sh2.style.display="block";}
+   if(sbNR){sbNR.href=submitUrl(it,"縄なし");sbNR.style.display="block";}
+   if(sbR){sbR.href=submitUrl(it,"縄あり");sbR.style.display="block";}
+   if(sh2){var stxNR=document.getElementById("submitTextNoRope"),stxR=document.getElementById("submitTextRope");if(stxNR)stxNR.textContent="動画提出："+stepLabel(it)+"（縄なし）";if(stxR)stxR.textContent="動画提出："+stepLabel(it)+"（縄あり）";sh2.style.display="block";}
  }
  drawDonut(c);drawPhaseBars(c);drawSpark();
  var _sr=document.getElementById("streakRow");
@@ -631,7 +639,9 @@ function render(){
      if(now)tr.className="now";else if(done)tr.className="done";
      if(it.isCreate)tr.className+=" create";
      const vid=(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
-     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"▶":"・"))+'</td><td>'+nameHtml(it)+(approvedSet.has(stepLabel(it))?' <span style="color:var(--blue);font-size:11px;font-weight:700">✓ 承認</span>':'')+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
+     var lbl=stepLabel(it);
+     var badges=(approvedNoRopeSet.has(lbl)?' <span style="color:var(--blue);font-size:11px;font-weight:700">縄なし✓</span>':'')+(approvedRopeSet.has(lbl)?' <span style="color:#e09000;font-size:11px;font-weight:700">縄あり✓</span>':'');
+     tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"▶":"・"))+'</td><td>'+nameHtml(it)+badges+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
      t.appendChild(tr);
    }
  });
@@ -639,11 +649,15 @@ function render(){
 document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);gasPractice();}render();window.scrollTo({top:0,behavior:"smooth"});};
 document.getElementById("practiceBtn").onclick=function(){gasPractice();};
 document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}render();};
-document.getElementById("submitText").addEventListener("click",function(){
-  var t=this.textContent||"";
-  function flash(){var m=document.getElementById("copiedMsg");if(m){m.style.display="inline";setTimeout(function(){m.style.display="none";},1600);}}
-  try{navigator.clipboard.writeText(t).then(flash,function(){flash();});}
-  catch(e){try{var r=document.createRange();r.selectNodeContents(this);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");}catch(_){}flash();}
+document.querySelectorAll(".submitCode").forEach(function(el){
+  el.addEventListener("click",function(){
+    var t=this.textContent||"";
+    var mid=this.id==="submitTextNoRope"?"copiedMsgNoRope":"copiedMsgRope";
+    var self=this;
+    function flash(){var m=document.getElementById(mid);if(m){m.style.display="inline";setTimeout(function(){m.style.display="none";},1600);}}
+    try{navigator.clipboard.writeText(t).then(flash,function(){flash();});}
+    catch(e){try{var r=document.createRange();r.selectNodeContents(self);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");}catch(_){}flash();}
+  });
 });
 
 // 用語シート
