@@ -256,6 +256,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
        <span class="em">クワトロ</span>… 4回（ク・ワ・ト・ロ）</p>
     <p>声に出して、体で打つ。<span class="em">動き（ステップ）× リズム</span>を掛け合わせると、表現が一気に増えます。</p>
     <img src="figures/05_リズム.svg" alt="リズムの分け方（1カウントを何回打つか）" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-top:6px">
+    <p style="margin-top:10px"><span class="vid vidbtn" data-v="https://youtu.be/M17yN49651g">▶ リズムを動画で見る</span></p>
   </div>
 </details>
 
@@ -644,7 +645,7 @@ function render(){
    h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?'<span class="pv vidbtn" data-v="'+ph.video+'">▶見本</span>':"")+(ph.article?'<a class="pv" href="'+ph.article+'" target="_blank" rel="noopener">'+(ph.articleLabel||"記事を読む")+'</a>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"✓ ":"")+ph.badge+"</span>";
    root.appendChild(h);
    const why=document.createElement("p");why.className="why";why.innerHTML=glossify(ph.why);root.appendChild(why);
-   const t=document.createElement("table");t.innerHTML="<tr class='hrow'><th>済</th><th>技</th><th>ポイント</th><th>やり方</th><th>見本</th></tr>";root.appendChild(t);
+   const t=document.createElement("table");t.innerHTML="<tr class='hrow'><th>済</th><th>技</th><th>ポイント</th><th>やり方</th><th>動画</th></tr>";root.appendChild(t);
    for(let i=s;i<=e;i++){
      const it=STEPS[i];const tr=document.createElement("tr");
      const done=i<c,now=i===c;
