@@ -630,8 +630,10 @@ function render(){
    tl.textContent="TODAY · "+(c+1)+" / "+TOTAL;
    tm.innerHTML=nameHtml(it)+(it.point?"（"+glossify(it.point)+"）":"");
    tw.innerHTML=glossify(ph.why);
-   ts.innerHTML=(it.styles?"やり方："+glossify(it.styles):"")+
-     (ph.video?(it.styles?'　':'')+'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':"");
+   var _tvUrl=(it.isCreate&&ph.cv)?ph.cv:it.v?it.v:ph.video||'';
+   var _tvId=_tvUrl?((_tvUrl.match(/(?:youtu\.be\/|[?&]v=)([A-Za-z0-9_-]{11})/)||[])[1]||''):'';
+   var _tvHtml=_tvId?'<span class="yt-card vidbtn" data-v="'+_tvUrl+'" style="display:block;margin-top:12px;width:min(220px,100%)"><img src="https://img.youtube.com/vi/'+_tvId+'/mqdefault.jpg" alt="動画" style="width:100%;border-radius:10px;display:block"><span class="yt-play" style="font-size:28px">▶</span></span>':_tvUrl?'<span class="vid vidbtn" data-v="'+_tvUrl+'">'+(it.isCreate?'▶解説':'▶見本')+'</span>':'';
+   ts.innerHTML=(it.styles?"やり方："+glossify(it.styles):"")+_tvHtml;
    if(sbNR){sbNR.href=submitUrl(it,"縄なし");sbNR.style.display="block";}
    if(sbR){sbR.href=submitUrl(it,"縄あり");sbR.style.display="block";}
    if(sh2){var stxNR=document.getElementById("submitTextNoRope"),stxR=document.getElementById("submitTextRope");if(stxNR)stxNR.textContent="動画提出："+stepLabel(it)+"（縄なし）";if(stxR)stxR.textContent="動画提出："+stepLabel(it)+"（縄あり）";sh2.style.display="block";}
@@ -655,8 +657,7 @@ function render(){
      const done=i<c,now=i===c;
      if(now)tr.className="now";else if(done)tr.className="done";
      if(it.isCreate)tr.className+=" create";
-     var _cvId=ph.cv?((ph.cv.match(/(?:youtu\.be\/|[?&]v=)([A-Za-z0-9_-]{11})/)||[])[1]||''):'';
-     const vid=(it.isCreate&&ph.cv&&_cvId)?'<span class="yt-card vidbtn" data-v="'+ph.cv+'"><img src="https://img.youtube.com/vi/'+_cvId+'/mqdefault.jpg" alt="解説動画"><span class="yt-play">▶</span></span>':(it.isCreate&&ph.cv)?'<span class="vid vidbtn" data-v="'+ph.cv+'">▶解説</span>':it.v?'<span class="vid vidbtn" data-v="'+it.v+'">▶見本</span>':(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
+     const vid=(it.isCreate&&ph.cv)?'<span class="vid vidbtn" data-v="'+ph.cv+'">▶解説</span>':it.v?'<span class="vid vidbtn" data-v="'+it.v+'">▶見本</span>':(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
      var lbl=stepLabel(it);
      var badges=(approvedNoRopeSet.has(lbl)?' <span style="color:var(--blue);font-size:11px;font-weight:700">縄なし✓</span>':'')+(approvedRopeSet.has(lbl)?' <span style="color:#e09000;font-size:11px;font-weight:700">縄あり✓</span>':'');
      tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"▶":"・"))+'</td><td>'+nameHtml(it)+badges+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
