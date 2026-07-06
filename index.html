@@ -690,7 +690,7 @@ function openGloss(k){const g=GLOSSARY[k];if(!g)return;
   document.getElementById("gloss").hidden=false;}
 function closeGloss(){document.getElementById("gloss").hidden=true;}
 function toYtEmbed(src){var m=src.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([A-Za-z0-9_-]{11})/);return m?"https://www.youtube.com/embed/"+m[1]+"?autoplay=1":null;}
-function openVideo(src){var yt=toYtEmbed(src);var p=document.getElementById("vplayer");var f=document.getElementById("vframe");if(yt){f.src=yt;f.hidden=false;p.hidden=true;}else{p.src=src;p.hidden=false;f.hidden=true;f.src="";p.play().catch(function(){});}document.getElementById("vmodal").hidden=false;}
+function openVideo(src){var yt=toYtEmbed(src);if(yt){window.open(src,'_blank');return;}var p=document.getElementById("vplayer");var f=document.getElementById("vframe");p.src=src;p.hidden=false;f.hidden=true;f.src="";p.play().catch(function(){});document.getElementById("vmodal").hidden=false;}
 function closeVideo(){var p=document.getElementById("vplayer");var f=document.getElementById("vframe");p.pause();p.removeAttribute("src");p.load();p.hidden=false;f.src="";f.hidden=true;document.getElementById("vmodal").hidden=true;}
 document.addEventListener("click",e=>{
   const vb=e.target.closest(".vidbtn");
