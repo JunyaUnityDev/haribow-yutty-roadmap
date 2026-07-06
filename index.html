@@ -237,7 +237,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
     <p>ダブルダッチのソロは、<span class="em">動き × リズム × 空間</span>の“掛け算”でできています。</p>
     <p>言葉と同じです。単語をいくつか覚えて、つなげるほど無限に文が作れる。技も、<span class="em">1個ずつ覚えて掛け合わせる</span>ほど、自由に・即興で組めるようになります。</p>
     <p>だからこのロードマップは「<span class="em">部品を1個ずつ覚える（分解）→ 掛け合わせる</span>」順番に並んでいます。</p>
-    <p style="margin-top:10px"><span class="vid vidbtn" data-v="videos/分解して考える.mp4">▶ この考え方を動画で見る</span></p>
+    <p style="margin-top:10px"><span class="yt-card vidbtn" data-v="https://youtu.be/iE-nOXSi7Ss"><img src="https://img.youtube.com/vi/iE-nOXSi7Ss/mqdefault.jpg" alt="動画" style="width:120px"><span class="yt-play">▶</span></span></p>
     <details class="subd"><summary>さらにくわしく</summary>
       <div style="margin-top:8px">
         <p>・土台の技（オーヴ・スライド・ペダル…）＝<span class="em">動きの部品</span></p>
@@ -259,7 +259,7 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
        <span class="em">クワトロ</span>… 4回（ク・ワ・ト・ロ）</p>
     <p>声に出して、体で打つ。<span class="em">動き（ステップ）× リズム</span>を掛け合わせると、表現が一気に増えます。</p>
     <img src="figures/05_リズム.svg" alt="リズムの分け方（1カウントを何回打つか）" style="width:100%;border:1px solid var(--line);border-radius:12px;margin-top:6px">
-    <p style="margin-top:10px"><span class="vid vidbtn" data-v="https://youtu.be/M17yN49651g">▶ リズムを動画で見る</span></p>
+    <p style="margin-top:10px"><span class="yt-card vidbtn" data-v="https://youtu.be/M17yN49651g"><img src="https://img.youtube.com/vi/M17yN49651g/mqdefault.jpg" alt="動画" style="width:120px"><span class="yt-play">▶</span></span></p>
   </div>
 </details>
 
@@ -320,21 +320,21 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 <script>
 // ===== 用語辞典（このサイトだけで完結。タップで定義が出る） =====
 const GLOSSARY = {
- "アンカー":{d:"体を固めず、腰で引き上げる質感。着地の振動を体に伝えない＝頭が揺れない（上半身が静か・滑らか）。コツ：重心を少し下げ、お尻を後ろに。",v:"videos/アンカースナッピー.mp4",f:["figures/04_質感.svg"]},
- "スナッピー":{d:"落下・横移動の勢いを、地面との接触で止める質感。かかとで着地して同時に体を固める。振動が足→体へ伝わる＝頭が揺れる（キレ）。",v:"videos/アンカースナッピー.mp4",f:["figures/04_質感.svg"]},
- "空間を埋める":{d:"縄の内側を、体を基準にした量で使い切る。①位置＝前後左右に“一人分以上”ずらす ②高さ＝上下2段階（普通／頭一つ分しゃがむ）③向き＝前・横・後ろ。①②③を全部できたらクリア。",v:"videos/空間を埋める.mp4",f:["figures/01_位置.svg","figures/02_高さ.svg","figures/03_向き.svg"]},
+ "アンカー":{d:"体を固めず、腰で引き上げる質感。着地の振動を体に伝えない＝頭が揺れない（上半身が静か・滑らか）。コツ：重心を少し下げ、お尻を後ろに。",v:"https://youtu.be/k5E15jE7NqY",f:["figures/04_質感.svg"]},
+ "スナッピー":{d:"落下・横移動の勢いを、地面との接触で止める質感。かかとで着地して同時に体を固める。振動が足→体へ伝わる＝頭が揺れる（キレ）。",v:"https://youtu.be/k5E15jE7NqY",f:["figures/04_質感.svg"]},
+ "空間を埋める":{d:"縄の内側を、体を基準にした量で使い切る。①位置＝前後左右に“一人分以上”ずらす ②高さ＝上下2段階（普通／頭一つ分しゃがむ）③向き＝前・横・後ろ。①②③を全部できたらクリア。",v:"https://youtu.be/S1_wSJAGyxs",f:["figures/01_位置.svg","figures/02_高さ.svg","figures/03_向き.svg"]},
  "リズム":{d:"どのビートで刻むか（8ビート／ダブル／トリプ等）。足の動き（ステップ）とは独立していて、ステップ×リズムで掛け合わせる。",v:"https://youtu.be/M17yN49651g",f:["figures/05_リズム.svg"]},
- "トリプ":{d:"「と・り・ぷ」の3連（1カウントに3回＝24ビート）で刻むリズム。3つ目の音の直後にオーヴで縄を抜けると引っかかりにくい。",v:"videos/トリプ.mp4",f:["figures/05_リズム.svg"]},
- "とめ":{d:"細かく刻んでいる箇所を、刻みの密度を半分に落として取る。動きを長く溜める＝“止めて”見せる。",v:"videos/とめはね払い.mp4"},
- "はね":{d:"ステップの途中にハイジャンプを入れる。",v:"videos/とめはね払い.mp4"},
- "払い":{d:"そのステップをしながら移動する。",v:"videos/とめはね払い.mp4"},
- "オーヴ":{d:"ロープを跳ばずに“またぐ”動き。足幅を前後に大きく開き、残った足を真上に抜く。他の技から縄を抜ける共通動作にもなる。",v:"videos/オーヴ.mp4"},
- "スライド":{d:"足が地面についた瞬間に、体を平行移動させる技。地面の反発をもらうと速い。前後スライドの習得は必須。",v:"videos/スライド.mp4"},
+ "トリプ":{d:"「と・り・ぷ」の3連（1カウントに3回＝24ビート）で刻むリズム。3つ目の音の直後にオーヴで縄を抜けると引っかかりにくい。",v:"https://youtu.be/6rvGkxTpJZQ",f:["figures/05_リズム.svg"]},
+ "とめ":{d:"細かく刻んでいる箇所を、刻みの密度を半分に落として取る。動きを長く溜める＝“止めて”見せる。",v:"https://youtu.be/Zg90mSmJVlM"},
+ "はね":{d:"ステップの途中にハイジャンプを入れる。",v:"https://youtu.be/Zg90mSmJVlM"},
+ "払い":{d:"そのステップをしながら移動する。",v:"https://youtu.be/Zg90mSmJVlM"},
+ "オーヴ":{d:"ロープを跳ばずに“またぐ”動き。足幅を前後に大きく開き、残った足を真上に抜く。他の技から縄を抜ける共通動作にもなる。",v:"https://youtu.be/63-VKq668sU"},
+ "スライド":{d:"足が地面についた瞬間に、体を平行移動させる技。地面の反発をもらうと速い。前後スライドの習得は必須。",v:"https://youtu.be/4tUHbgwHmeQ"},
  "連続スライド":{d:"スライドを途切れさせず連続でつなぐ。"},
- "ペダル":{d:"つま先とかかとを交互に踏みかえる中で、足裏の下にロープを通過させる技。引っかかったら重心を上下に。",v:"videos/ペダル.mp4"},
- "ヒールロック":{d:"着地と同時に素早く片足へ体重を移し、かかとで姿勢をキープする技。ムーブに緩急を出せる。",v:"videos/ヒールロック.mp4"},
- "ラグジャンプ":{d:"足の接地を意図的に長く取り、カウントで“浮き始める”。溜め＝ラグを作って跳ぶ。最難関。",v:"videos/ラグジャンプ.mp4"},
- "3ステップ":{d:"ワン（踏みに行く）・エン（太もも90度まで上げる）・ツー（後ろに置く）の3カウントのステップ。ダンスステップ。",v:"videos/3ステップ.mp4"},
+ "ペダル":{d:"つま先とかかとを交互に踏みかえる中で、足裏の下にロープを通過させる技。引っかかったら重心を上下に。",v:"https://youtu.be/ER4QCas1ne4"},
+ "ヒールロック":{d:"着地と同時に素早く片足へ体重を移し、かかとで姿勢をキープする技。ムーブに緩急を出せる。",v:"https://youtu.be/9hpXiLQgefg"},
+ "ラグジャンプ":{d:"足の接地を意図的に長く取り、カウントで“浮き始める”。溜め＝ラグを作って跳ぶ。最難関。",v:"https://youtu.be/9e6-saodELs"},
+ "3ステップ":{d:"ワン（踏みに行く）・エン（太もも90度まで上げる）・ツー（後ろに置く）の3カウントのステップ。ダンスステップ。",v:"https://youtu.be/DE0E9OFlwDY"},
  "ただのジャンプ":{d:"普通に連続で跳ぶ基礎ジャンプ。リズムと質感の土台。"},
  "16ビートのパーグージャンプ":{d:"パー（足を開く）とグー（閉じる）を交互に跳ぶ基礎ジャンプ。"},
  "ジャンプコンボ":{d:"基礎技を組み合わせた連続技（レベル2）。3つ作る。"},
@@ -364,7 +364,7 @@ const PHASES = [
     {name:"ただのジャンプ",point:"アンカー・スナッピーで跳ぶ",styles:"",v:"https://youtu.be/xXKvyRnUv_g"},
     {name:"16ビートのパーグージャンプ",point:"アンカー・スナッピーで跳ぶ",styles:"",v:"https://youtu.be/TxE2j9tWRvE"}]},
 
- {title:"① オーヴ", short:"① オーヴ", video:"videos/オーヴ.mp4",
+ {title:"① オーヴ", short:"① オーヴ", video:"https://youtu.be/63-VKq668sU",
    why:"跳ばずに“またぐ”。足幅を前後に大きく開き、残った足を真上に抜く。他の技の共通動作なので最初に土台化。",
    badge:"初・跳ばずに縄を抜けた",
    create:"オーヴで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
@@ -372,7 +372,7 @@ const PHASES = [
    items:[
     {name:"オーヴ単体",point:"",styles:"アンカー→スナッピー"}]},
 
- {title:"② スライド", short:"② スライド", video:"videos/スライド.mp4",
+ {title:"② スライド", short:"② スライド", video:"https://youtu.be/4tUHbgwHmeQ",
    why:"接地の瞬間に体を平行移動。地面の反発をもらうと速い。前後スライドは必須。",
    badge:"初・狙った位置にスライドできた",
    create:"スライドで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
@@ -381,7 +381,7 @@ const PHASES = [
     {name:"スライド 前後左右",point:"前後は必須",styles:""},
     {name:"連続スライド",point:"つなげて連続で",styles:"",v:"https://youtu.be/RHPhl0KRXUc"}]},
 
- {title:"③ ペダル（基礎ジャンプ）", short:"③ ペダル", video:"videos/ペダル.mp4",
+ {title:"③ ペダル（基礎ジャンプ）", short:"③ ペダル", video:"https://youtu.be/ER4QCas1ne4",
    article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
    why:"つま先↔かかとを交互に踏みかえ、足裏の下にロープを通す。引っかかったら重心を上下に。",
    badge:"初・10回連続跳べた",
@@ -392,7 +392,7 @@ const PHASES = [
     {name:"ペダル 片足",point:"片足で安定",styles:"アンカー→スナッピー"},
     {name:"ペダルウォーク",point:"歩くように",styles:"アンカー→スナッピー"}]},
 
- {title:"④ 3ステップ", short:"④ 3ステップ", video:"videos/3ステップ.mp4",
+ {title:"④ 3ステップ", short:"④ 3ステップ", video:"https://youtu.be/DE0E9OFlwDY",
    article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
    why:"ワン（踏みに行く）→エン（太もも90度まで上げる）→ツー（後ろに置く）。",
    badge:"初・とめ・はね・払いが計3そろった",
@@ -401,7 +401,7 @@ const PHASES = [
    items:[
     {name:"3ステップ",point:"ワン・エン・ツー",styles:""}]},
 
- {title:"⑤ ヒールロック", short:"⑤ ヒールロック", video:"videos/ヒールロック.mp4",
+ {title:"⑤ ヒールロック", short:"⑤ ヒールロック", video:"https://youtu.be/9hpXiLQgefg",
    why:"着地と同時に片足へ素早く体重、かかとでキープ。上半身を横に曲げ次の縄ギリギリまでポーズ＝緩急。",
    badge:"初・キメのポーズが決まった",
    create:"ヒールロックで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
@@ -409,7 +409,7 @@ const PHASES = [
    items:[
     {name:"ヒールロック 左右",point:"左右どちらの軸足でも",styles:""}]},
 
- {title:"⑥ ラグジャンプ", short:"⑥ ラグジャンプ", video:"videos/ラグジャンプ.mp4",
+ {title:"⑥ ラグジャンプ", short:"⑥ ラグジャンプ", video:"https://youtu.be/9e6-saodELs",
    why:"接地を粘り、カウントで“浮き始める”。溜め＝ラグを作るのが命。最難関。",
    badge:"初・溜めて高く跳べた",
    create:"ラグジャンプで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
@@ -418,7 +418,7 @@ const PHASES = [
     {name:"ラグジャンプ 両足",point:"",styles:""},
     {name:"ラグジャンプ 片足",point:"",styles:""}]},
 
- {title:"⑦ トリプ", short:"⑦ トリプ", video:"videos/トリプ.mp4",
+ {title:"⑦ トリプ", short:"⑦ トリプ", video:"https://youtu.be/6rvGkxTpJZQ",
    why:"“と・り・ぷ”の3連（タ・タ・タ）で刻む。3つ目の直後にオーヴで抜けると引っかかりにくい。",
    badge:"初・トリプが音にハマった",
    create:"トリプで空間を埋める（位置・高さ・向き）。技に掛けるリズム展開は免除",
@@ -648,7 +648,7 @@ function render(){
  PHASES.forEach((ph,pi)=>{
    const [s,e]=PHASE_RANGE[pi];const phaseDone=c>e;
    const h=document.createElement("div");h.className="phase";
-   h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?'<span class="pv vidbtn" data-v="'+ph.video+'">▶見本</span>':"")+(ph.article?'<a class="pv" href="'+ph.article+'" target="_blank" rel="noopener">'+(ph.articleLabel||"記事を読む")+'</a>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"✓ ":"")+ph.badge+"</span>";
+   h.innerHTML="<span>"+glossify(ph.title)+"</span>"+(ph.video?ytBtn(ph.video,"▶見本"):"")+(ph.article?'<a class="pv" href="'+ph.article+'" target="_blank" rel="noopener">'+(ph.articleLabel||"記事を読む")+'</a>':"")+'<span class="badge '+(phaseDone?"win":"lock")+'">'+(phaseDone?"✓ ":"")+ph.badge+"</span>";
    root.appendChild(h);
    const why=document.createElement("p");why.className="why";why.innerHTML=glossify(ph.why);root.appendChild(why);
    const t=document.createElement("table");t.innerHTML="<tr class='hrow'><th>済</th><th>技</th><th>ポイント</th><th>やり方</th><th>動画</th></tr>";root.appendChild(t);
@@ -657,7 +657,7 @@ function render(){
      const done=i<c,now=i===c;
      if(now)tr.className="now";else if(done)tr.className="done";
      if(it.isCreate)tr.className+=" create";
-     const vid=(it.isCreate&&ph.cv)?'<span class="vid vidbtn" data-v="'+ph.cv+'">▶解説</span>':it.v?'<span class="vid vidbtn" data-v="'+it.v+'">▶見本</span>':(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
+     const vid=(it.isCreate&&ph.cv)?ytBtn(ph.cv,'▶解説'):it.v?ytBtn(it.v,'▶見本'):(!it.isCreate&&ph.video&&i===s)?ytBtn(ph.video,'▶見本'):'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
      var lbl=stepLabel(it);
      var badges=(approvedNoRopeSet.has(lbl)?' <span style="color:var(--blue);font-size:11px;font-weight:700">縄なし✓</span>':'')+(approvedRopeSet.has(lbl)?' <span style="color:#e09000;font-size:11px;font-weight:700">縄あり✓</span>':'');
      tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"▶":"・"))+'</td><td>'+nameHtml(it)+badges+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
@@ -679,12 +679,14 @@ document.querySelectorAll(".submitCode").forEach(function(el){
   });
 });
 
+// ytBtn: YouTubeサムネイルボタンを生成。YouTube URL以外はテキストボタン。
+function ytBtn(url,label,w){if(!url)return'';var id=(url.match(/(?:youtu\.be\/|[?&]v=)([A-Za-z0-9_-]{11})/)||[])[1]||'';if(!id)return'<span class="vid vidbtn" data-v="'+url+'">'+label+'</span>';return'<span class="yt-card vidbtn" data-v="'+url+'"><img src="https://img.youtube.com/vi/'+id+'/mqdefault.jpg" alt="動画"'+(w?' style="width:'+w+'px"':'')+'>'+' <span class="yt-play">▶</span></span>';}
 // 用語シート
 function openGloss(k){const g=GLOSSARY[k];if(!g)return;
   document.getElementById("gloss-t").textContent=k;
   document.getElementById("gloss-d").textContent=g.d;
   document.getElementById("gloss-fig").innerHTML=(g.f||[]).map(function(src){return '<img src="'+src+'" alt="">';}).join("");
-  document.getElementById("gloss-v").innerHTML=g.v?'<span class="vid vidbtn" data-v="'+g.v+'">▶見本動画</span>':"";
+  document.getElementById("gloss-v").innerHTML=g.v?ytBtn(g.v,'▶見本動画',160):"";
   document.getElementById("gloss").hidden=false;}
 function closeGloss(){document.getElementById("gloss").hidden=true;}
 function toYtEmbed(src){var m=src.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([A-Za-z0-9_-]{11})/);return m?"https://www.youtube.com/embed/"+m[1]+"?autoplay=1":null;}
