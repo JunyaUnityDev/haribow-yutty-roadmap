@@ -136,6 +136,9 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 .chk.on{color:#06c755}
 .vid{display:inline-block;background:var(--acw);color:var(--blue);border-radius:7px;padding:3px 9px;font-size:12px;text-decoration:none}
 .vid.empty{background:var(--soft);color:var(--faint)}
+.yt-card{display:inline-block;position:relative;cursor:pointer;border-radius:8px;overflow:hidden;line-height:0;vertical-align:middle}
+.yt-card img{width:96px;display:block}
+.yt-card .yt-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.42);color:#fff;font-size:22px;pointer-events:none}
 .foot{color:var(--faint);font-size:12px;margin-top:22px}
 
 /* 用語タップ解説 */
@@ -651,7 +654,8 @@ function render(){
      const done=i<c,now=i===c;
      if(now)tr.className="now";else if(done)tr.className="done";
      if(it.isCreate)tr.className+=" create";
-     const vid=(it.isCreate&&ph.cv)?'<span class="vid vidbtn" data-v="'+ph.cv+'">▶解説</span>':it.v?'<span class="vid vidbtn" data-v="'+it.v+'">▶見本</span>':(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
+     var _cvId=ph.cv?((ph.cv.match(/(?:youtu\.be\/|[?&]v=)([A-Za-z0-9_-]{11})/)||[])[1]||''):'';
+     const vid=(it.isCreate&&ph.cv&&_cvId)?'<span class="yt-card vidbtn" data-v="'+ph.cv+'"><img src="https://img.youtube.com/vi/'+_cvId+'/mqdefault.jpg" alt="解説動画"><span class="yt-play">▶</span></span>':(it.isCreate&&ph.cv)?'<span class="vid vidbtn" data-v="'+ph.cv+'">▶解説</span>':it.v?'<span class="vid vidbtn" data-v="'+it.v+'">▶見本</span>':(!it.isCreate&&ph.video&&i===s)?'<span class="vid vidbtn" data-v="'+ph.video+'">▶見本</span>':'<span class="vid empty">'+(it.isCreate?"自作":"準備中")+'</span>';
      var lbl=stepLabel(it);
      var badges=(approvedNoRopeSet.has(lbl)?' <span style="color:var(--blue);font-size:11px;font-weight:700">縄なし✓</span>':'')+(approvedRopeSet.has(lbl)?' <span style="color:#e09000;font-size:11px;font-weight:700">縄あり✓</span>':'');
      tr.innerHTML='<td class="chk '+(done?"on":"")+'">'+(done?"✓":(now?"▶":"・"))+'</td><td>'+nameHtml(it)+badges+'</td><td>'+glossify(it.point||"")+'</td><td>'+glossify(it.styles||"")+'</td><td>'+vid+'</td>';
