@@ -22,6 +22,23 @@ h1{font-size:24px;margin:0 0 22px;font-family:var(--serif);font-weight:700;lette
 .wrap>.submithint{animation-delay:.28s}
 .wrap>.morebtn{animation-delay:.32s}
 @media(prefers-reduced-motion:reduce){.wrap>*{animation:none!important}}
+/* ── Todayカード切替 ── */
+.today{transition:opacity .16s ease,transform .16s ease}
+.today.today-exit{opacity:0;transform:translateY(6px)}
+@keyframes todayIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.today.today-enter{animation:todayIn .26s cubic-bezier(.2,.7,.2,1) both}
+/* ── アコーディオン展開 ── */
+details[open]>.accbody{animation:fadeUp .22s cubic-bezier(.2,.7,.2,1) both}
+/* ── submitbtn / サムネイル タップ感触 ── */
+.submitbtn:active{transform:scale(.97)}
+.yt-card{transition:transform .12s cubic-bezier(.2,.7,.2,1)}
+.yt-card:active{transform:scale(.93)}
+/* ── 動画モーダル スケールイン ── */
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.video-modal:not([hidden]){animation:modalIn .2s cubic-bezier(.2,.7,.2,1) both}
+/* ── 動体視差軽減ユーザー向け（追加分） ── */
+@media(prefers-reduced-motion:reduce){.today,.yt-card{transition:none}.today.today-enter,details[open]>.accbody,.video-modal:not([hidden]){animation:none!important}}
+
 .brand{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--blue);font-weight:700;margin:0 0 7px}
 h1.rm{margin:0 0 6px}
 .who{font-size:14px;color:var(--ink);font-weight:700;margin:0 0 18px;letter-spacing:.02em}
@@ -49,7 +66,7 @@ h1.rm{margin:0 0 6px}
 .today .style{font-size:13px;color:var(--ink);margin-top:10px}
 .ctrl{display:flex;gap:10px;margin-bottom:10px}
 .practicebtn{display:block;width:100%;text-align:center;background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:700;font-size:14px;border-radius:13px;padding:13px;margin-bottom:10px;cursor:pointer}
-.practicebtn:active{transform:scale(.99)}
+.practicebtn:active{transform:scale(.96)}
 .practicebtn.done{background:var(--acw);border-color:transparent;color:var(--blue)}
 .practicebtn #practiceMsg{font-weight:600;font-size:12px;color:var(--blue);margin-left:8px}
 .submitbtn{display:block;text-align:center;text-decoration:none;background:#06c755;color:#fff;font-weight:700;font-size:15px;border-radius:13px;padding:15px;margin-bottom:8px}
@@ -57,8 +74,8 @@ h1.rm{margin:0 0 6px}
 .submithint{font-size:11.5px;line-height:1.65;color:var(--mut);background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:12px 14px;margin-bottom:18px}
 .submithint b{color:var(--ink)}
 .submithint code{display:inline-block;margin-top:7px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--blue);font-weight:700;cursor:pointer;word-break:break-all}
-.btn{flex:1;border:none;border-radius:13px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;transition:transform .05s ease,opacity .15s}
-.btn:active{transform:scale(.985)}
+.btn{flex:1;border:none;border-radius:13px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;transition:transform .1s cubic-bezier(.2,.7,.2,1),opacity .15s}
+.btn:active{transform:scale(.95)}
 .btn.go{background:var(--blue);color:#fff}
 .btn.back{flex:0 0 auto;background:var(--card);color:var(--mut);font-weight:600;padding:15px 17px;border:1px solid var(--line)}
 
@@ -670,9 +687,10 @@ function render(){
    }
  });
 }
-document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);gasPractice();}render();window.scrollTo({top:0,behavior:"smooth"});};
+function animToday(cb){var t=document.querySelector('.today');t.classList.add('today-exit');setTimeout(function(){cb();t.classList.remove('today-exit');t.classList.add('today-enter');setTimeout(function(){t.classList.remove('today-enter');},300);},160);}
+document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);gasPractice();}animToday(render);window.scrollTo({top:0,behavior:"smooth"});};
 document.getElementById("practiceBtn").onclick=function(){gasPractice();};
-document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}render();};
+document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}animToday(render);};
 document.querySelectorAll(".submitCode").forEach(function(el){
   el.addEventListener("click",function(){
     var t=this.textContent||"";
