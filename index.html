@@ -218,8 +218,16 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 .video-modal video{max-width:100%;max-height:84vh;border-radius:10px;background:#000}
 .video-modal iframe{width:min(90vw,854px);height:min(50.6vw,480px);border:none;border-radius:10px}
 .video-close{position:absolute;top:12px;right:16px;font-size:32px;line-height:1;color:#fff;background:none;border:none;cursor:pointer}
+/* ── DEMO MODE ── */
+#demo-banner{display:none;position:sticky;top:0;z-index:50;background:#b25c33;color:#fff;text-align:center;padding:9px 16px;font-size:12px;font-weight:700;letter-spacing:.06em;}
+body.is-demo #demo-banner{display:block;}
+#demo-toast{position:fixed;inset:auto 0 0;z-index:300;background:rgba(28,24,19,.97);border-radius:20px 20px 0 0;padding:22px 20px 36px;box-shadow:0 -6px 32px rgba(0,0,0,.35);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.7,.2,1);pointer-events:none;}
+#demo-toast.open{transform:translateY(0);pointer-events:auto;}
+#demo-toast-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:#b25c33;margin-bottom:10px;}
+#demo-toast-msg{font-size:14px;line-height:1.72;color:rgba(255,255,255,.9);margin:0 0 18px;}
+#demo-toast-close{display:block;width:100%;background:rgba(255,255,255,.11);border:none;color:rgba(255,255,255,.8);font-size:14px;font-weight:700;border-radius:10px;padding:13px;cursor:pointer;font-family:inherit;}
 </style></head>
-<body><div class="wrap">
+<body><div id="demo-banner">DEMO ― 実際のサービスの動きをお試しいただけます</div><div class="wrap">
 <div class="brand">HARIBOW ONLINE LESSON</div>
 <h1 class="rm">上達ロードマップ</h1>
 <div class="who" id="who" style="display:none"></div>
@@ -339,6 +347,11 @@ tr.create td:first-child{border-left:3px solid var(--gold)}
 </div>
 
 <div class="video-modal" id="vmodal" hidden><button class="video-close" id="vclose" aria-label="閉じる">×</button><video id="vplayer" controls playsinline preload="metadata"></video><iframe id="vframe" allowfullscreen allow="autoplay"></iframe></div>
+<div id="demo-toast" role="dialog" aria-modal="true">
+  <div id="demo-toast-label">DEMO</div>
+  <p id="demo-toast-msg"></p>
+  <button id="demo-toast-close">閉じる</button>
+</div>
 <script>
 // ===== 用語辞典（このサイトだけで完結。タップで定義が出る） =====
 const GLOSSARY = {
@@ -486,6 +499,10 @@ const TOTAL=STEPS.length, NPH=PHASES.length;
 
 // token を先に確定（localStorageキーを本人ごとに分けるため）
 const U=(new URLSearchParams(location.search).get("u")||"").trim();
+const DEMO=new URLSearchParams(location.search).get("demo")==="1";
+if(DEMO)document.body.classList.add("is-demo");
+function showDemoToast(msg){var t=document.getElementById("demo-toast");var m=document.getElementById("demo-toast-msg");if(!t||!m)return;m.textContent=msg;t.classList.add("open");}
+function hideDemoToast(){var t=document.getElementById("demo-toast");if(t)t.classList.remove("open");}
 // 進捗のlocalStorageキーは token ごとに分離する。
 // これをしないと、1台のスマホで複数人のURLを開いた時に進捗が混ざり、
 // 別人の進捗が表示され、さらにサーバへ書き込まれてしまう（データ汚染）。
@@ -689,8 +706,12 @@ function render(){
 }
 function animToday(cb){var t=document.querySelector('.today');t.classList.add('today-exit');setTimeout(function(){cb();t.classList.remove('today-exit');t.classList.add('today-enter');setTimeout(function(){t.classList.remove('today-enter');},300);},160);}
 document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);gasPractice();}animToday(render);window.scrollTo({top:0,behavior:"smooth"});};
-document.getElementById("practiceBtn").onclick=function(){gasPractice();};
+document.getElementById("practiceBtn").onclick=function(){if(DEMO){showDemoToast("実際はここで今日の練習が記録されます。毎日押すと連続記録が積み上がります。");return;}gasPractice();};
 document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}animToday(render);};
+document.getElementById("demo-toast-close").addEventListener("click",hideDemoToast);
+if(DEMO){
+  ["submitBtnNoRope","submitBtnRope"].forEach(function(id){var el=document.getElementById(id);if(!el)return;el.addEventListener("click",function(e){e.preventDefault();showDemoToast("実際はここでLINEが開き、動画をJUNYAに直接提出できます。提出後にJUNYAから個別フィードバックが届きます。");});});
+}
 document.querySelectorAll(".submitCode").forEach(function(el){
   el.addEventListener("click",function(){
     var t=this.textContent||"";
@@ -713,9 +734,10 @@ function openGloss(k){const g=GLOSSARY[k];if(!g)return;
   document.getElementById("gloss").hidden=false;}
 function closeGloss(){document.getElementById("gloss").hidden=true;}
 function toYtEmbed(src){var m=src.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([A-Za-z0-9_-]{11})/);return m?"https://www.youtube.com/embed/"+m[1]+"?autoplay=1":null;}
-function openVideo(src){var yt=toYtEmbed(src);var p=document.getElementById("vplayer");var f=document.getElementById("vframe");if(yt){f.src=yt;f.hidden=false;p.hidden=true;}else{p.src=src;p.hidden=false;f.hidden=true;f.src="";p.play().catch(function(){});}document.getElementById("vmodal").hidden=false;}
+function openVideo(src){if(DEMO){showDemoToast("実際はここで解説動画が再生されます。技のポイントや見本を確認できます。");return;}var yt=toYtEmbed(src);var p=document.getElementById("vplayer");var f=document.getElementById("vframe");if(yt){f.src=yt;f.hidden=false;p.hidden=true;}else{p.src=src;p.hidden=false;f.hidden=true;f.src="";p.play().catch(function(){});}document.getElementById("vmodal").hidden=false;}
 function closeVideo(){var p=document.getElementById("vplayer");var f=document.getElementById("vframe");p.pause();p.removeAttribute("src");p.load();p.hidden=false;f.src="";f.hidden=true;document.getElementById("vmodal").hidden=true;}
 document.addEventListener("click",e=>{
+  if(DEMO){var pv=e.target.closest(".pv");if(pv){e.preventDefault();showDemoToast("実際はここで受講者限定の解説記事ページが開きます。");return;}}
   const vb=e.target.closest(".vidbtn");
   if(vb){openVideo(vb.dataset.v);return;}
   if(e.target.id==="vclose"||e.target.id==="vmodal"){closeVideo();return;}
