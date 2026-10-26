@@ -38,23 +38,34 @@ h1{font-size:24px;margin:0 0 10px;font-family:var(--serif);font-weight:700;line-
 .empty{color:var(--mut);font-size:13px;padding:20px 0;text-align:center}
 .foot{color:var(--faint);font-size:11px;text-align:center;margin-top:24px}
 /* モーダル */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px}
+.modal{position:fixed;inset:0;background:rgba(20,17,13,.97);z-index:100;display:flex;flex-direction:column;overflow-y:auto;padding:50px 14px 28px;-webkit-overflow-scrolling:touch}
 .modal[hidden]{display:none}
-.modal video{max-width:100%;max-height:70vh;border-radius:10px;background:#000}
-.modal iframe{width:min(400px,calc(100vw - 28px),calc(70vh * 9 / 16));aspect-ratio:9/16;height:auto;border:0;border-radius:10px;background:#000;flex:0 0 auto}
+.minner{margin:auto 0;display:flex;flex-direction:column;align-items:center;width:100%}
+.modal video{max-width:100%;max-height:56vh;border-radius:10px;background:#000}
+.modal video.mirror{transform:scaleX(-1)}
+.modal iframe{width:min(400px,calc(100vw - 28px),calc(62vh * 9 / 16));aspect-ratio:9/16;height:auto;border:0;border-radius:10px;background:#000;flex:0 0 auto}
 .mhead{color:#fff;font-size:13px;margin-bottom:10px;text-align:center;max-width:100%;padding:0 30px}
 .mhead b{font-family:var(--mono)}
+.mhint{color:#b9b1a6;font-size:11.5px;margin-top:4px}
+.mback{background:none;border:0;color:#e8c9b8;font:inherit;font-size:13px;cursor:pointer;margin-bottom:6px;padding:4px 0}
+.tools{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;justify-content:center}
+.tool{border:1px solid rgba(255,255,255,.28);background:none;color:#ddd;border-radius:999px;padding:6px 12px;font:inherit;font-size:12.5px;cursor:pointer;font-family:var(--mono)}
+.tool.on{background:#fffdfa;color:var(--ink);border-color:#fffdfa}
 .mbtns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center}
 .mbtn{border:0;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:#fffdfa;color:var(--ink)}
 .mbtn.main{background:var(--blue);color:#fff}
 .mbtn[disabled]{opacity:.45;cursor:default}
-.mtext{color:#eee;font-size:13px;max-width:min(440px,100%);margin:10px 0 0;line-height:1.6}
+.mtext{color:#eee;font-size:13.5px;max-width:min(440px,100%);margin:14px 0 0;line-height:1.7}
 .mtext b{color:#fff}
-.mtag{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:6px;padding:1px 7px;margin:2px;font:inherit;font-size:12px;cursor:pointer}
-.mtag.has{background:#b25c33}
-.dictbar{display:none;background:var(--acw);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:13px;color:var(--ink);cursor:pointer}
+.mlink{background:none;border:0;padding:0;color:#e8c9b8;font:inherit;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.mtag{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:7px;padding:5px 10px;margin:3px;font:inherit;font-size:13px;min-height:30px}
+.mtag.r{background:#b25c33}
+.mtag.has{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.mtag.has::after{content:" ›"}
+.dictbar{display:none;background:var(--acw);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:13px;color:var(--ink)}
+.dictbar.go{cursor:pointer}
 .dictbar b{color:var(--blue)}
-.dictlist{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 18px}
+.dictlist{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 14px}
 .dictlist summary{list-style:none;cursor:pointer;padding:13px 16px;font-weight:700;font-size:14px;display:flex;gap:8px;align-items:center}
 .dictlist summary::-webkit-details-marker{display:none}
 .dictlist summary .sm{font-weight:500;color:var(--mut);font-size:12px}
@@ -63,61 +74,53 @@ h1{font-size:24px;margin:0 0 10px;font-family:var(--serif);font-weight:700;line-
 .dictlist .dl button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink)}
 .dictlist .dl button.r{border-color:var(--blue);color:var(--blue);font-weight:700}
 .dictlist .dlh{font-size:12px;color:var(--mut);padding:0 16px 6px}
-.mclose{position:absolute;top:10px;right:14px;background:none;border:0;color:#fff;font-size:30px;cursor:pointer;line-height:1}
+.mclose{position:fixed;top:8px;right:12px;background:rgba(20,17,13,.6);border:0;color:#fff;font-size:30px;cursor:pointer;line-height:1;width:44px;height:44px;border-radius:50%;z-index:101}
+.legend{font-size:11.5px;color:var(--faint);margin:-8px 0 12px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--acw);border:1px solid var(--blue);vertical-align:-1px;margin-right:4px}
+.chip.more{border-style:dashed}
+.first{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:3px 9px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.steps{margin-top:6px;font-size:12.5px;color:var(--mut)}
+.thumb .badge{position:absolute;left:8px;bottom:8px;background:var(--blue);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px}
+.thumb .seen{position:absolute;left:8px;top:30px;background:rgba(255,253,250,.9);color:var(--mut);font-size:10.5px;border-radius:5px;padding:1px 6px}
+.meta{padding:7px 8px 9px}
+.meta .tags{margin-top:0}
 </style></head><body><div class="wrap">
 <div class="brand">HARIBOW ONLINE LESSON</div>
 <h1>コレオライブラリ</h1>
 <a class="back" id="back" href="index.html">‹ 上達ロードマップに戻る</a>
-<p class="lead">ロードマップで1個ずつ覚えた技が、曲の中でどう組み合わさるのか。<br>全49本の振付と、それぞれの解説動画です。</p>
+<p class="lead">ロードマップで覚えた技を、曲に合わせてつなげた振付（コレオ）49本と、その解説動画です。</p>
 <div class="howto">
-  <b>おすすめの進み方</b>：ロードマップを完走したら、ここへ。途中でものぞいてOK。
-  <ol>
-    <li>振付を見る（くり返し再生されます）</li>
-    <li>タグで「どの技でできているか」を先に確認（知らない技は<b>技辞典</b>へ）</li>
-    <li>解説を見て、組み合わせ方を分解する</li>
-  </ol>
-  <div style="margin-top:6px">はじめての1本は「<b>ロードマップの技だけ</b>」（12本）から選ぶのがおすすめ。</div>
+  <div><b>はじめの1本</b>は <button class="first" data-no="47">#47 ペダルだけ</button> から。慣れたら「ロードマップの技だけ」の振付へ。</div>
+  <div class="steps">見る → タグで技を確認 → 解説を見る → 8カウントだけ跳んでみる → 技を1つ、自分の得意技に差し替える</div>
 </div>
 <details class="dictlist"><summary>技辞典<span class="sm">知らない技はここで</span></summary>
-  <div class="dlh">振付に出てくる技の、縄の中での見本とコツ。色つき＝ロードマップの技</div>
+  <div class="dlh">振付に出てくる技の、縄の中での見本とコツ</div>
   <div class="dl" id="dictList"></div>
 </details>
 <div class="chips" id="chips"></div>
+<div class="legend"><i></i>色つきのタグ＝ロードマップで練習する技</div>
 <div class="dictbar" id="dictBar"></div>
 <div class="count" id="count"></div>
 <div class="grid" id="grid"></div>
-<p class="foot">色つきのタグ＝ロードマップで練習する技</p>
 </div>
 
 <div class="modal" id="modal" hidden>
   <button class="mclose" id="mclose" aria-label="閉じる">×</button>
-  <div class="mhead" id="mhead"></div>
-  <video id="mv" controls playsinline loop preload="metadata"></video>
-  <iframe id="mf" hidden allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
-  <div class="mtext" id="mtext" hidden></div>
-  <div class="mbtns" id="mbtns"></div>
+  <div class="minner">
+    <div class="mhead" id="mhead"></div>
+    <video id="mv" controls playsinline loop preload="metadata"></video>
+    <iframe id="mf" hidden allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+    <div class="tools" id="tools">
+      <button class="tool" data-rate="0.5">0.5x</button><button class="tool" data-rate="0.75">0.75x</button><button class="tool on" data-rate="1">1x</button><button class="tool" id="mirror">左右反転</button>
+    </div>
+    <div class="mbtns" id="mbtns"></div>
+    <div class="mtext" id="mtext" hidden></div>
+  </div>
 </div>
 
 <script>
 const ITEMS=[{"no": 1, "date": "2025/9/2", "inst": "Junya", "tags": ["レット", "オーヴ", "スライド"], "road": false, "v": "videos/choreo/c01.mp4", "img": "figures/choreo/c01.jpg", "yt": "npvlzitKmd8", "sec": 148}, {"no": 2, "date": "2025/9/4", "inst": "Junya", "tags": ["スイング", "ペダル", "3ステップ", "16ビート"], "road": false, "v": "videos/choreo/c02.mp4", "img": "figures/choreo/c02.jpg", "yt": "yRMaCsn6Up0", "sec": 226}, {"no": 3, "date": "2025/9/9", "inst": "Junya", "tags": ["ツイスト", "3ステップ", "スイング", "ペダル", "ポップコーン"], "road": false, "v": "videos/choreo/c03.mp4", "img": "figures/choreo/c03.jpg", "yt": "xzMtdLf9c24", "sec": 153}, {"no": 4, "date": "2025/9/11", "inst": "Junya", "tags": ["レット", "オーヴ", "3ステップ", "スイング", "ペダル"], "road": false, "v": "videos/choreo/c04.mp4", "img": "figures/choreo/c04.jpg", "yt": "ED6ahWwZT_M", "sec": 218}, {"no": 5, "date": "2025/9/16", "inst": "Junya", "tags": ["スライド", "ラグジャンプ"], "road": true, "v": "videos/choreo/c05.mp4", "img": "figures/choreo/c05.jpg", "yt": "DvaJGrj-eVc", "sec": 240}, {"no": 6, "date": "2025/9/18", "inst": "Junya", "tags": ["オーヴ", "3ステップ", "ツイスト", "トリプ"], "road": false, "v": "videos/choreo/c06.mp4", "img": "figures/choreo/c06.jpg", "yt": "qXcn1npqG8A", "sec": 183}, {"no": 7, "date": "2025/9/23", "inst": "Junya", "tags": ["ZDステップ", "トリプ"], "road": false, "v": "videos/choreo/c07.mp4", "img": "figures/choreo/c07.jpg", "yt": "TXae5Fy37Zo", "sec": 224}, {"no": 8, "date": "2025/9/25", "inst": "Junya", "tags": ["レット", "スイング", "ペダル", "3ステップ", "オーヴ"], "road": false, "v": "videos/choreo/c08.mp4", "img": "figures/choreo/c08.jpg", "yt": "8gjNABOED1w", "sec": 247}, {"no": 9, "date": "2025/9/30", "inst": "Junya", "tags": ["ランニングマン", "ツイスト", "オーヴ", "3ステップ"], "road": false, "v": "videos/choreo/c09.mp4", "img": "figures/choreo/c09.jpg", "yt": "C8_ut19ZpIY", "sec": 222}, {"no": 10, "date": "2025/10/2", "inst": "Junya", "tags": ["レット", "トリプ", "スライド", "ラグジャンプ", "ボディポップ"], "road": false, "v": "videos/choreo/c10.mp4", "img": "figures/choreo/c10.jpg", "yt": "MKbvlLVZvyA", "sec": 214}, {"no": 11, "date": "2025/10/7", "inst": "Junya", "tags": ["オーヴ", "スイング", "ヒールロック", "ZDステップ"], "road": false, "v": "videos/choreo/c11.mp4", "img": "figures/choreo/c11.jpg", "yt": "byf0b9jsJ4A", "sec": 257}, {"no": 12, "date": "2025/10/9", "inst": "Junya", "tags": ["空中ヒット", "スイング", "オーヴ"], "road": false, "v": "videos/choreo/c12.mp4", "img": "figures/choreo/c12.jpg", "yt": "5izJHut_ojc", "sec": 292}, {"no": 13, "date": "2025/10/14", "inst": "Junya", "tags": ["ペダル", "3ステップ", "オーヴ"], "road": true, "v": "videos/choreo/c13.mp4", "img": "figures/choreo/c13.jpg", "yt": "3HyVSBVSc6k", "sec": 290}, {"no": 14, "date": "2025/10/16", "inst": "Junya", "tags": ["ペダル", "トリプ"], "road": true, "v": "videos/choreo/c14.mp4", "img": "figures/choreo/c14.jpg", "yt": "ZT5cs73mMJQ", "sec": 363}, {"no": 15, "date": "2025/10/21", "inst": "Junya", "tags": ["ペダル", "ZDステップ", "スイング"], "road": false, "v": "videos/choreo/c15.mp4", "img": "figures/choreo/c15.jpg", "yt": "gNU3HvQsscg", "sec": 273}, {"no": 16, "date": "2025/10/23", "inst": "Junya", "tags": ["スイング", "ペダル"], "road": false, "v": "videos/choreo/c16.mp4", "img": "figures/choreo/c16.jpg", "yt": "BMCZsaJAS8g", "sec": 330}, {"no": 17, "date": "2025/10/28", "inst": "Junya", "tags": ["レット", "オーヴ", "フック"], "road": false, "v": "videos/choreo/c17.mp4", "img": "figures/choreo/c17.jpg", "yt": "UVwhtlo1gAs", "sec": 405}, {"no": 18, "date": "2025/10/30", "inst": "Junya", "tags": ["フック", "トリプ", "ペダル", "スイング"], "road": false, "v": "videos/choreo/c18.mp4", "img": "figures/choreo/c18.jpg", "yt": "AkEPkM_VYfA", "sec": 393}, {"no": 19, "date": "2025/11/4", "inst": "Junya", "tags": ["ZDステップ", "オーヴ", "クラブステップ", "ヒールトゥー"], "road": false, "v": "videos/choreo/c19.mp4", "img": "figures/choreo/c19.jpg", "yt": "UXObUtGAhHA", "sec": 268}, {"no": 20, "date": "2025/11/6", "inst": "Junya", "tags": ["ツイスト", "トリプ", "オーヴ", "スマーフ", "ヒールトゥー"], "road": false, "v": "videos/choreo/c20.mp4", "img": "figures/choreo/c20.jpg", "yt": "FF8wi3CRHAM", "sec": 281}, {"no": 21, "date": "2025/11/11", "inst": "Junya", "tags": ["スマーフ", "スライド", "オーヴ", "スイング"], "road": false, "v": "videos/choreo/c21.mp4", "img": "figures/choreo/c21.jpg", "yt": "chz3jj2FsCQ", "sec": 327}, {"no": 22, "date": "2025/11/13", "inst": "Ryusuke", "tags": ["スワル", "ヒールステップ"], "road": false, "v": "videos/choreo/c22.mp4", "img": "figures/choreo/c22.jpg", "yt": "S8ZYllkUQiI", "sec": 500}, {"no": 23, "date": "2025/11/18", "inst": "Junya", "tags": ["ラグジャンプ"], "road": true, "v": "videos/choreo/c23.mp4", "img": "figures/choreo/c23.jpg", "yt": "zzY9xovKAZY", "sec": 287}, {"no": 24, "date": "2025/11/20", "inst": "Junya", "tags": ["ヒールロック"], "road": true, "v": "videos/choreo/c24.mp4", "img": "figures/choreo/c24.jpg", "yt": "P0NF8pucO4A", "sec": 277}, {"no": 25, "date": "2025/11/25", "inst": "Junya", "tags": ["オーヴ", "ラグジャンプ"], "road": true, "v": "videos/choreo/c25.mp4", "img": "figures/choreo/c25.jpg", "yt": "jMDko5xhyy0", "sec": 221}, {"no": 26, "date": "2025/11/27", "inst": "Junya", "tags": ["トップロック", "ZDステップ", "ラグジャンプ"], "road": false, "v": "videos/choreo/c26.mp4", "img": "figures/choreo/c26.jpg", "yt": "tw84M5C7Jb0", "sec": 285}, {"no": 27, "date": "2025/12/2", "inst": "Junya", "tags": ["スライド", "レット"], "road": false, "v": "videos/choreo/c27.mp4", "img": "figures/choreo/c27.jpg", "yt": "RcSxwoltjVw", "sec": 384}, {"no": 28, "date": "2025/12/4", "inst": "Junya", "tags": ["トリプ", "スイング", "ヒールロック"], "road": false, "v": "videos/choreo/c28.mp4", "img": "figures/choreo/c28.jpg", "yt": "Cr0TLjdf_F8", "sec": 400}, {"no": 29, "date": "2025/12/9", "inst": "Ryusuke", "tags": ["スワル"], "road": false, "v": "videos/choreo/c29.mp4", "img": "figures/choreo/c29.jpg", "yt": "T7DycOYLk60", "sec": 316}, {"no": 30, "date": "2025/12/11", "inst": "Junya", "tags": ["スイング", "ペダル", "3ステップ"], "road": false, "v": "videos/choreo/c30.mp4", "img": "figures/choreo/c30.jpg", "yt": "DekSQc2Mv7Q", "sec": 180}, {"no": 31, "date": "2025/12/16", "inst": "Junya", "tags": ["スライド", "オーヴ", "3ステップ"], "road": true, "v": "videos/choreo/c31.mp4", "img": "figures/choreo/c31.jpg", "yt": "bDKfFYPCo7Q", "sec": 343}, {"no": 32, "date": "2025/12/18", "inst": "Ryusuke", "tags": ["前ノリ"], "road": false, "v": "videos/choreo/c32.mp4", "img": "figures/choreo/c32.jpg", "yt": "K08fktNc5dA", "sec": 295}, {"no": 33, "date": "2025/12/23", "inst": "Junya", "tags": ["ペダル", "オーヴ", "3ステップ"], "road": true, "v": "videos/choreo/c33.mp4", "img": "figures/choreo/c33.jpg", "yt": "gkz93WjQpxk", "sec": 390}, {"no": 34, "date": "2025/12/25", "inst": "Junya", "tags": ["シャッフルステップ", "ペダル", "ストロボ"], "road": false, "v": "videos/choreo/c34.mp4", "img": "figures/choreo/c34.jpg", "yt": "mSt3qTjzFA8", "sec": 415}, {"no": 35, "date": "2025/12/30", "inst": "Junya", "tags": ["スライド", "ペダル"], "road": true, "v": "videos/choreo/c35.mp4", "img": "figures/choreo/c35.jpg", "yt": "80eFtkYD_Rg", "sec": 490}, {"no": 36, "date": "2026/1/1", "inst": "Ryusuke", "tags": ["トレイン"], "road": false, "v": "videos/choreo/c36.mp4", "img": "figures/choreo/c36.jpg", "yt": "QDYlXTceTHY", "sec": 198}, {"no": 37, "date": "2026/1/6", "inst": "Junya", "tags": ["オーヴ", "ランニングマン"], "road": false, "v": "videos/choreo/c37.mp4", "img": "figures/choreo/c37.jpg", "yt": "X5dRhwe7vIs", "sec": 262}, {"no": 38, "date": "2026/1/8", "inst": "Ryusuke", "tags": ["バックステップ"], "road": false, "v": "videos/choreo/c38.mp4", "img": "figures/choreo/c38.jpg", "yt": "lT9tZKnBgfM", "sec": 254}, {"no": 39, "date": "2026/1/13", "inst": "Junya", "tags": ["ペダル", "ヒールロック", "スイング"], "road": false, "v": "videos/choreo/c39.mp4", "img": "figures/choreo/c39.jpg", "yt": "SOjaXeoI2W4", "sec": 405}, {"no": 40, "date": "2026/1/15", "inst": "Ryusuke", "tags": ["ハッピーフィート"], "road": false, "v": "videos/choreo/c40.mp4", "img": "figures/choreo/c40.jpg", "yt": "9QgiOIx0AWo", "sec": 233}, {"no": 41, "date": "2026/1/20", "inst": "Junya", "tags": ["前ノリ", "オーヴターン"], "road": false, "v": "videos/choreo/c41.mp4", "img": "figures/choreo/c41.jpg", "yt": "bIIVbEjpqWQ", "sec": 287}, {"no": 42, "date": "2026/1/22", "inst": "Junya", "tags": ["スイング", "ヒールロック", "ペダル"], "road": false, "v": "videos/choreo/c42.mp4", "img": "figures/choreo/c42.jpg", "yt": "Wt3SZfyN0tw", "sec": 295}, {"no": 43, "date": "2026/1/27", "inst": "Junya", "tags": ["3ステップ", "スライド", "オーヴ", "トリプ"], "road": true, "v": "videos/choreo/c43.mp4", "img": "figures/choreo/c43.jpg", "yt": "PMYyXzVl3F8", "sec": 310}, {"no": 44, "date": "2026/1/29", "inst": "Junya", "tags": ["ペダル", "オーヴ", "ZDステップ"], "road": false, "v": "videos/choreo/c44.mp4", "img": "figures/choreo/c44.jpg", "yt": "3CDIOpbR4Lo", "sec": 295}, {"no": 45, "date": "2026/2/3", "inst": "Junya", "tags": ["トリプ", "ZDステップ", "ペダル"], "road": false, "v": "videos/choreo/c45.mp4", "img": "figures/choreo/c45.jpg", "yt": "f6tvPJ96_3A", "sec": 421}, {"no": 46, "date": "2026/2/5", "inst": "Junya", "tags": ["分解運動"], "road": false, "v": "videos/choreo/c46.mp4", "img": "figures/choreo/c46.jpg", "yt": "gOkyifzgItU", "sec": 304}, {"no": 47, "date": "2026/2/10", "inst": "Junya", "tags": ["ペダル"], "road": true, "v": "videos/choreo/c47.mp4", "img": "figures/choreo/c47.jpg", "yt": "AfcINBl8Qgc", "sec": 187}, {"no": 48, "date": "2026/2/12", "inst": "Junya", "tags": ["ZDステップ"], "road": false, "v": "videos/choreo/c48.mp4", "img": "figures/choreo/c48.jpg", "yt": "Cvlf27gTKgM", "sec": 241}, {"no": 49, "date": "2026/2/17", "inst": "Junya", "tags": ["ラグジャンプ", "ペダル"], "road": true, "v": "videos/choreo/c49.mp4", "img": "figures/choreo/c49.jpg", "yt": "XJzbYYE09KU", "sec": 318}];
 const CHIPS=["オーヴ", "スライド", "ペダル", "3ステップ", "ヒールロック", "ラグジャンプ", "トリプ", "スイング", "ZDステップ", "レット", "ツイスト", "ランニングマン", "フック", "ヒールトゥー", "スマーフ", "スワル", "前ノリ"];
-const ROAD=["オーヴ","スライド","ペダル","3ステップ","ヒールロック","ラグジャンプ","トリプ"];
-const U=(new URLSearchParams(location.search).get("u")||"").trim();
-if(U)document.getElementById("back").href="index.html?u="+encodeURIComponent(U);
-let filter="all";
-function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-function drawChips(){
-  const box=document.getElementById("chips");
-  const list=[["all","すべて",ITEMS.length],["road","ロードマップの技だけ",ITEMS.filter(i=>i.road).length]].concat(CHIPS.map(t=>[t,t,ITEMS.filter(i=>i.tags.includes(t)).length]));
-  box.innerHTML=list.map(([k,l,c])=>'<button class="chip'+(filter===k?' on':'')+'" data-k="'+esc(k)+'">'+esc(l)+'<span class="c">'+c+'</span></button>').join("");
-}
-function drawGrid(){
-  const g=document.getElementById("grid");
-  const list=ITEMS.filter(i=>filter==="all"||(filter==="road"?i.road:i.tags.includes(filter)));
-  document.getElementById("count").textContent=list.length+" 本";
-  if(!list.length){g.innerHTML='<div class="empty">該当なし</div>';return;}
-  g.innerHTML=list.map(i=>'<button class="card" aria-label="#'+i.no+' '+i.tags.join('・')+'" data-no="'+i.no+'"><div class="thumb" style="background-image:url('+i.img+')"><span class="play">▶</span></div></button>').join("");
-}
 const DICT={
  "オーヴ":{"road":true,"d":"ロープを跳ばずに“またぐ”動き。足幅を前後に大きく開き、残った足を真上に抜く。他の技から縄を抜ける共通動作にもなる。","v":"videos/dict/ove.mp4","yt":"63-VKq668sU"},
  "スライド":{"road":true,"d":"足が地面についた瞬間に、体を平行移動させる技。地面の反発をもらうと速い。前後スライドの習得は必須。","v":"videos/dict/slide.mp4","yt":"4tUHbgwHmeQ"},
@@ -135,51 +138,100 @@ const DICT={
  "ダウン":{"d":"ダウン（重心を落とす動き）をしながら跳ぶ、基本の技。スイングのコツにも出てくる。","tip":"ロープが来る直前まで待ち、ジャンプをせずに体重を落とすだけで体を浮かせる。頭の高さは、立っているときより高くならない。","v":"videos/dict/down.mp4"}
 }
 ;
-let SRC=[],curIdx=0;
-const mv=document.getElementById("mv"),mf=document.getElementById("mf");
+const ROAD=["オーヴ","スライド","ペダル","3ステップ","ヒールロック","ラグジャンプ","トリプ"];
+const FIRST=47;
+const U=(new URLSearchParams(location.search).get("u")||"").trim();
+if(U)document.getElementById("back").href="index.html?u="+encodeURIComponent(U);
+let filter="all", showMore=false;
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+// 見た記録（この端末だけ。使えない環境では何もしない）
+let SEEN={};try{SEEN=JSON.parse(localStorage.getItem("choreo_seen")||"{}")||{};}catch(e){}
+function markSeen(no){SEEN[no]=1;try{localStorage.setItem("choreo_seen",JSON.stringify(SEEN));}catch(e){}}
+const OTHER=CHIPS.filter(t=>!ROAD.includes(t)).concat(Object.keys(DICT).filter(t=>!CHIPS.includes(t)&&!ROAD.includes(t)&&ITEMS.some(i=>i.tags.includes(t))));
+function cnt(t){return ITEMS.filter(i=>i.tags.includes(t)).length;}
+function chip(k,l,c){return '<button class="chip'+(filter===k?' on':'')+'" data-k="'+esc(k)+'">'+esc(l)+'<span class="c">'+c+'</span></button>';}
+function drawChips(){
+  let h=chip("all","すべて",ITEMS.length)+chip("road","ロードマップの技だけ",ITEMS.filter(i=>i.road).length)+ROAD.filter(t=>cnt(t)).map(t=>chip(t,t,cnt(t))).join("");
+  const otherOn=OTHER.includes(filter);
+  if(showMore||otherOn)h+=OTHER.map(t=>chip(t,t,cnt(t))).join("")+'<button class="chip more" id="lessBtn">閉じる</button>';
+  else h+='<button class="chip more" id="moreBtn">その他の技 ›</button>';
+  document.getElementById("chips").innerHTML=h;
+}
+function listFor(){
+  let l=ITEMS.filter(i=>filter==="all"||(filter==="road"?i.road:i.tags.includes(filter)));
+  if(filter==="road")l=l.slice().sort((a,b)=>(a.no===FIRST?-1:b.no===FIRST?1:a.tags.length-b.tags.length||a.no-b.no));
+  return l;
+}
+function drawGrid(){
+  const g=document.getElementById("grid"),list=listFor();
+  document.getElementById("count").textContent=list.length+" 本"+(filter==="road"?"（技の少ない順）":"");
+  if(!list.length){g.innerHTML='<div class="empty">該当なし</div>';return;}
+  g.innerHTML=list.map(i=>'<button class="card" aria-label="#'+i.no+' '+esc(i.tags.join('・'))+'" data-no="'+i.no+'"><div class="thumb" style="background-image:url('+i.img+')"><span class="play">▶</span>'+
+    (i.no===FIRST?'<span class="badge">はじめの1本</span>':'')+(SEEN[i.no]?'<span class="seen">見た</span>':'')+'</div>'+
+    '<div class="meta"><div class="tags">'+i.tags.map(t=>'<span class="tag'+(ROAD.includes(t)?' r':'')+'">'+esc(t)+'</span>').join("")+'</div></div></button>').join("");
+}
+function drawDictBar(){
+  const b=document.getElementById("dictBar");
+  if(filter==="all"||filter==="road"){b.style.display="none";return;}
+  if(DICT[filter]){b.className="dictbar go";b.innerHTML='<b>'+esc(filter)+'</b>ってどんな技？　見本とコツ ›';}
+  else{b.className="dictbar";b.innerHTML='<b>'+esc(filter)+'</b>は技辞典にまだありません。振付の解説動画の中で説明しています。';}
+  b.style.display="block";
+}
+function setFilter(k){filter=k;drawChips();drawGrid();drawDictBar();}
+
+// ---- モーダル ----
+let SRC=[],from=null;
+const modal=document.getElementById("modal"),mv=document.getElementById("mv"),mf=document.getElementById("mf");
+function setRate(r){mv.defaultPlaybackRate=r;mv.playbackRate=r;document.querySelectorAll(".tool[data-rate]").forEach(b=>b.classList.toggle("on",+b.dataset.rate===r));}
 function play(k){
-  curIdx=k;const x=SRC[k];
-  if(x.yt){mv.pause();mv.hidden=true;mf.hidden=false;mf.src="https://www.youtube.com/embed/"+x.yt+"?autoplay=1&playsinline=1";}
-  else{mf.src="";mf.hidden=true;mv.hidden=false;if(mv.getAttribute("src")!==x.v)mv.src=x.v;mv.play().catch(()=>{});}
+  const x=SRC[k];
+  if(x.yt){mv.pause();mv.hidden=true;mf.hidden=false;mf.src="https://www.youtube.com/embed/"+x.yt+"?autoplay=1&playsinline=1";document.getElementById("tools").style.display="none";}
+  else{mf.src="";mf.hidden=true;mv.hidden=false;if(mv.getAttribute("src")!==x.v){mv.src=x.v;}const r=mv.playbackRate;mv.play().catch(()=>{});mv.playbackRate=r;document.getElementById("tools").style.display="flex";}
   document.querySelectorAll("#mbtns .mbtn").forEach((b,i)=>b.className="mbtn"+(i===k?" main":""));
 }
 function openModal(head,text,src){
   SRC=src;document.getElementById("mhead").innerHTML=head;
   const t=document.getElementById("mtext");if(text){t.innerHTML=text;t.hidden=false;}else{t.hidden=true;}
-  document.getElementById("mbtns").innerHTML=src.map((x,i)=>'<button class="mbtn" data-i="'+i+'"'+(x.off?' disabled':'')+'>'+esc(x.l)+'</button>').join("");
-  document.getElementById("modal").hidden=false;play(0);
+  document.getElementById("mbtns").innerHTML=src.length>1?src.map((x,i)=>'<button class="mbtn" data-i="'+i+'"'+(x.off?' disabled':'')+'>'+esc(x.l)+'</button>').join(""):"";
+  if(modal.hidden){modal.hidden=false;document.body.style.overflow="hidden";try{history.pushState({m:1},"");}catch(e){}}
+  modal.scrollTop=0;setRate(1);mv.classList.remove("mirror");document.getElementById("mirror").classList.remove("on");play(0);
 }
-function tagBtns(tags){return tags.map(t=>'<button class="mtag'+(DICT[t]?' has':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join("");}
+function tagBtns(tags){return tags.map(t=>'<button class="mtag'+(ROAD.includes(t)?' r':'')+(DICT[t]?' has':'')+'"'+(DICT[t]?' data-t="'+esc(t)+'"':'')+'>'+esc(t)+'</button>').join("");}
 function openChoreo(no){
-  const c=ITEMS.find(i=>i.no===no);if(!c)return;
-  openModal('<b>#'+String(c.no).padStart(2,"0")+'</b>　'+c.date+'　'+c.inst+'<br>'+tagBtns(c.tags),
-    c.tags.some(t=>DICT[t])?'<span style="color:#bbb;font-size:12px">色つきのタグを押すと、その技の解説が見られます</span>':'',
-    [{l:"振付",v:c.v},c.yt?{l:"解説を見る（約"+Math.max(1,Math.round(c.sec/60))+"分）",yt:c.yt}:{l:"解説は準備中",off:true}]);
+  const c=ITEMS.find(i=>i.no===no);if(!c)return;from=null;markSeen(no);
+  openModal('<b>#'+String(c.no).padStart(2,"0")+'</b>　'+c.date+'　'+c.inst+'<br>'+tagBtns(c.tags)+(c.tags.some(t=>DICT[t])?'<div class="mhint">› が付いた技を押すと、見本とコツが見られます</div>':''),
+    '',[{l:"振付",v:c.v},c.yt?{l:"解説を見る（約"+Math.max(1,Math.round(c.sec/60))+"分）",yt:c.yt}:{l:"解説は準備中",off:true}]);
 }
-function openDict(t){
-  const d=DICT[t];if(!d)return;
+function openDict(t,back){
+  const d=DICT[t];if(!d)return;from=back||null;
   const src=[{l:"縄の中の見本",v:d.v}];
   if(d.v2)src.push({l:"名前と由来",v:d.v2});
   if(d.yt)src.push({l:"ロードマップの解説",yt:d.yt});
   (d.ex||[]).forEach(e=>src.push({l:e[0],v:e[1]}));
-  const n=ITEMS.filter(i=>i.tags.includes(t)).length;
-  openModal('<b style="font-size:17px">'+esc(t)+'</b>'+(d.road?'　<span style="color:#e8a27f;font-size:12px">ロードマップの技</span>':''),
-    '<b>どんな技？</b> '+esc(d.d)+(d.tip?'<br><b>コツ</b> '+esc(d.tip):'')+(n?'<br><span style="color:#bbb;font-size:12px">この技が出てくる振付：'+n+'本</span>':''),src);
+  const n=cnt(t);
+  openModal((from?'<button class="mback" id="mback">‹ #'+String(from).padStart(2,"0")+'に戻る</button><br>':'')+'<b style="font-size:17px;font-family:inherit">'+esc(t)+'</b>'+(d.road?'　<span style="color:#e8a27f;font-size:12px">ロードマップの技</span>':''),
+    '<b>どんな技？</b> '+esc(d.d)+(d.tip?'<br><b>コツ</b> '+esc(d.tip):'')+(n?'<br><button class="mlink" id="mfilter" data-t2="'+esc(t)+'">この技が出てくる振付 '+n+'本を見る ›</button>':''),src);
 }
-function close_(){mv.pause();mv.removeAttribute("src");mv.load();mf.src="";document.getElementById("modal").hidden=true;}
-function drawDictBar(){
-  const b=document.getElementById("dictBar");
-  if(DICT[filter]){b.innerHTML='<b>'+esc(filter)+'</b> ってどんな技？　→ 見本とコツを見る';b.style.display="block";}else{b.style.display="none";}
-}
+function hideModal(){mv.pause();mv.removeAttribute("src");mv.load();mf.src="";modal.hidden=true;document.body.style.overflow="";from=null;}
+function close_(){if(history.state&&history.state.m){history.back();}else{hideModal();}}
+window.addEventListener("popstate",()=>{if(!modal.hidden)hideModal();});
+let curChoreo=null;
 document.getElementById("dictList").innerHTML=Object.keys(DICT).map(t=>'<button class="'+(DICT[t].road?'r':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join("");
-CHIPS.splice(0,CHIPS.length,...CHIPS.concat(Object.keys(DICT).filter(t=>!CHIPS.includes(t)&&ITEMS.some(i=>i.tags.includes(t)))));
 document.addEventListener("click",e=>{
-  const c=e.target.closest(".chip");if(c){filter=c.dataset.k;drawChips();drawGrid();drawDictBar();return;}
-  if(e.target.closest("#dictBar")){openDict(filter);return;}
-  const dt=e.target.closest("[data-t]");if(dt&&DICT[dt.dataset.t]){openDict(dt.dataset.t);return;}
-  const k=e.target.closest(".card");if(k){openChoreo(+k.dataset.no);return;}
-  if(e.target.id==="mclose"||e.target.id==="modal"){close_();return;}
-  const mb=e.target.closest("#mbtns .mbtn");if(mb&&!mb.disabled){play(+mb.dataset.i);return;}
+  const T=e.target;
+  if(T.id==="moreBtn"){showMore=true;drawChips();return;}
+  if(T.id==="lessBtn"){showMore=false;if(OTHER.includes(filter))setFilter("all");else drawChips();return;}
+  const c=T.closest(".chip");if(c){setFilter(c.dataset.k);return;}
+  if(T.closest(".dictbar.go")){openDict(filter);return;}
+  if(T.id==="mback"){openChoreo(from);return;}
+  if(T.id==="mfilter"){const t=T.dataset.t2;close_();setTimeout(()=>{setFilter(t);document.getElementById("chips").scrollIntoView({behavior:"smooth"});},60);return;}
+  const dt=T.closest("[data-t]");if(dt&&DICT[dt.dataset.t]){const inChoreo=!modal.hidden&&curChoreo;openDict(dt.dataset.t,inChoreo?curChoreo:null);curChoreo=null;return;}
+  const fb=T.closest(".first");if(fb){curChoreo=+fb.dataset.no;openChoreo(curChoreo);return;}
+  const k=T.closest(".card");if(k){curChoreo=+k.dataset.no;openChoreo(curChoreo);drawGrid();return;}
+  if(T.id==="mclose"){close_();return;}
+  const rb=T.closest(".tool[data-rate]");if(rb){setRate(+rb.dataset.rate);return;}
+  if(T.id==="mirror"){mv.classList.toggle("mirror");T.classList.toggle("on");return;}
+  const mb=T.closest("#mbtns .mbtn");if(mb&&!mb.disabled){play(+mb.dataset.i);return;}
 });
 drawChips();drawGrid();
 </script>
