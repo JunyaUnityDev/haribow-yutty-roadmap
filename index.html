@@ -748,7 +748,7 @@ function render(){
    if(sbR){sbR.href=submitUrl(it,"縄あり");sbR.style.display="block";}
    if(sh2){var stxNR=document.getElementById("submitTextNoRope"),stxR=document.getElementById("submitTextRope");if(stxNR)stxNR.textContent="動画提出："+stepLabel(it)+"（縄なし）";if(stxR)stxR.textContent="動画提出："+stepLabel(it)+"（縄あり）";sh2.style.display="block";}
  }
- var _cl=document.getElementById("choreoLink");if(_cl){_cl.href="choreo.html"+(U?"?u="+encodeURIComponent(U):"");_cl.classList.toggle("done",c>=TOTAL);var _cm=document.getElementById("choreoMsg");if(_cm&&c>=TOTAL)_cm.textContent="完走おめでとう。はじめの1本は #47（ペダルだけ）から。";}
+ var _cl=document.getElementById("choreoLink");if(_cl){_cl.href="choreo.html"+(U?"?u="+encodeURIComponent(U):"");_cl.classList.toggle("done",c>=TOTAL);var _cm=document.getElementById("choreoMsg");if(_cm&&c>=TOTAL)_cm.textContent="完走おめでとう。はじめの1本は #30（基礎だけでできる振り）から。";}
  (function(){var j=document.getElementById("journey");if(!j)return;var cur=-1;PHASE_RANGE.forEach(function(r,i){if(cur<0&&c<=r[1])cur=i;});
    var h='<div class="jrow">';PHASES.forEach(function(ph,i){var cls=(cur<0||i<cur)?"done":(i===cur?"now":"");h+=(i?'<span class="jline'+((cur<0||i<=cur)?" done":"")+'"></span>':'')+'<span class="jdot '+cls+'" title="'+ph.short+'">'+i+'</span>';});
    h+='<span class="jline'+(cur<0?" done":"")+'"></span><span class="jdot goal'+(cur<0?" now":"")+'">コレオ</span></div>';
