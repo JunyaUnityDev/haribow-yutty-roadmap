@@ -235,6 +235,32 @@ body.is-demo #demo-banner{display:block;}
 #demo-toast-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:#b25c33;margin-bottom:10px;}
 #demo-toast-msg{font-size:14px;line-height:1.72;color:rgba(255,255,255,.9);margin:0 0 18px;}
 #demo-toast-close{display:block;width:100%;background:rgba(255,255,255,.11);border:none;color:rgba(255,255,255,.8);font-size:14px;font-weight:700;border-radius:10px;padding:13px;cursor:pointer;font-family:inherit;}
+
+/* ── 図（アイコン＋短いラベル） ── */
+.ico svg{width:26px;height:26px;fill:none;stroke:var(--blue);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.iflow{display:flex;align-items:flex-start;justify-content:space-between;margin:2px 0 12px}
+.iflow .st{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;font-weight:700;color:var(--ink);text-align:center;line-height:1.3}
+.iflow .ar{color:var(--faint);margin-top:5px;font-size:16px}
+.mult{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 6px;margin:10px 0}
+.mult .t{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:700;min-width:54px}
+.mult .x{font-family:var(--mono);color:var(--faint);font-size:15px}
+.mult .eq{font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:8px;padding:6px 9px;line-height:1.35;text-align:center}
+.loopfig{display:block;width:min(260px,100%);margin:4px auto 10px}
+.irows{margin:8px 0}
+.irow{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px}
+.irow:first-child{border-top:0}
+.irow b{color:var(--ink)}
+/* ── 旅の地図（フェーズの現在地） ── */
+.journey{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px 10px;margin-bottom:14px}
+.jrow{display:flex;align-items:center}
+.jdot{width:20px;height:20px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9.5px;font-weight:700;background:var(--soft);color:var(--faint);border:1.5px solid var(--line)}
+.jdot.done{background:var(--blue);border-color:var(--blue);color:#fff}
+.jdot.now{background:#fff;border-color:var(--blue);color:var(--blue);box-shadow:0 0 0 4px var(--acw);width:24px;height:24px;font-size:11px}
+.jdot.goal{width:auto;height:22px;padding:0 7px;border-radius:7px;font-family:inherit;font-size:10.5px}
+.jline{flex:1;height:2px;background:var(--line);min-width:4px}
+.jline.done{background:var(--blue)}
+.jcap{font-size:12px;color:var(--mut);margin-top:8px;display:flex;justify-content:space-between;gap:8px}
+.jcap b{color:var(--blue)}
 </style></head>
 <body><div id="demo-banner">DEMO ― 実際のサービスの動きをお試しいただけます</div><div class="wrap">
 <div class="brand">HARIBOW ONLINE LESSON</div>
@@ -251,6 +277,7 @@ body.is-demo #demo-banner{display:block;}
     <div class="snum" id="snapNum">0 / 0 ステップ</div>
   </div>
 </div>
+<div class="journey" id="journey" aria-label="フェーズの現在地"></div>
 <div class="today">
   <div class="lbl" id="todayLbl">今日やること</div>
   <div class="menu" id="todayMenu">―</div>
@@ -265,7 +292,8 @@ body.is-demo #demo-banner{display:block;}
 <a class="submitbtn" id="submitBtnNoRope" target="_blank" rel="noopener" style="display:none">縄なし動画を提出</a>
 <a class="submitbtn rope" id="submitBtnRope" target="_blank" rel="noopener" style="display:none">縄あり動画を提出</a>
 <div class="submithint" id="submitHint" style="display:none">
-  公式LINEが開いたら、入った文をそのまま送信 → 続けて<b>動画</b>を送ればOK。<br>
+  <div class="iflow"><div class="st"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="4"/><path d="M8 18l-1.5 3 4-3"/><path d="M8 11h8"/></svg></span>LINEが開く</div><span class="ar">›</span><div class="st"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l16-7-6 16-3-7z"/><path d="M11 14l9-9"/></svg></span>入った文を<br>そのまま送る</div><span class="ar">›</span><div class="st"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10.5l5-3v9l-5-3z"/></svg></span>続けて<br>動画を送る</div><span class="ar">›</span><div class="st"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14.5" r="5.5"/><path d="M9 9.5L6.5 3h4l1.5 4M15 9.5L17.5 3h-4L12 7"/><path d="M10 14.5l1.5 1.5 3-3"/></svg></span>合格で<br>✓が付く</div></div>
+
   <span style="color:var(--faint)">空欄のときは下をコピー：</span><br>
   縄なし：<code class="submitCode" id="submitTextNoRope" title="タップでコピー">動画提出：―（縄なし）</code><span id="copiedMsgNoRope" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span><br>
   縄あり：<code class="submitCode" id="submitTextRope" title="タップでコピー">動画提出：―（縄あり）</code><span id="copiedMsgRope" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span>
@@ -287,6 +315,7 @@ body.is-demo #demo-banner{display:block;}
   <summary>なぜこの順番でやるの？<span class="sm">動き × リズム × 空間の掛け算</span></summary>
   <div class="accbody">
     <p>ダブルダッチのソロは、<span class="em">動き × リズム × 空間</span>の“掛け算”でできています。</p>
+    <div class="mult"><div class="t"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M12 7v6M12 9l-4 2M12 9l4-1M12 13l-3 7M12 13l3 7"/></svg></span>動き</div><span class="x">×</span><div class="t"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V8M9 18V5M14 18V10M19 18V7"/></svg></span>リズム</div><span class="x">×</span><div class="t"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 2.4"/><path d="M12 8v8M8 12h8"/></svg></span>空間</div><span class="x">=</span><div class="eq">あなたの<br>ソロ</div></div>
     <p>言葉と同じです。単語をいくつか覚えて、つなげるほど無限に文が作れる。技も、<span class="em">1個ずつ覚えて掛け合わせる</span>ほど、自由に・即興で組めるようになります。</p>
     <p>だからこのロードマップは「<span class="em">部品を1個ずつ覚える（分解）→ 掛け合わせる</span>」順番に並んでいます。</p>
     <p style="margin-top:10px"><span class="yt-card vidbtn" data-v="https://youtu.be/iE-nOXSi7Ss"><img src="https://img.youtube.com/vi/iE-nOXSi7Ss/mqdefault.jpg" alt="動画" style="width:120px"><span class="yt-play">▶</span></span></p>
@@ -319,6 +348,19 @@ body.is-demo #demo-banner{display:block;}
   <summary>進め方<span class="sm">4ステップのループ</span></summary>
   <div class="accbody" id="beatBox">
     <p>覚えるのは技じゃなく、この“ループ”ひとつ。</p>
+    <svg class="loopfig" viewBox="0 0 260 200" aria-label="コピー、なぜ、条件変え、自分で、のループ">
+  <defs><marker id="lah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1L9 5L0 9z" fill="#b25c33"/></marker></defs>
+  <g fill="none" stroke="#b25c33" stroke-width="1.6" marker-end="url(#lah)">
+    <path d="M150 34 Q205 40 212 78"/><path d="M212 122 Q205 160 150 166"/><path d="M110 166 Q55 160 48 122"/><path d="M48 78 Q55 40 110 34"/>
+  </g>
+  <g font-family="Zen Kaku Gothic New,sans-serif" font-weight="700" text-anchor="middle">
+    <rect x="90" y="16" width="80" height="34" rx="17" fill="#b25c33"/><text x="130" y="38" fill="#fff" font-size="13">① コピー</text>
+    <rect x="172" y="83" width="80" height="34" rx="17" fill="#f4e7df"/><text x="212" y="105" fill="#1c1813" font-size="13">② なぜ</text>
+    <rect x="84" y="150" width="92" height="34" rx="17" fill="#f4e7df"/><text x="130" y="172" fill="#1c1813" font-size="13">③ 条件変え</text>
+    <rect x="8" y="83" width="80" height="34" rx="17" fill="#f4e7df"/><text x="48" y="105" fill="#1c1813" font-size="13">④ 自分で</text>
+    <text x="130" y="104" fill="#a8a196" font-size="11" font-weight="500">各ステップで</text><text x="130" y="119" fill="#a8a196" font-size="11" font-weight="500">くり返す</text>
+  </g>
+</svg>
     <p><span class="em">① コピー</span>… 見本どおり、形だけ回す</p>
     <p><span class="em">② なぜ</span>… 今アンカー？スナッピー？（頭が揺れない＝アンカー／揺れる＝スナッピー）を一言で</p>
     <p><span class="em">③ 条件変え</span>… 高さ・向き・2スタイルで変えてみる</p>
@@ -361,9 +403,7 @@ body.is-demo #demo-banner{display:block;}
   <summary>ゴールと約束<span class="sm">めざす場所・提出ルール</span></summary>
   <div class="accbody">
     <p><span class="em">最終ゴール</span>… 跳びながら音を取れる → 自分のステップと混ぜて、バトルが組み立てられる。</p>
-    <p>1日にやることは最大3つまで。アンカー・スナッピーの2つの質感で磨く。</p>
-    <p><span class="em">たくさんを中途半端にやるより、ひとつの簡単な基礎を完璧に。</span>そのほうが、結果いちばん速く上達します。</p>
-    <p>動画は毎回かならず「<span class="em">公式LINE</span>」から提出（これがマスト）。</p>
+    <div class="irows"><div class="irow"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h3M5 12h3M5 18h3"/><path d="M11 6h8M11 12h8M11 18h8" stroke-opacity=".45"/></svg></span><span><b>1日3つまで</b>。ひとつの基礎を完璧に</span></div><div class="irow"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15c3 0 3-6 6-6s3 6 6 6 3-6 6-6"/></svg></span><span><b>2つの質感</b>（アンカー・スナッピー）で磨く</span></div><div class="irow"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="4"/><path d="M8 18l-1.5 3 4-3"/><path d="M8 11h8"/></svg></span><span>動画は毎回 <b>公式LINE</b> から提出</span></div></div>
   </div>
 </details>
 </div>
@@ -709,6 +749,11 @@ function render(){
    if(sh2){var stxNR=document.getElementById("submitTextNoRope"),stxR=document.getElementById("submitTextRope");if(stxNR)stxNR.textContent="動画提出："+stepLabel(it)+"（縄なし）";if(stxR)stxR.textContent="動画提出："+stepLabel(it)+"（縄あり）";sh2.style.display="block";}
  }
  var _cl=document.getElementById("choreoLink");if(_cl){_cl.href="choreo.html"+(U?"?u="+encodeURIComponent(U):"");_cl.classList.toggle("done",c>=TOTAL);var _cm=document.getElementById("choreoMsg");if(_cm&&c>=TOTAL)_cm.textContent="完走おめでとう。はじめの1本は #47（ペダルだけ）から。";}
+ (function(){var j=document.getElementById("journey");if(!j)return;var cur=-1;PHASE_RANGE.forEach(function(r,i){if(cur<0&&c<=r[1])cur=i;});
+   var h='<div class="jrow">';PHASES.forEach(function(ph,i){var cls=(cur<0||i<cur)?"done":(i===cur?"now":"");h+=(i?'<span class="jline'+((cur<0||i<=cur)?" done":"")+'"></span>':'')+'<span class="jdot '+cls+'" title="'+ph.short+'">'+i+'</span>';});
+   h+='<span class="jline'+(cur<0?" done":"")+'"></span><span class="jdot goal'+(cur<0?" now":"")+'">コレオ</span></div>';
+   h+='<div class="jcap"><span>'+(cur<0?'<b>完走</b>。次はコレオ':'いま <b>'+PHASES[cur].short+'</b>')+'</span><span>'+(cur<0?NPH:cur)+' / '+NPH+' フェーズ</span></div>';
+   j.innerHTML=h;})();
  drawDonut(c);drawPhaseBars(c);drawSpark();
  var _sr=document.getElementById("streakRow");
  if(_sr){if(practiceStreak>=1){document.getElementById("streakNum").textContent=practiceStreak+"日";_sr.style.display="flex";}else{_sr.style.display="none";}}
