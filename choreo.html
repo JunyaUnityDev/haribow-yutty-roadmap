@@ -28,7 +28,7 @@ h1{font-size:24px;margin:0 0 10px;font-family:var(--serif);font-weight:700;line-
 .card:active{transform:scale(.97)}
 .thumb{position:relative;aspect-ratio:3/4;background:#222 center/cover no-repeat}
 .thumb .no{position:absolute;left:8px;top:8px;background:rgba(28,24,19,.72);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;border-radius:6px;padding:2px 7px}
-.thumb .play{position:absolute;right:8px;bottom:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,253,250,.9);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px}
+.thumb .play{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,253,250,.9);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px}
 .meta{padding:9px 10px 11px}
 .meta .d{font-family:var(--mono);font-size:11px;color:var(--faint)}
 .meta .i{font-size:11px;color:var(--mut);margin-left:6px}
@@ -98,9 +98,7 @@ function drawGrid(){
   const list=ITEMS.filter(i=>filter==="all"||(filter==="road"?i.road:i.tags.includes(filter)));
   document.getElementById("count").textContent=list.length+" 本";
   if(!list.length){g.innerHTML='<div class="empty">該当なし</div>';return;}
-  g.innerHTML=list.map(i=>'<button class="card" data-no="'+i.no+'"><div class="thumb" style="background-image:url('+i.img+')"><span class="no">#'+String(i.no).padStart(2,"0")+'</span><span class="play">▶</span></div>'+
-    '<div class="meta"><span class="d">'+i.date+'</span><span class="i">'+i.inst+'</span><div class="tags">'+
-    i.tags.map(t=>'<span class="tag'+(ROAD.includes(t)?' r':'')+'">'+esc(t)+'</span>').join("")+'</div></div></button>').join("");
+  g.innerHTML=list.map(i=>'<button class="card" aria-label="#'+i.no+' '+i.tags.join('・')+'" data-no="'+i.no+'"><div class="thumb" style="background-image:url('+i.img+')"><span class="play">▶</span></div></button>').join("");
 }
 let cur=null;
 const mv=document.getElementById("mv"),mf=document.getElementById("mf");
