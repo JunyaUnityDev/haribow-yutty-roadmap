@@ -239,7 +239,7 @@ function openModal(head,text,src){
 function passHtml(c){
   const n=OKN.has(lbl(c.no)),r=OKR.has(lbl(c.no));
   let h='<div class="pass"><h4>合格のポイント'+(n?'<span class="got n">縄なし✓</span>':'')+(r?'<span class="got r">縄あり✓</span>':'')+'<span class="st">難しさ '+stars(c.dif)+'</span></h4><ol>'+c.chk.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>'+
-    '<div class="lv"><b>縄なし</b> 最後まで止まらずに通す　<b>縄あり</b> 縄の中で最後まで（引っかかり1回までOK）</div></div>';
+    '<div class="lv"><b>'+c.chk.length+'つ中'+Math.ceil(c.chk.length*0.6)+'つ</b>できたら合格。縄なしは止まらずに最後まで、縄ありは縄の中で最後まで（引っかかり1回までOK）</div></div>';
   h+='<div class="sub"><a href="'+subUrl(c.no,"縄なし")+'" target="_blank" rel="noopener">縄なし動画を提出</a><a class="r" href="'+subUrl(c.no,"縄あり")+'" target="_blank" rel="noopener">縄あり動画を提出</a></div>'+
     '<div class="subhint">LINEが開いたら、入った文をそのまま送る → 続けて動画を送る</div>';
   return h;
