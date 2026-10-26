@@ -48,6 +48,21 @@ h1{font-size:24px;margin:0 0 10px;font-family:var(--serif);font-weight:700;line-
 .mbtn{border:0;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:#fffdfa;color:var(--ink)}
 .mbtn.main{background:var(--blue);color:#fff}
 .mbtn[disabled]{opacity:.45;cursor:default}
+.mtext{color:#eee;font-size:13px;max-width:min(440px,100%);margin:10px 0 0;line-height:1.6}
+.mtext b{color:#fff}
+.mtag{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:6px;padding:1px 7px;margin:2px;font:inherit;font-size:12px;cursor:pointer}
+.mtag.has{background:#b25c33}
+.dictbar{display:none;background:var(--acw);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:13px;color:var(--ink);cursor:pointer}
+.dictbar b{color:var(--blue)}
+.dictlist{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 18px}
+.dictlist summary{list-style:none;cursor:pointer;padding:13px 16px;font-weight:700;font-size:14px;display:flex;gap:8px;align-items:center}
+.dictlist summary::-webkit-details-marker{display:none}
+.dictlist summary .sm{font-weight:500;color:var(--mut);font-size:12px}
+.dictlist summary::after{content:"›";margin-left:auto;color:var(--faint);font-size:21px;line-height:1;transform:rotate(90deg)}
+.dictlist .dl{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 14px}
+.dictlist .dl button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink)}
+.dictlist .dl button.r{border-color:var(--blue);color:var(--blue);font-weight:700}
+.dictlist .dlh{font-size:12px;color:var(--mut);padding:0 16px 6px}
 .mclose{position:absolute;top:10px;right:14px;background:none;border:0;color:#fff;font-size:30px;cursor:pointer;line-height:1}
 </style></head><body><div class="wrap">
 <div class="brand">HARIBOW ONLINE LESSON</div>
@@ -58,12 +73,17 @@ h1{font-size:24px;margin:0 0 10px;font-family:var(--serif);font-weight:700;line-
   <b>おすすめの進み方</b>：ロードマップを完走したら、ここへ。途中でものぞいてOK。
   <ol>
     <li>振付を見る（くり返し再生されます）</li>
-    <li>下のタグで「どの技でできているか」を先に確認</li>
+    <li>タグで「どの技でできているか」を先に確認（知らない技は<b>技辞典</b>へ）</li>
     <li>解説を見て、組み合わせ方を分解する</li>
   </ol>
   <div style="margin-top:6px">はじめての1本は「<b>ロードマップの技だけ</b>」（12本）から選ぶのがおすすめ。</div>
 </div>
+<details class="dictlist"><summary>技辞典<span class="sm">知らない技はここで</span></summary>
+  <div class="dlh">振付に出てくる技の、縄の中での見本とコツ。色つき＝ロードマップの技</div>
+  <div class="dl" id="dictList"></div>
+</details>
 <div class="chips" id="chips"></div>
+<div class="dictbar" id="dictBar"></div>
 <div class="count" id="count"></div>
 <div class="grid" id="grid"></div>
 <p class="foot">色つきのタグ＝ロードマップで練習する技</p>
@@ -74,10 +94,8 @@ h1{font-size:24px;margin:0 0 10px;font-family:var(--serif);font-weight:700;line-
   <div class="mhead" id="mhead"></div>
   <video id="mv" controls playsinline loop preload="metadata"></video>
   <iframe id="mf" hidden allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
-  <div class="mbtns">
-    <button class="mbtn" id="bChoreo">振付</button>
-    <button class="mbtn main" id="bExpl">解説を見る</button>
-  </div>
+  <div class="mtext" id="mtext" hidden></div>
+  <div class="mbtns" id="mbtns"></div>
 </div>
 
 <script>
@@ -100,25 +118,68 @@ function drawGrid(){
   if(!list.length){g.innerHTML='<div class="empty">該当なし</div>';return;}
   g.innerHTML=list.map(i=>'<button class="card" aria-label="#'+i.no+' '+i.tags.join('・')+'" data-no="'+i.no+'"><div class="thumb" style="background-image:url('+i.img+')"><span class="play">▶</span></div></button>').join("");
 }
-let cur=null;
-const mv=document.getElementById("mv"),mf=document.getElementById("mf");
-function showChoreo(){mf.src="";mf.hidden=true;mv.hidden=false;mv.play().catch(()=>{});document.getElementById("bChoreo").className="mbtn main";document.getElementById("bExpl").className="mbtn";}
-function showExpl(){if(!cur||!cur.yt)return;mv.pause();mv.hidden=true;mf.hidden=false;mf.src="https://www.youtube.com/embed/"+cur.yt+"?autoplay=1&playsinline=1";document.getElementById("bExpl").className="mbtn main";document.getElementById("bChoreo").className="mbtn";}
-function open_(no){
-  cur=ITEMS.find(i=>i.no===no);if(!cur)return;
-  document.getElementById("mhead").innerHTML='<b>#'+String(cur.no).padStart(2,"0")+'</b>　'+cur.date+'　'+cur.inst+'<br>'+cur.tags.map(esc).join(" ・ ");
-  mv.src=cur.v;
-  const be=document.getElementById("bExpl");
-  if(cur.yt){be.disabled=false;be.textContent="解説を見る（約"+Math.max(1,Math.round(cur.sec/60))+"分）";}else{be.disabled=true;be.textContent="解説は準備中";}
-  document.getElementById("modal").hidden=false;showChoreo();
+const DICT={
+ "オーヴ":{"road":true,"d":"ロープを跳ばずに“またぐ”動き。足幅を前後に大きく開き、残った足を真上に抜く。他の技から縄を抜ける共通動作にもなる。","v":"videos/dict/ove.mp4","yt":"63-VKq668sU"},
+ "スライド":{"road":true,"d":"足が地面についた瞬間に、体を平行移動させる技。地面の反発をもらうと速い。前後スライドの習得は必須。","v":"videos/dict/slide.mp4","yt":"4tUHbgwHmeQ"},
+ "ペダル":{"road":true,"d":"つま先とかかとを交互に踏みかえる中で、足裏の下にロープを通過させる技。引っかかったら重心を上下に。","v":"videos/dict/pedal.mp4","yt":"ER4QCas1ne4"},
+ "3ステップ":{"road":true,"d":"ワン（踏みに行く）・エン（太もも90度まで上げる）・ツー（後ろに置く）の3カウントのステップ。ダンスステップ。","v":"videos/dict/step3.mp4","yt":"DE0E9OFlwDY"},
+ "ヒールロック":{"road":true,"d":"着地と同時に素早く片足へ体重を移し、かかとで姿勢をキープする技。ムーブに緩急を出せる。","v":"videos/dict/heellock.mp4","yt":"9hpXiLQgefg"},
+ "ラグジャンプ":{"road":true,"d":"足の接地を意図的に長く取り、カウントで“浮き始める”。溜め＝ラグを作って跳ぶ。最難関。","v":"videos/dict/rag.mp4","yt":"9e6-saodELs"},
+ "トリプ":{"road":true,"d":"「と・り・ぷ」の3連（1カウントに3回）で刻むリズム。3つ目の音の直後にオーヴで縄を抜けると引っかかりにくい。","v":"videos/dict/trip.mp4","yt":"6rvGkxTpJZQ"},
+ "スイング":{"d":"頭を振り子のように動かしながら跳ぶ技。ペダルやオーヴにつなげると相性がいい。","tip":"ジャンプをせず、重心を落としながら（ダウンしながら）頭の位置を回す。","v":"videos/dict/swing.mp4","ex":[["スイング＋オーヴ","videos/dict/set_swing_ove.mp4"],["スイング→ペダル","videos/dict/set_swing_pedal.mp4"]]},
+ "レット":{"d":"トリプ（タ・タ・タ）の1つ目と3つ目だけを取り、2つ目は抜くリズムの取り方。シャッフルビートとも呼ぶ。","tip":"3つ目（レット）の音を取った直後に、後ろから来る縄をオーヴでまたぐと引っかかりにくい。","v":"videos/dict/let.mp4","v2":"videos/dict/let_card.mp4","ex":[["レット＋オーヴ","videos/dict/set_let_ove.mp4"]]},
+ "ZDステップ":{"d":"ダンスステップのリーボックとトレインをつなげた技。","tip":"ペダルをしながら、反対の足を踏み込む動作と上げる動作を練習すると感覚をつかみやすい。","v":"videos/dict/zd.mp4"},
+ "空中ヒット":{"d":"空中にいる間に足を伸ばし、ヒットのような質感を出す技。","tip":"空中で足をお腹に引きつけると、大きくヒットを打てる。","v":"videos/dict/airhit.mp4"},
+ "ボディポップ":{"d":"地面からの反発を使い、体を弾くように動かす技。","tip":"足裏全体で着地すると反発をもらいやすい。初動を速くすると引っかかりにくい。","v":"videos/dict/bodypop.mp4"},
+ "ポップジャンプ":{"d":"地面からの反発を使い、弾かれるような質感を出す動き。","tip":"足裏全体で着地すると反発をもらいやすい。かかとを地面につけることを意識。","v":"videos/dict/popjump.mp4"},
+ "ダウン":{"d":"ダウン（重心を落とす動き）をしながら跳ぶ、基本の技。スイングのコツにも出てくる。","tip":"ロープが来る直前まで待ち、ジャンプをせずに体重を落とすだけで体を浮かせる。頭の高さは、立っているときより高くならない。","v":"videos/dict/down.mp4"}
 }
-function close_(){mv.pause();mv.removeAttribute("src");mv.load();mf.src="";document.getElementById("modal").hidden=true;cur=null;}
+;
+let SRC=[],curIdx=0;
+const mv=document.getElementById("mv"),mf=document.getElementById("mf");
+function play(k){
+  curIdx=k;const x=SRC[k];
+  if(x.yt){mv.pause();mv.hidden=true;mf.hidden=false;mf.src="https://www.youtube.com/embed/"+x.yt+"?autoplay=1&playsinline=1";}
+  else{mf.src="";mf.hidden=true;mv.hidden=false;if(mv.getAttribute("src")!==x.v)mv.src=x.v;mv.play().catch(()=>{});}
+  document.querySelectorAll("#mbtns .mbtn").forEach((b,i)=>b.className="mbtn"+(i===k?" main":""));
+}
+function openModal(head,text,src){
+  SRC=src;document.getElementById("mhead").innerHTML=head;
+  const t=document.getElementById("mtext");if(text){t.innerHTML=text;t.hidden=false;}else{t.hidden=true;}
+  document.getElementById("mbtns").innerHTML=src.map((x,i)=>'<button class="mbtn" data-i="'+i+'"'+(x.off?' disabled':'')+'>'+esc(x.l)+'</button>').join("");
+  document.getElementById("modal").hidden=false;play(0);
+}
+function tagBtns(tags){return tags.map(t=>'<button class="mtag'+(DICT[t]?' has':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join("");}
+function openChoreo(no){
+  const c=ITEMS.find(i=>i.no===no);if(!c)return;
+  openModal('<b>#'+String(c.no).padStart(2,"0")+'</b>　'+c.date+'　'+c.inst+'<br>'+tagBtns(c.tags),
+    c.tags.some(t=>DICT[t])?'<span style="color:#bbb;font-size:12px">色つきのタグを押すと、その技の解説が見られます</span>':'',
+    [{l:"振付",v:c.v},c.yt?{l:"解説を見る（約"+Math.max(1,Math.round(c.sec/60))+"分）",yt:c.yt}:{l:"解説は準備中",off:true}]);
+}
+function openDict(t){
+  const d=DICT[t];if(!d)return;
+  const src=[{l:"縄の中の見本",v:d.v}];
+  if(d.v2)src.push({l:"名前と由来",v:d.v2});
+  if(d.yt)src.push({l:"ロードマップの解説",yt:d.yt});
+  (d.ex||[]).forEach(e=>src.push({l:e[0],v:e[1]}));
+  const n=ITEMS.filter(i=>i.tags.includes(t)).length;
+  openModal('<b style="font-size:17px">'+esc(t)+'</b>'+(d.road?'　<span style="color:#e8a27f;font-size:12px">ロードマップの技</span>':''),
+    '<b>どんな技？</b> '+esc(d.d)+(d.tip?'<br><b>コツ</b> '+esc(d.tip):'')+(n?'<br><span style="color:#bbb;font-size:12px">この技が出てくる振付：'+n+'本</span>':''),src);
+}
+function close_(){mv.pause();mv.removeAttribute("src");mv.load();mf.src="";document.getElementById("modal").hidden=true;}
+function drawDictBar(){
+  const b=document.getElementById("dictBar");
+  if(DICT[filter]){b.innerHTML='<b>'+esc(filter)+'</b> ってどんな技？　→ 見本とコツを見る';b.style.display="block";}else{b.style.display="none";}
+}
+document.getElementById("dictList").innerHTML=Object.keys(DICT).map(t=>'<button class="'+(DICT[t].road?'r':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join("");
+CHIPS.splice(0,CHIPS.length,...CHIPS.concat(Object.keys(DICT).filter(t=>!CHIPS.includes(t)&&ITEMS.some(i=>i.tags.includes(t)))));
 document.addEventListener("click",e=>{
-  const c=e.target.closest(".chip");if(c){filter=c.dataset.k;drawChips();drawGrid();return;}
-  const k=e.target.closest(".card");if(k){open_(+k.dataset.no);return;}
+  const c=e.target.closest(".chip");if(c){filter=c.dataset.k;drawChips();drawGrid();drawDictBar();return;}
+  if(e.target.closest("#dictBar")){openDict(filter);return;}
+  const dt=e.target.closest("[data-t]");if(dt&&DICT[dt.dataset.t]){openDict(dt.dataset.t);return;}
+  const k=e.target.closest(".card");if(k){openChoreo(+k.dataset.no);return;}
   if(e.target.id==="mclose"||e.target.id==="modal"){close_();return;}
-  if(e.target.id==="bChoreo"){showChoreo();return;}
-  if(e.target.id==="bExpl"){showExpl();return;}
+  const mb=e.target.closest("#mbtns .mbtn");if(mb&&!mb.disabled){play(+mb.dataset.i);return;}
 });
 drawChips();drawGrid();
 </script>
