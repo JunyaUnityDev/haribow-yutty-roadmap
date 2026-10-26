@@ -87,6 +87,15 @@ h1.rm{margin:0 0 6px}
 .morebtn{width:100%;border:1px solid var(--line);background:var(--card);color:var(--mut);border-radius:13px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:18px}
 #more[hidden]{display:none}
 /* 段階開示アコーディオン（必要な情報だけ・押すほど深く） */
+.nextbox{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 17px;margin-bottom:10px;text-decoration:none;color:inherit}
+.nb-h{font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:8px}
+.nb-n{font-family:var(--mono);font-size:11px;color:var(--blue);background:var(--acw);border-radius:6px;padding:1px 7px}
+.nb-arrow{margin-left:auto;color:var(--faint);font-size:21px;line-height:1}
+.nb-p{margin:4px 0 0;font-size:12.5px;color:var(--mut)}
+.nb-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.nb-btn{background:var(--blue)!important;color:#fff!important;border-radius:999px!important;padding:8px 14px!important;font-weight:700;font-size:13px}
+.nb-cap{font-size:12px;color:var(--mut);margin-left:-4px}
+.nb-link.done{border-color:var(--blue);background:var(--acw)}
 .acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
 .acc>summary{list-style:none;cursor:pointer;padding:15px 17px;font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:8px}
 .acc>summary::-webkit-details-marker{display:none}
@@ -261,6 +270,20 @@ body.is-demo #demo-banner{display:block;}
   縄なし：<code class="submitCode" id="submitTextNoRope" title="タップでコピー">動画提出：―（縄なし）</code><span id="copiedMsgNoRope" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span><br>
   縄あり：<code class="submitCode" id="submitTextRope" title="タップでコピー">動画提出：―（縄あり）</code><span id="copiedMsgRope" style="display:none;color:#06c755;font-weight:700;margin-left:6px">コピーしました✓</span>
 </div>
+<div class="nextbox">
+  <div class="nb-h">ロードマップを応用すると、こうなる</div>
+  <p class="nb-p">ここまでの基礎を組み合わせるだけで、バトルで使えるムーブが作れます。</p>
+  <div class="nb-row">
+    <span class="vid vidbtn nb-btn" data-v="videos/choreo/battle_demo.mp4">▶ バトルムーブを見る</span>
+    <span class="yt-card vidbtn" data-v="https://youtu.be/KJZBfdKEFo8"><img src="https://img.youtube.com/vi/KJZBfdKEFo8/mqdefault.jpg" alt="解説動画"><span class="yt-play">▶</span></span>
+    <span class="nb-cap">解説</span>
+  </div>
+</div>
+<a class="nextbox nb-link" id="choreoLink" href="choreo.html">
+  <div class="nb-h">コレオライブラリ<span class="nb-n">49本</span><span class="nb-arrow">›</span></div>
+  <p class="nb-p" id="choreoMsg">ロードマップを完走したら、次はここ。振付と解説がいつでも見られます。</p>
+</a>
+
 <details class="acc accwhy">
   <summary>なぜこの順番でやるの？<span class="sm">動き × リズム × 空間の掛け算</span></summary>
   <div class="accbody">
@@ -669,7 +692,7 @@ function render(){
  const sbR=document.getElementById("submitBtnRope");
  const sh2=document.getElementById("submitHint");
  if(c>=TOTAL){
-   tl.textContent="COMPLETE";tm.textContent="完走。バトルの素ができたね";tw.textContent="";ts.textContent="ここからはフリースタイルで遊ぼう";
+   tl.textContent="COMPLETE";tm.textContent="完走。バトルの素ができたね";tw.textContent="";ts.textContent="ここからはフリースタイルで遊ぼう"+"。次はコレオライブラリへ";
    if(sbNR)sbNR.style.display="none";
    if(sbR)sbR.style.display="none";
    if(sh2)sh2.style.display="none";
@@ -686,6 +709,7 @@ function render(){
    if(sbR){sbR.href=submitUrl(it,"縄あり");sbR.style.display="block";}
    if(sh2){var stxNR=document.getElementById("submitTextNoRope"),stxR=document.getElementById("submitTextRope");if(stxNR)stxNR.textContent="動画提出："+stepLabel(it)+"（縄なし）";if(stxR)stxR.textContent="動画提出："+stepLabel(it)+"（縄あり）";sh2.style.display="block";}
  }
+ var _cl=document.getElementById("choreoLink");if(_cl){_cl.href="choreo.html"+(U?"?u="+encodeURIComponent(U):"");_cl.classList.toggle("done",c>=TOTAL);var _cm=document.getElementById("choreoMsg");if(_cm&&c>=TOTAL)_cm.textContent="完走おめでとう。ここからは振付で、組み合わせ方を広げよう。";}
  drawDonut(c);drawPhaseBars(c);drawSpark();
  var _sr=document.getElementById("streakRow");
  if(_sr){if(practiceStreak>=1){document.getElementById("streakNum").textContent=practiceStreak+"日";_sr.style.display="flex";}else{_sr.style.display="none";}}
