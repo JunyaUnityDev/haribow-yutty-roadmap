@@ -95,6 +95,14 @@ h1.rm{margin:0 0 6px}
 .nb-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
 .nb-btn{background:var(--card)!important;color:var(--blue)!important;border:1px solid var(--blue);border-radius:999px!important;padding:7px 14px!important;font-weight:700;font-size:13px}
 .nb-cap{font-size:12px;color:var(--mut);margin-left:-4px}
+.chtop{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--blue);border-radius:14px;padding:10px 12px;margin:0 0 12px;text-decoration:none;color:inherit}
+.chtop .ths{display:flex;gap:4px;flex:none}
+.chtop .ths img{width:40px;aspect-ratio:3/4;object-fit:cover;border-radius:6px;display:block;background:#222}
+.chtop .tx{flex:1;min-width:0}
+.chtop .t1{font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:6px}
+.chtop .t2{font-size:11.5px;color:var(--mut);margin-top:2px}
+.chtop .ar{color:var(--blue);font-size:22px;line-height:1;flex:none}
+@media(max-width:380px){.chtop .ths img:nth-child(n+3){display:none}}
 .nb-link.done{border-color:var(--blue);background:var(--acw)}
 .acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
 .acc>summary{list-style:none;cursor:pointer;padding:15px 17px;font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:8px}
@@ -277,6 +285,11 @@ body.is-demo #demo-banner{display:block;}
     <div class="snum" id="snapNum">0 / 0 ステップ</div>
   </div>
 </div>
+<a class="chtop" id="choreoTop" href="choreo.html">
+  <div class="ths"><img src="figures/choreo/c30.jpg" alt=""><img src="figures/choreo/c12.jpg" alt=""><img src="figures/choreo/c47.jpg" alt=""></div>
+  <div class="tx"><div class="t1">コレオライブラリ<span class="nb-n">49本</span></div><div class="t2">ロードマップの技でできた振付と解説</div></div>
+  <span class="ar">›</span>
+</a>
 <div class="journey" id="journey" aria-label="フェーズの現在地"></div>
 <div class="today">
   <div class="lbl" id="todayLbl">今日やること</div>
@@ -748,7 +761,7 @@ function render(){
    if(sbR){sbR.href=submitUrl(it,"縄あり");sbR.style.display="block";}
    if(sh2){var stxNR=document.getElementById("submitTextNoRope"),stxR=document.getElementById("submitTextRope");if(stxNR)stxNR.textContent="動画提出："+stepLabel(it)+"（縄なし）";if(stxR)stxR.textContent="動画提出："+stepLabel(it)+"（縄あり）";sh2.style.display="block";}
  }
- var _cl=document.getElementById("choreoLink");if(_cl){_cl.href="choreo.html"+(U?"?u="+encodeURIComponent(U):"");_cl.classList.toggle("done",c>=TOTAL);var _cm=document.getElementById("choreoMsg");if(_cm&&c>=TOTAL)_cm.textContent="完走おめでとう。はじめの1本は #30（基礎だけでできる振り）から。";}
+ var _ct=document.getElementById("choreoTop");if(_ct)_ct.href="choreo.html"+(U?"?u="+encodeURIComponent(U):"");var _cl=document.getElementById("choreoLink");if(_cl){_cl.href="choreo.html"+(U?"?u="+encodeURIComponent(U):"");_cl.classList.toggle("done",c>=TOTAL);var _cm=document.getElementById("choreoMsg");if(_cm&&c>=TOTAL)_cm.textContent="完走おめでとう。はじめの1本は #30（基礎だけでできる振り）から。";}
  (function(){var j=document.getElementById("journey");if(!j)return;var cur=-1;PHASE_RANGE.forEach(function(r,i){if(cur<0&&c<=r[1])cur=i;});
    var h='<div class="jrow">';PHASES.forEach(function(ph,i){var cls=(cur<0||i<cur)?"done":(i===cur?"now":"");h+=(i?'<span class="jline'+((cur<0||i<=cur)?" done":"")+'"></span>':'')+'<span class="jdot '+cls+'" title="'+ph.short+'">'+i+'</span>';});
    h+='<span class="jline'+(cur<0?" done":"")+'"></span><span class="jdot goal'+(cur<0?" now":"")+'">コレオ</span></div>';
