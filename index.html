@@ -69,6 +69,8 @@ h1.rm{margin:0 0 6px}
 .practicebtn:active{transform:scale(.96)}
 .practicebtn.done{background:var(--acw);border-color:transparent;color:var(--blue)}
 .practicebtn #practiceMsg{font-weight:600;font-size:12px;color:var(--blue);margin-left:8px}
+.ydbtn{display:block;margin:-4px auto 12px;background:none;border:0;color:var(--faint);font-size:12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 8px}
+.ydbtn.done{text-decoration:none;color:var(--blue);cursor:default}
 .submitbtn{display:block;text-align:center;text-decoration:none;background:#06c755;color:#fff;font-weight:700;font-size:15px;border-radius:13px;padding:15px;margin-bottom:8px}
 .submitbtn.rope{background:#e09000}
 .submithint{font-size:11.5px;line-height:1.65;color:var(--mut);background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:12px 14px;margin-bottom:18px}
@@ -302,6 +304,7 @@ body.is-demo #demo-banner{display:block;}
   <button class="btn back" id="backBtn">‹ 戻す</button>
 </div>
 <button class="practicebtn" id="practiceBtn">今日練習した<span id="practiceMsg"></span></button>
+<button class="ydbtn" id="practiceYBtn" style="display:none">昨日の分を記録し忘れた</button>
 <a class="submitbtn" id="submitBtnNoRope" target="_blank" rel="noopener" style="display:none">縄なし動画を提出</a>
 <a class="submitbtn rope" id="submitBtnRope" target="_blank" rel="noopener" style="display:none">縄あり動画を提出</a>
 <div class="submithint" id="submitHint" style="display:none">
@@ -386,7 +389,7 @@ body.is-demo #demo-banner{display:block;}
   <div class="accbody">
     <p>跳ぶのとは別に、「ロープをきれいに回す」のにもコツがあります。手の軌道・接地・体の使い方を、動画つきで<span class="em">5つのポイント</span>にまとめました。</p>
     <p>提出やフィードバックはなしの<span class="em">自習用</span>。回しでつまずいたら見返してください。</p>
-    <p style="margin-top:8px"><a href="https://junyaunitydev.github.io/haribow-online-lesson-articles/rope/" target="_blank" rel="noopener" class="em" style="border-bottom:1px solid var(--blue)">→ ロープの回し方をみる</a></p>
+    <p style="margin-top:8px"><a href="https://articles.haribow.com/rope/" target="_blank" rel="noopener" class="em" style="border-bottom:1px solid var(--blue)">→ ロープの回し方をみる</a></p>
   </div>
 </details>
 
@@ -501,7 +504,7 @@ const PHASES = [
     {name:"連続スライド",point:"つなげて連続で",styles:"",v:"https://youtu.be/RHPhl0KRXUc"}]},
 
  {title:"③ ペダル（基礎ジャンプ）", short:"③ ペダル", video:"https://youtu.be/ER4QCas1ne4",
-   article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
+   article:"https://articles.haribow.com/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
    why:"つま先↔かかとを交互に踏みかえ、足裏の下にロープを通す。引っかかったら重心を上下に。",
    badge:"初・10回連続跳べた",
    create:"ペダルで空間を埋める（前後左右に一人分・高さ上下・向き 前/横/後ろ を全部）",
@@ -512,7 +515,7 @@ const PHASES = [
     {name:"ペダルウォーク",point:"歩くように",styles:"アンカー→スナッピー"}]},
 
  {title:"④ 3ステップ", short:"④ 3ステップ", video:"https://youtu.be/DE0E9OFlwDY",
-   article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
+   article:"https://articles.haribow.com/articles/silhouette-correction/", articleLabel:"シルエットで悩んだら",
    why:"ワン（踏みに行く）→エン（太もも90度まで上げる）→ツー（後ろに置く）。",
    badge:"初・とめ・はね・払いが計3そろった",
    create:"3ステップに とめ・はね・払いを それぞれ1つずつ乗せる（とめ1・はね1・払い1＝計3）",
@@ -562,7 +565,7 @@ const PHASES = [
     {name:"必殺③",point:"自分の必殺技",styles:""}]},
 
  {title:"⑩ 音ハメ（レベル4：フリースタイル）", short:"⑩ 音ハメ", video:"https://youtu.be/0RiCj4l8SyU",
-   article:"https://junyaunitydev.github.io/haribow-online-lesson-articles/articles/solo-battle-strategy/",
+   article:"https://articles.haribow.com/articles/solo-battle-strategy/",
    why:"ここまでの“自分で”を全部使う。曲に合わせて、ハマるように。",
    badge:"初・自分の組み合わせで8カウント",
    items:[
@@ -654,13 +657,32 @@ function gasPractice(){
     }
   }).catch(function(){});
 }
+// 昨日の記録し忘れを後から付ける（さかのぼれるのは昨日だけ）
+function gasPracticeYesterday(){
+  if(!U)return;
+  var yb=document.getElementById("practiceYBtn");
+  if(!yb||yb.classList.contains("done"))return;
+  yb.textContent="記録中…";
+  fetch(GAS_URL+"?action=practiceYesterday&u="+encodeURIComponent(U)).then(function(r){return r.json();}).then(function(j){
+    if(j&&j.ok){
+      practiceStreak=j.streak||0;practiceTotal=j.total||0;
+      var sn=document.getElementById("streakNum");if(sn)sn.textContent=practiceStreak+"日";
+      var sr=document.getElementById("streakRow");if(sr&&practiceStreak>=1)sr.style.display="flex";
+      var tn=document.getElementById("totalNum");if(tn)tn.textContent=practiceTotal+"回";
+      var tr=document.getElementById("totalRow");if(tr&&practiceTotal>=1)tr.style.display="flex";
+      yb.classList.add("done");
+      yb.textContent="昨日の分を記録した（"+practiceStreak+"日連続）";
+    }else{yb.textContent="昨日の分を記録し忘れた";}
+  }).catch(function(){yb.textContent="昨日の分を記録し忘れた";});
+}
 function gasLoad(cb){
   if(!U){cb();return;}
   fetch(GAS_URL+"?action=read&u="+encodeURIComponent(U)).then(function(r){return r.json();}).then(function(j){
     if(j&&j.ok){
       showWho(j.name||"");
       activityDates=(j.dates||[]).slice();
-      if(j.practice){practiceStreak=j.practice.streak||0;practiceTotal=j.practice.total||0;}
+      if(j.practice){practiceStreak=j.practice.streak||0;practiceTotal=j.practice.total||0;
+        var _yb=document.getElementById("practiceYBtn");if(_yb&&j.practice.yesterday===false)_yb.style.display="block";}
       (j.approvedNoRope||j.approved||[]).forEach(function(k){approvedNoRopeSet.add(k);});
       (j.approvedRope||[]).forEach(function(k){approvedRopeSet.add(k);});
       var sset=new Set(j.done||[]);
@@ -797,6 +819,7 @@ function render(){
 }
 function animToday(cb){var t=document.querySelector('.today');t.classList.add('today-exit');setTimeout(function(){cb();t.classList.remove('today-exit');t.classList.add('today-enter');setTimeout(function(){t.classList.remove('today-enter');},300);},160);}
 document.getElementById("goBtn").onclick=()=>{const a=getLog();if(a.length<TOTAL){a.push(todayStr());saveLog(a);gasSave(STEPS[a.length-1].key,true);gasPractice();}animToday(render);window.scrollTo({top:0,behavior:"smooth"});};
+document.getElementById("practiceYBtn").onclick=function(){gasPracticeYesterday();};
 document.getElementById("practiceBtn").onclick=function(){if(DEMO){showDemoToast("実際はここで今日の練習が記録されます。毎日押すと連続記録が積み上がります。");return;}gasPractice();};
 document.getElementById("backBtn").onclick=()=>{const a=getLog();if(a.length>0){const k=STEPS[a.length-1].key;a.pop();saveLog(a);gasSave(k,false);}animToday(render);};
 document.getElementById("demo-toast-close").addEventListener("click",hideDemoToast);
